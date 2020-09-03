@@ -8,4 +8,12 @@ declare var variableName:any;
 })
 export class AppComponent {
   title = 'MatrioshTS';
+
+  Ev_Ejecutar(){
+    console.log("Funciona boton ejecutar");
+
+  }
+  Ev_Traducir(){
+    console.log("Funciona boton traducir");
+  }
 }

@@ -7,3 +7,4 @@ _Levantar el frontend de angular_
 _Convertir archivos ts a js automaticamente_
 ```tsc -w```
 ## Herramientas 🔧
+* [Githubpages](https://medium.com/tech-insights/how-to-deploy-angular-apps-to-github-pages-gh-pages-896c4e10f9b4)

@@ -1,6 +1,6 @@
 
 %{
-    const CL_Error=require('../Errores/L_Error');
+    let CL_Error=require('../Errores/L_Error');
     let CN_Error=require('../Errores/N_Error');
 %}
 
@@ -42,17 +42,17 @@
 "print"                      return 'tk_print'
 
 //Relacionales
-"=="    return 'tk_igual'
-"!="    return 'tk_dif'
-">="    return 'tk_mayIgual'
-">"     return 'tk_may'
-"<="    return 'tk_menIgual'
-"<"     return 'tk_men' 
+"=="    return '=='
+"!="    return '!='
+">="    return '>='
+">"     return '>'
+"<="    return '<='
+"<"     return '<' 
 
 
 //Logicas
-"&&"    return 'tk_and'
-"||"    return 'tk_or'
+"&&"    return '&&'
+"||"    return '||'
 "!"    return 'tk_not'
 
 //Unarias de Incremento y Decremento
@@ -73,36 +73,42 @@
 
 
 //Exprsiones Regulares
-[-]?[0-9]+("."[0-9]+)?             return 'tk_digito'
+[0-9]+("."[0-9]+)?             return 'tk_digito'
 "true"|"false"                     return 'tk_booleano'
 [\"]([^\"\n]|(\\\"))*[\"]          return 'tk_cadena'
 [\'][a-zA-Z| ][\']                 return 'tk_caracter'
 ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*	        return 'tk_id';
 
 //Operaciones Aritmeticas
-"+"     return 'tk_sum'
-"-"     return 'tk_res'
-"*"     return 'tk_mul'
-"/"     return 'tk_div'
-"^"     return 'tk_pot'
-"%"     return 'tk_mod'
+"+"     return '+'
+"-"     return '-'
+"*"     return '*'
+"/"     return '/'
+"%"     return '%'
 
 [ \t\r\n\f]                    %{ /*se ignoran*/ %}
 
 <<EOF>>                        %{  return 'EOF';   %}
 
-.                               {CL_Error.push(new CN_Error.N_Error("Lexico",yytext,yylineno,yylloc.first_column))}
+.                               {CL_Error.L_Errores.push(new CN_Error.N_Error("Lexico",yytext,yylineno,yylloc.first_column))}
 
 
 /lex
 
+%left '||'
+%left '&&'
+%left '==', '!='
+%left '>=', '<=', '<', '>'
+%left '+' '-'
+%left '*' '/'
+
 /*------------------------------------------------PARTE SINTACTICA--------------------------------------------------- */
 
-%star START
+%start START
 %% 
 
 START:
-    LInstrucciones EOF 
+    LInstrucciones EOF              
 ;
 
 LInstrucciones:
@@ -115,5 +121,14 @@ Instruccion:
 ;
 
 Declaracion:
-    tk_id '='  ';'  {console.log("hola");}
+    tk_id '=' Expresion ';'  {console.log("hola");}
+;
+
+Expresion:
+    Expresion '+' Expresion
+    | Factor
+;
+
+Factor:
+    '(' Expresion ')'
 ;

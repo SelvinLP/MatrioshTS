@@ -8,4 +8,5 @@ export abstract class Instruccion {
         this.columna = column;
     }
 
+    public abstract ejecutar() : any;
 }

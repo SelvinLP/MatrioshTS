@@ -13,5 +13,6 @@ export class Declaration extends Instruccion{
         this.value = value;
     }
 
+    public ejecutar() : any{}
 
 }

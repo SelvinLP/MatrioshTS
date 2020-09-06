@@ -1,15 +1,15 @@
 export class N_Error {
 
-    private Tipo:string;
-    private Descripcion:string;
-    private Linea:number;
-    private Columna:number;
+    private tipo:string;
+    private descripcion:string;
+    private linea:number;
+    private columna:number;
 
-    constructor(tipo:string,descripcion:string,linea:number, columna:number){
-        this.Tipo=tipo;
-        this.Descripcion=descripcion;
-        this.Linea=linea;
-        this.Columna=columna;
+    constructor(type:string,description:string,line:number, column:number){
+        this.tipo=type;
+        this.descripcion=description;
+        this.linea=line;
+        this.columna=column;
     }
 
 }

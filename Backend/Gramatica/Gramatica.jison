@@ -1,7 +1,11 @@
 
 %{
-    let CL_Error=require('../Errores/L_Error');
-    let CN_Error=require('../Errores/N_Error');
+    const CL_Error = require('../build/Errores/L_Error');
+    const CN_Error = require('../build/Errores/N_Error');
+    const {Literal} = require('../build/Expresiones/Literal');
+    const {Aritmetica} = require('../build/Expresiones/Aritmetica');
+    const {TipoAritmetico} = require('../build/Abstracto/Retorno');
+    const {Imprimir} = require('../build/Instrucciones/Imprimir');
 %}
 
 /*------------------------------------------------PARTE LEXICA--------------------------------------------------- */
@@ -14,11 +18,8 @@
 "/*""/"*([^*/]|[^*]"/"|"*"[^/])*"*"*"*/"  /*Comentario multilinea*/
 
 //Tipos de Datos
-"int"|"Int"                   return 'tk_int'
-"double"|"Double"             return 'tk_double'
-"boolean"|"Boolean"           return 'tk_boolean'
-"char"|"Char"                 return 'tk_char'
-"string"|"String"             return 'tk_string'
+"let"               return 'tk_let'
+"const"             return 'tk_const'
 
 //Palabras Reservadas
 "class"             return 'tk_class'
@@ -35,11 +36,8 @@
 "return"            return 'tk_return'
 "break"             return 'tk_break'
 "void"              return 'tk_void'
+"console.log"       return 'tk_console'
 
-"system"|"System"            return 'tk_system'
-"out"                        return 'tk_out'
-"println"                    return 'tk_print'
-"print"                      return 'tk_print'
 
 //Relacionales
 "=="    return '=='
@@ -61,23 +59,23 @@
 
 
 //Otros
-"{"     return 'tk_llavei';
-"}"     return 'tk_llaved'
+"{"     return '{'
+"}"     return '}'
 ";"     return ';'
 "="     return '='
-"("     return 'tk_pabre'
-")"     return 'tk_pcierra'
-","     return 'tk_coma'
-":"     return 'tk_dospuntos'
-"."     return 'tk_punto'
+"("     return '('
+")"     return ')'
+","     return ','
+":"     return ':'
+"."     return '.'
 
 
-//Exprsiones Regulares
-[0-9]+("."[0-9]+)?             return 'tk_digito'
-"true"|"false"                     return 'tk_booleano'
-[\"]([^\"\n]|(\\\"))*[\"]          return 'tk_cadena'
-[\'][a-zA-Z| ][\']                 return 'tk_caracter'
-([a-zA-Z_])[a-zA-Z0-9_ñÑ]*	        return 'tk_id';
+//Expresiones Regulares
+[0-9]+                             return 'tk_entero'
+[0-9]+"."[0-9]+                    return 'tk_decimal'
+[\"|\']([^\"\n]|(\\\"))*[\"|\']    return 'tk_cadena'
+([a-zA-Z_])[a-zA-Z0-9_ñÑ]*	       return 'tk_id';
+"true"|"false"                     return 'tk_bool'
 
 //Operaciones Aritmeticas
 "+"     return '+'
@@ -108,27 +106,91 @@
 %% 
 
 START:
-    LInstrucciones EOF              
+    LInstrucciones EOF  
+    {
+        return $1;
+    }            
 ;
 
 LInstrucciones:
     LInstrucciones Instruccion 
+    {
+        $1.push($2);
+        $$ = $1;
+    }
     | Instruccion
+    {
+        $$ = [$1];
+    }
 ;
 
 Instruccion:
     Declaracion
+    | Impresion  
+    {
+        $$=$1;
+    }
 ;
 
 Declaracion:
-    tk_id '=' Expresion ';'  {console.log("hola");}
+    tk_id '=' Expresion ';'  
+    {
+        console.log("Reconocio Declaracion");
+    }
+;
+
+Impresion:
+    tk_console '(' Expresion ')' ';'
+    {
+        $$ = new Imprimir($3, @1.first_line, @1.first_column);
+    }
 ;
 
 Expresion:
     Expresion '+' Expresion
+    {
+        $$ = new Aritmetica($1, $3, TipoAritmetico.MAS, @1.first_line,@1.first_column);
+    }
+    | Expresion '-' Expresion
+    {
+        $$ = new Aritmetica($1, $3, TipoAritmetico.MENOS, @1.first_line,@1.first_column);
+    }
+    | Expresion '*' Expresion
+    {
+        $$ = new Aritmetica($1, $3, TipoAritmetico.MULT, @1.first_line,@1.first_column);
+    }
+    | Expresion '/' Expresion
+    {
+        $$ = new Aritmetica($1, $3, TipoAritmetico.DIV, @1.first_line,@1.first_column);
+    }
     | Factor
+    {
+        $$=$1;
+    }
 ;
 
 Factor:
     '(' Expresion ')'
+    { 
+        $$ = $2;
+    }
+    | tk_cadena
+    {
+        $$ = new Literal($1.replace(/\"|\'/g,""), @1.first_line, @1.first_column, 0);
+    }
+    | tk_entero
+    { 
+        $$ = new Literal($1, @1.first_line, @1.first_column, 1);
+    }
+    | tk_decimal
+    { 
+        $$ = new Literal($1, @1.first_line, @1.first_column, 1);
+    }
+    | tk_bool
+    { 
+        $$ = new Literal($1, @1.first_line, @1.first_column, 2);
+    }
+    | tk_id
+    {
+    }
 ;

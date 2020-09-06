@@ -1,3 +1,6 @@
+import { Retorno, Tipo} from "./Retorno";
+import { L_tipos } from "../Otros/Tb_Tipos";
+
 export abstract class Expresion {
 
     public linea: number;
@@ -8,4 +11,11 @@ export abstract class Expresion {
         this.columna = column;
     }
 
+    public abstract ejecutar() : Retorno;
+
+    //Definimos que tipo es el que predomina entre esos dos
+    public Tipo_dominante(tipoIzq : Tipo, tipoDer : Tipo) : Tipo{
+        const tipo = L_tipos[tipoIzq][tipoDer];
+        return tipo;
+    }
 }

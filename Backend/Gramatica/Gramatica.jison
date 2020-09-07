@@ -4,8 +4,13 @@
     const CN_Error = require('../build/Errores/N_Error');
     const {Literal} = require('../build/Expresiones/Literal');
     const {Aritmetica} = require('../build/Expresiones/Aritmetica');
-    const {TipoAritmetico} = require('../build/Abstracto/Retorno');
+    const {Relacional} = require('../build/Expresiones/Relacional');
+    const {TipoAritmetico, TipoRelacional} = require('../build/Abstracto/Retorno');
     const {Imprimir} = require('../build/Instrucciones/Imprimir');
+    const {Ifelse} = require('../build/Instrucciones/Ifelse');
+    const {While} = require('../build/Instrucciones/While');
+    const {Statement} = require('../build/Instrucciones/Statement');
+
 %}
 
 /*------------------------------------------------PARTE LEXICA--------------------------------------------------- */
@@ -22,8 +27,6 @@
 "const"             return 'tk_const'
 
 //Palabras Reservadas
-"class"             return 'tk_class'
-"import"            return 'tk_import'
 "if"                return 'tk_if'
 "else"              return 'tk_else'
 "switch"            return 'tk_switch'
@@ -71,10 +74,10 @@
 
 
 //Expresiones Regulares
-[0-9]+                             return 'tk_entero'
 [0-9]+"."[0-9]+                    return 'tk_decimal'
+[0-9]+                             return 'tk_entero'
 [\"|\']([^\"\n]|(\\\"))*[\"|\']    return 'tk_cadena'
-([a-zA-Z_])[a-zA-Z0-9_ñÑ]*	       return 'tk_id';
+([a-zA-Z_])[a-zA-Z0-9_ñÑ]+	       return 'tk_id';
 "true"|"false"                     return 'tk_bool'
 
 //Operaciones Aritmeticas
@@ -89,7 +92,6 @@
 <<EOF>>                        %{  return 'EOF';   %}
 
 .                               {CL_Error.L_Errores.push(new CN_Error.N_Error("Lexico",yytext,yylineno,yylloc.first_column))}
-
 
 /lex
 
@@ -130,6 +132,14 @@ Instruccion:
     {
         $$=$1;
     }
+    | Ift
+    {
+        $$=$1;
+    }
+    | Whilet
+    {
+        $$=$1;
+    }
 ;
 
 Declaracion:
@@ -146,6 +156,45 @@ Impresion:
     }
 ;
 
+Ift:
+    tk_if '(' Expresion ')' Cuerpo Elset
+    {
+        $$ = new Ifelse($3, $5, $6, @1.first_line, @1.first_column);
+    }
+;
+
+Elset:
+    tk_else Cuerpo
+    {
+        $$=$2;
+    }
+    | tk_else Ift
+    {
+        $$=$2;
+    }
+    | %empty
+    {
+        $$=null;
+    }
+;
+
+Whilet:
+    tk_while '(' Expresion ')' Cuerpo
+    {
+        $$ = new While($3, $5, @1.first_line, @1.first_column);
+    }
+;
+
+Cuerpo:
+    '{' LInstrucciones '}' 
+    {
+        $$ = new Statement($2, @1.first_line, @1.first_column);
+    }
+    | '{' '}' 
+    {
+        $$ = new Statement(new Array(), @1.first_line, @1.first_column);
+    }
+;
 Expresion:
     Expresion '+' Expresion
     {
@@ -162,6 +211,30 @@ Expresion:
     | Expresion '/' Expresion
     {
         $$ = new Aritmetica($1, $3, TipoAritmetico.DIV, @1.first_line,@1.first_column);
+    }
+    | Expresion '>' Expresion
+    {
+        $$ = new Relacional($1, $3,TipoRelacional.MAYORQUE, @1.first_line, @1.first_column);
+    }
+    | Expresion '<' Expresion
+    {
+        $$ = new Relacional($1, $3,TipoRelacional.MENORQUE, @1.first_line, @1.first_column);
+    }
+    | Expresion '>=' Expresion
+    {
+        $$ = new Relacional($1, $3,TipoRelacional.MAYORIGUAL, @1.first_line, @1.first_column);
+    }
+    | Expresion '<=' Expresion
+    {
+        $$ = new Relacional($1, $3,TipoRelacional.MENORIGUAL, @1.first_line, @1.first_column);
+    }
+        | Expresion '==' Expresion
+    {
+        $$ = new Relacional($1, $3,TipoRelacional.IGUAL, @1.first_line, @1.first_column);
+    }
+    | Expresion '!=' Expresion
+    {
+        $$ = new Relacional($1, $3,TipoRelacional.DIFERENCIA, @1.first_line, @1.first_column);
     }
     | Factor
     {

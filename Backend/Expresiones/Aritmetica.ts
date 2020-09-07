@@ -1,5 +1,6 @@
 import { Expresion } from "../Abstracto/Expresion";
 import { Retorno, Tipo, TipoAritmetico } from "../Abstracto/Retorno";
+import { N_Error } from "../Errores/N_Error";
 
 export class Aritmetica extends Expresion{
 
@@ -19,23 +20,29 @@ export class Aritmetica extends Expresion{
             else if(tipoDominante == Tipo.NUMBER)
                 resultado = {valor : (valorizq.valor + valorder.valor), tipo : Tipo.NUMBER};
             else
-                throw console.log("Error semantico no se puede operar +") //falta poner error         
+                throw new N_Error('Semantico','No se puede operar: '+valorizq.valor+" + "+valorder.valor, this.linea,this.columna);  
+
         }else if(this.type == TipoAritmetico.MENOS){
             if(tipoDominante == Tipo.NUMBER)
                 resultado = {valor : (valorizq.valor - valorder.valor), tipo : Tipo.NUMBER};
             else
-                throw console.log("Error semantico no se puede operar -") //falta poner error 
+                throw new N_Error('Semantico','No se puede operar: '+valorizq.valor+" - "+valorder.valor, this.linea,this.columna);
+
         }else if(this.type == TipoAritmetico.MULT){
             if(tipoDominante == Tipo.NUMBER)
                 resultado = {valor : (valorizq.valor * valorder.valor), tipo : Tipo.NUMBER};
             else
-                throw console.log("Error semantico no se puede operar *") //falta poner error
+                throw new N_Error('Semantico','No se puede operar: '+valorizq.valor+" * "+valorder.valor, this.linea,this.columna);
+
         }else{
-            if(tipoDominante == Tipo.NUMBER && valorder.valor != 0)
-                resultado = {valor : (valorizq.valor / valorder.valor), tipo : Tipo.NUMBER};
+            if(tipoDominante == Tipo.NUMBER)
+                if(valorder.valor != 0)
+                    resultado = {valor : (valorizq.valor / valorder.valor), tipo : Tipo.NUMBER};
+                else
+                    throw new N_Error('Semantico','No se puede dividir entre 0', this.linea,this.columna);
             else
-                throw console.log("Error semantico no se puede operar /") //falta poner error  
-        };
+                throw new N_Error('Semantico','No se puede operar: '+valorizq.valor+" / "+valorder.valor, this.linea,this.columna);
+        }
         return resultado;
     }
 }

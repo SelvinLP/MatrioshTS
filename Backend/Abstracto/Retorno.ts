@@ -1,10 +1,10 @@
 //Tipos de variables
 export enum Tipo{
-    STRING = 0,
-    NUMBER = 1,
-    BOOLEAN = 2,
-    NULL = 3,
-    ARRAY = 4
+    STRING,
+    NUMBER,
+    BOOLEAN ,
+    NULL,
+    ARRAY
 }
 
 //Variables de retorno
@@ -13,10 +13,20 @@ export type Retorno ={
     tipo : Tipo
 }
 
-//Tipos de operaciones
+//Tipos de operaciones Aritmeticas
 export enum TipoAritmetico{
     MAS,
     MENOS,
     MULT,
     DIV
+}
+
+//Tipos de operaciones logicas
+export enum TipoRelacional{
+    MAYORQUE,
+    MENORQUE,
+    MAYORIGUAL,
+    MENORIGUAL,
+    IGUAL,
+    DIFERENCIA
 }

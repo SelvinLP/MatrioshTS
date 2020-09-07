@@ -16,6 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Aritmetica = void 0;
 var Expresion_1 = require("../Abstracto/Expresion");
 var Retorno_1 = require("../Abstracto/Retorno");
+var N_Error_1 = require("../Errores/N_Error");
 var Aritmetica = /** @class */ (function (_super) {
     __extends(Aritmetica, _super);
     function Aritmetica(left, right, type, line, column) {
@@ -36,27 +37,29 @@ var Aritmetica = /** @class */ (function (_super) {
             else if (tipoDominante == Retorno_1.Tipo.NUMBER)
                 resultado = { valor: (valorizq.valor + valorder.valor), tipo: Retorno_1.Tipo.NUMBER };
             else
-                throw console.log("Error semantico no se puede operar +"); //falta poner error         
+                throw new N_Error_1.N_Error('Semantico', 'No se puede operar: ' + valorizq.valor + " + " + valorder.valor, this.linea, this.columna);
         }
         else if (this.type == Retorno_1.TipoAritmetico.MENOS) {
             if (tipoDominante == Retorno_1.Tipo.NUMBER)
                 resultado = { valor: (valorizq.valor - valorder.valor), tipo: Retorno_1.Tipo.NUMBER };
             else
-                throw console.log("Error semantico no se puede operar -"); //falta poner error 
+                throw new N_Error_1.N_Error('Semantico', 'No se puede operar: ' + valorizq.valor + " - " + valorder.valor, this.linea, this.columna);
         }
         else if (this.type == Retorno_1.TipoAritmetico.MULT) {
             if (tipoDominante == Retorno_1.Tipo.NUMBER)
                 resultado = { valor: (valorizq.valor * valorder.valor), tipo: Retorno_1.Tipo.NUMBER };
             else
-                throw console.log("Error semantico no se puede operar *"); //falta poner error
+                throw new N_Error_1.N_Error('Semantico', 'No se puede operar: ' + valorizq.valor + " * " + valorder.valor, this.linea, this.columna);
         }
         else {
-            if (tipoDominante == Retorno_1.Tipo.NUMBER && valorder.valor != 0)
-                resultado = { valor: (valorizq.valor / valorder.valor), tipo: Retorno_1.Tipo.NUMBER };
+            if (tipoDominante == Retorno_1.Tipo.NUMBER)
+                if (valorder.valor != 0)
+                    resultado = { valor: (valorizq.valor / valorder.valor), tipo: Retorno_1.Tipo.NUMBER };
+                else
+                    throw new N_Error_1.N_Error('Semantico', 'No se puede dividir entre 0', this.linea, this.columna);
             else
-                throw console.log("Error semantico no se puede operar /"); //falta poner error  
+                throw new N_Error_1.N_Error('Semantico', 'No se puede operar: ' + valorizq.valor + " / " + valorder.valor, this.linea, this.columna);
         }
-        ;
         return resultado;
     };
     return Aritmetica;

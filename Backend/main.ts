@@ -3,13 +3,13 @@ import { Instruccion } from "./Abstracto/Instruccion";
 
 const parser=require("../Gramatica/Gramatica");
 
-var ast=parser.parse("console.log(\"hola\"-2+3);");
+var ast=parser.parse("console.log(\"hola\"+2.2/3)_;  \n $console.log(\"no\"+2>=\"no2\");");
 console.log("--------------------------------- Instrucciones ---------------------------------");
 for(const Instruccion of ast){
     try {
         Instruccion.ejecutar();
-    } catch (error) {
-        //errores.push(error);  
+    } catch (err) {
+        L_Errores.push(err);  
     }
 }
 

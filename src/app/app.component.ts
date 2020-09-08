@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-declare var variableName:any;
+import { L_Errores } from "../../Backend/build/Errores/L_Error";
+import Parser from "../../Backend/Gramatica/Gramatica";
+
 
 @Component({
   selector: 'app-root',
@@ -8,9 +10,30 @@ declare var variableName:any;
 })
 export class AppComponent {
   title = 'MatrioshTS';
+  Entrada="";
+  Salida="console.log(\"hola\"+2.2/3)_;  \n$console.log(\"no\"+2>=\"no2\");";
+  options: any = {
+    lineNumbers: true,
+    theme:'mbo',
+    lineWrapping : true,
+    indentWithTabs: true,
+    mode: 'javascript',
+    styleActiveLine: true,
+  };
 
   Ev_Ejecutar(){
-    console.log("Funciona boton ejecutar");
+    var ast=Parser.parse("console.log(\"hola\"+2.2/3)_;  \n $console.log(\"no\"+2>=\"no2\");");
+    console.log("--------------------------------- Instrucciones ---------------------------------");
+    for(const Instruccion of ast){
+        try {
+            Instruccion.ejecutar();
+        } catch (err) {
+            L_Errores.push(err);  
+        }
+    }
+    
+    console.log("--------------------------------- Lista de Errores ---------------------------------");
+    console.log(L_Errores);
 
   }
   Ev_Traducir(){

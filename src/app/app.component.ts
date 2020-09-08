@@ -11,7 +11,7 @@ import Parser from "../../Backend/Gramatica/Gramatica";
 export class AppComponent {
   title = 'MatrioshTS';
   Entrada="";
-  Salida="console.log(\"hola\"+2.2/3)_;  \n$console.log(\"no\"+2>=\"no2\");";
+  Salida="console.log(2*2+2);";
   options: any = {
     lineNumbers: true,
     theme:'mbo',
@@ -21,8 +21,12 @@ export class AppComponent {
     styleActiveLine: true,
   };
 
+  Ev_Traducir(){
+    console.log("Funciona boton traducir");
+  }
   Ev_Ejecutar(){
-    var ast=Parser.parse("console.log(\"hola\"+2.2/3)_;  \n $console.log(\"no\"+2>=\"no2\");");
+    L_Errores.splice(0,L_Errores.length)
+    var ast=Parser.parse(this.Salida);
     console.log("--------------------------------- Instrucciones ---------------------------------");
     for(const Instruccion of ast){
         try {
@@ -35,8 +39,5 @@ export class AppComponent {
     console.log("--------------------------------- Lista de Errores ---------------------------------");
     console.log(L_Errores);
 
-  }
-  Ev_Traducir(){
-    console.log("Funciona boton traducir");
   }
 }

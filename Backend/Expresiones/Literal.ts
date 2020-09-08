@@ -8,16 +8,24 @@ export class Literal extends Expresion{
     }
 
     public ejecutar() : Retorno{
-        if(this.type == 0)
-            return {valor : this.value, tipo : Tipo.STRING};
-        else if(this.type == 1)
+        if(this.type == 0){
             return {valor : Number(this.value), tipo : Tipo.NUMBER};
-        else if(this.type == 2)
-            return {valor : this.value, tipo : Tipo.BOOLEAN};
-        else if(this.type == 3)
-            return {valor : this.value, tipo : Tipo.NULL};
-        else
+
+        }else if(this.type == 1){
+            return {valor : this.value, tipo : Tipo.STRING};
+
+        }else if(this.type == 2){
+            if(this.value=="true"){
+                return {valor : true, tipo : Tipo.BOOLEAN};
+            }else{
+                return {valor : false, tipo : Tipo.BOOLEAN};
+            }
+
+        }else if(this.type == 3){
+            return {valor : null , tipo : Tipo.NULL};
+
+        }else{
             return {valor : this.value, tipo : Tipo.ARRAY};
-        
+        }
     }
 }

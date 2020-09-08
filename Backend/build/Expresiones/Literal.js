@@ -25,16 +25,26 @@ var Literal = /** @class */ (function (_super) {
         return _this;
     }
     Literal.prototype.ejecutar = function () {
-        if (this.type == 0)
-            return { valor: this.value, tipo: Retorno_1.Tipo.STRING };
-        else if (this.type == 1)
+        if (this.type == 0) {
             return { valor: Number(this.value), tipo: Retorno_1.Tipo.NUMBER };
-        else if (this.type == 2)
-            return { valor: this.value, tipo: Retorno_1.Tipo.BOOLEAN };
-        else if (this.type == 3)
-            return { valor: this.value, tipo: Retorno_1.Tipo.NULL };
-        else
+        }
+        else if (this.type == 1) {
+            return { valor: this.value, tipo: Retorno_1.Tipo.STRING };
+        }
+        else if (this.type == 2) {
+            if (this.value == "true") {
+                return { valor: true, tipo: Retorno_1.Tipo.BOOLEAN };
+            }
+            else {
+                return { valor: false, tipo: Retorno_1.Tipo.BOOLEAN };
+            }
+        }
+        else if (this.type == 3) {
+            return { valor: null, tipo: Retorno_1.Tipo.NULL };
+        }
+        else {
             return { valor: this.value, tipo: Retorno_1.Tipo.ARRAY };
+        }
     };
     return Literal;
 }(Expresion_1.Expresion));

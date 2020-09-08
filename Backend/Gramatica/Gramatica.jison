@@ -2,10 +2,11 @@
 %{
     const CL_Error = require('../build/Errores/L_Error');
     const CN_Error = require('../build/Errores/N_Error');
+    const {TipoAritmetico, TipoRelacional, TipoLogica} = require('../build/Abstracto/Retorno');
     const {Literal} = require('../build/Expresiones/Literal');
     const {Aritmetica} = require('../build/Expresiones/Aritmetica');
     const {Relacional} = require('../build/Expresiones/Relacional');
-    const {TipoAritmetico, TipoRelacional} = require('../build/Abstracto/Retorno');
+    const {Logica} = require('../build/Expresiones/Logica');
     const {Imprimir} = require('../build/Instrucciones/Imprimir');
     const {Ifelse} = require('../build/Instrucciones/Ifelse');
     const {While} = require('../build/Instrucciones/While');
@@ -54,7 +55,7 @@
 //Logicas
 "&&"    return '&&'
 "||"    return '||'
-"!"    return 'tk_not'
+"!"     return '!'
 
 //Unarias de Incremento y Decremento
 "++"    return 'tk_inc'
@@ -74,13 +75,15 @@
 
 
 //Expresiones Regulares
+"true"|"false"                     return 'tk_bool'
 [0-9]+"."[0-9]+                    return 'tk_decimal'
 [0-9]+                             return 'tk_entero'
 [\"|\']([^\"\n]|(\\\"))*[\"|\']    return 'tk_cadena'
 ([a-zA-Z_])[a-zA-Z0-9_ñÑ]+	       return 'tk_id';
-"true"|"false"                     return 'tk_bool'
+
 
 //Operaciones Aritmeticas
+"**"    return '**'
 "+"     return '+'
 "-"     return '-'
 "*"     return '*'
@@ -95,12 +98,14 @@
 
 /lex
 
-%left '||'
-%left '&&'
-%left '==', '!='
-%left '>=', '<=', '<', '>'
 %left '+' '-'
 %left '*' '/'
+$left '**' '%'
+%left '||'
+%left '&&'
+%right '!'
+%left '==', '!='
+%left '>=', '<=', '<', '>'
 
 /*------------------------------------------------PARTE SINTACTICA--------------------------------------------------- */
 
@@ -212,6 +217,14 @@ Expresion:
     {
         $$ = new Aritmetica($1, $3, TipoAritmetico.DIV, @1.first_line,@1.first_column);
     }
+    | Expresion '**' Expresion
+    {
+        $$ = new Aritmetica($1, $3, TipoAritmetico.POT, @1.first_line,@1.first_column);
+    }
+    | Expresion '%' Expresion
+    {
+        $$ = new Aritmetica($1, $3, TipoAritmetico.MOD, @1.first_line,@1.first_column);
+    }
     | Expresion '>' Expresion
     {
         $$ = new Relacional($1, $3,TipoRelacional.MAYORQUE, @1.first_line, @1.first_column);
@@ -228,13 +241,25 @@ Expresion:
     {
         $$ = new Relacional($1, $3,TipoRelacional.MENORIGUAL, @1.first_line, @1.first_column);
     }
-        | Expresion '==' Expresion
+    | Expresion '==' Expresion
     {
         $$ = new Relacional($1, $3,TipoRelacional.IGUAL, @1.first_line, @1.first_column);
     }
     | Expresion '!=' Expresion
     {
         $$ = new Relacional($1, $3,TipoRelacional.DIFERENCIA, @1.first_line, @1.first_column);
+    }
+    | Expresion '&&' Expresion
+    {
+        $$ = new Logica($1, $3,TipoLogica.AND, @1.first_line, @1.first_column);
+    }
+    | Expresion '||' Expresion
+    {
+        $$ = new Logica($1, $3,TipoLogica.OR, @1.first_line, @1.first_column);
+    }
+    | '!' Expresion
+    {
+        $$ = new Logica($2, null,TipoLogica.NOT, @1.first_line, @1.first_column);
     }
     | Factor
     {
@@ -247,17 +272,17 @@ Factor:
     { 
         $$ = $2;
     }
-    | tk_cadena
-    {
-        $$ = new Literal($1.replace(/\"|\'/g,""), @1.first_line, @1.first_column, 0);
-    }
     | tk_entero
     { 
-        $$ = new Literal($1, @1.first_line, @1.first_column, 1);
+        $$ = new Literal($1, @1.first_line, @1.first_column, 0);
     }
     | tk_decimal
     { 
-        $$ = new Literal($1, @1.first_line, @1.first_column, 1);
+        $$ = new Literal($1, @1.first_line, @1.first_column, 0);
+    }
+    | tk_cadena
+    {
+        $$ = new Literal($1.replace(/\"|\'/g,""), @1.first_line, @1.first_column, 1);
     }
     | tk_bool
     { 

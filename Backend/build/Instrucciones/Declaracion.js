@@ -39,15 +39,15 @@ var Declaracion = /** @class */ (function (_super) {
         }
         else {
             var banderainsertar = false;
-            var restipo = this.value.ejecutar(entorno);
+            var resp = this.value.ejecutar(entorno);
             //Definicion de tipo sino tiene
             if (this.tipo == Retorno_1.Tipo.NULL || this.tipo == null) {
-                this.tipo = restipo.tipo;
+                this.tipo = resp.tipo;
                 banderainsertar = true;
             }
             else {
                 //comprobacion de compatibilidad de datos
-                if (this.tipo == restipo.tipo) {
+                if (this.tipo == resp.tipo) {
                     banderainsertar = true;
                 }
                 else {
@@ -56,7 +56,7 @@ var Declaracion = /** @class */ (function (_super) {
             }
             //Insertamos si cumple con las condiciones
             if (banderainsertar == true) {
-                entorno.guardarvar(this.letoconst, this.id, this.value, this.tipo, this.linea, this.columna);
+                entorno.guardarvar(this.letoconst, this.id, resp.valor, resp.tipo, this.linea, this.columna);
             }
         }
     };

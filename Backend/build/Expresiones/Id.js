@@ -31,8 +31,7 @@ var Id = /** @class */ (function (_super) {
         if (resultado.valor == null) {
             throw new N_Error_1.N_Error('Semantico', 'La variable ' + this.id + ' no contiene valor ', this.linea, this.columna);
         }
-        var retorno = resultado.valor.ejecutar(entorno);
-        return retorno;
+        return { valor: resultado.valor, tipo: resultado.tipo };
     };
     return Id;
 }(Expresion_1.Expresion));

@@ -11,7 +11,7 @@ export class Entorno{
         this.variables = new Map();
     }
 
-    public guardarvar(letoconst: TipoDato,id: string, valor: Expresion, tipo: Tipo, line : number, column: number){
+    public guardarvar(letoconst: TipoDato,id: string, valor: any, tipo: Tipo, line : number, column: number){
 
         let env : Entorno | null = this;
         while(env != null){
@@ -36,5 +36,6 @@ export class Entorno{
         }
         return null;
     } 
+
 
 }

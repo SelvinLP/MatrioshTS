@@ -21,14 +21,14 @@ export class Declaracion extends Instruccion{
             }
         }else{
             let banderainsertar=false;
-            let restipo=this.value.ejecutar(entorno);
+            let resp=this.value.ejecutar(entorno);
             //Definicion de tipo sino tiene
             if(this.tipo == Tipo.NULL || this.tipo == null){
-                this.tipo=restipo.tipo;
+                this.tipo=resp.tipo;
                 banderainsertar=true;
             }else{
                 //comprobacion de compatibilidad de datos
-                if(this.tipo == restipo.tipo){
+                if(this.tipo == resp.tipo){
                         banderainsertar=true;
                 }else{
                     throw new N_Error('Semantico','La variable '+this.id+" no es de tipo compatible con la expresion", this.linea, this.columna);
@@ -36,7 +36,7 @@ export class Declaracion extends Instruccion{
             }
             //Insertamos si cumple con las condiciones
             if(banderainsertar == true){
-                entorno.guardarvar(this.letoconst, this.id, this.value, this.tipo ,this.linea,this.columna);
+                entorno.guardarvar(this.letoconst, this.id, resp.valor, resp.tipo ,this.linea,this.columna);
             }
         }
     }

@@ -31,7 +31,6 @@ var Aritmetica = /** @class */ (function (_super) {
         var valorder = this.right.ejecutar(entorno);
         var tipoDominante = this.Tipo_dominante(valorizq.tipo, valorder.tipo);
         if (this.type == Retorno_1.TipoAritmetico.MAS) {
-            console.log(tipoDominante);
             if (tipoDominante == Retorno_1.Tipo.STRING)
                 return { valor: (valorizq.valor.toString() + valorder.valor.toString()), tipo: Retorno_1.Tipo.STRING };
             else if (tipoDominante == Retorno_1.Tipo.NUMBER)

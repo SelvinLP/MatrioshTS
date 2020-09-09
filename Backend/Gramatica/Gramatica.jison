@@ -11,6 +11,7 @@
     const {Ifelse} = require('../build/Instrucciones/Ifelse');
     const {While} = require('../build/Instrucciones/While');
     const {Declaracion} = require('../build/Instrucciones/Declaracion');
+    const {Asignacion} = require('../build/Instrucciones/Asignacion');
     const {Statement} = require('../build/Instrucciones/Statement');
     const {Id} = require('../build/Expresiones/Id');
 %}
@@ -129,6 +130,7 @@ LInstrucciones:
 
 Instruccion:
     Declaracion             {$$=$1;}
+    | Asignacion            {$$=$1;} 
     | Impresion             {$$=$1;}
     | Ift                   {$$=$1;}
     | Whilet                {$$=$1;}
@@ -156,6 +158,13 @@ Tipodeclaracion:
 PosibleAsignacion:
     '=' Expresion                   {$$=$2;}
     | %empty                        {$$=null;}
+;
+
+Asignacion:
+    tk_id '=' Expresion ';'
+    {
+        $$ = new Asignacion($1, $3, @1.first_line, @1.first_column);
+    }
 ;
 
 Impresion:

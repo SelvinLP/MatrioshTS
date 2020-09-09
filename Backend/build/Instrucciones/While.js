@@ -29,9 +29,8 @@ var While = /** @class */ (function (_super) {
         var condicion = this.condicion.ejecutar(entorno);
         if (condicion.tipo == Retorno_1.Tipo.BOOLEAN) {
             while (condicion.valor == true) {
-                var resultado = this.codigo.ejecutar(entorno);
-                if (resultado != null || resultado != undefined) {
-                }
+                this.codigo.ejecutar(entorno);
+                //validacion nuevamente de la condicion sino se encicla
                 condicion = this.condicion.ejecutar(entorno);
                 if (condicion.tipo != Retorno_1.Tipo.BOOLEAN) {
                     throw new N_Error_1.N_Error('Semantico', 'La operacion no es booleana en el while', this.linea, this.columna);

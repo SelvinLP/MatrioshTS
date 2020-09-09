@@ -14,9 +14,8 @@ export class While extends Instruccion{
         let condicion = this.condicion.ejecutar(entorno);
         if(condicion.tipo == Tipo.BOOLEAN){
             while(condicion.valor == true){
-                const resultado = this.codigo.ejecutar(entorno);
-                if( resultado != null || resultado != undefined){
-                }
+                this.codigo.ejecutar(entorno);
+                //validacion nuevamente de la condicion sino se encicla
                 condicion = this.condicion.ejecutar(entorno);
                 if(condicion.tipo != Tipo.BOOLEAN){
                     throw new N_Error('Semantico','La operacion no es booleana en el while', this.linea,this.columna);

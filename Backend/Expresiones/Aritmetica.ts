@@ -16,7 +16,6 @@ export class Aritmetica extends Expresion{
         const tipoDominante = this.Tipo_dominante(valorizq.tipo, valorder.tipo);
         
         if(this.type == TipoAritmetico.MAS){
-            console.log(tipoDominante);
             if(tipoDominante == Tipo.STRING)
                 return {valor : (valorizq.valor.toString() + valorder.valor.toString()), tipo : Tipo.STRING};
             else if(tipoDominante == Tipo.NUMBER)

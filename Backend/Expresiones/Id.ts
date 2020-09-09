@@ -18,8 +18,6 @@ export class Id extends Expresion{
         if(resultado.valor==null){
             throw new N_Error('Semantico','La variable '+this.id+' no contiene valor ', this.linea,this.columna);
         }
-        let retorno=resultado.valor.ejecutar(entorno);
-        return retorno;
-        
+        return {valor : resultado.valor, tipo : resultado.tipo};
     }
 }

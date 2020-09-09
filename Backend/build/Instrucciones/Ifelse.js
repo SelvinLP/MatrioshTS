@@ -26,15 +26,15 @@ var Ifelse = /** @class */ (function (_super) {
         _this.elsest = elsest;
         return _this;
     }
-    Ifelse.prototype.ejecutar = function () {
-        var condicion = this.condicion.ejecutar();
+    Ifelse.prototype.ejecutar = function (entorno) {
+        var condicion = this.condicion.ejecutar(entorno);
         if (condicion.tipo == Retorno_1.Tipo.BOOLEAN) {
             if (condicion.valor == true) {
-                return this.codigo.ejecutar();
+                return this.codigo.ejecutar(entorno);
             }
             else {
                 if (this.elsest != null)
-                    this.elsest.ejecutar();
+                    this.elsest.ejecutar(entorno);
             }
         }
         else {

@@ -16,6 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Statement = void 0;
 var Instruccion_1 = require("../Abstracto/Instruccion");
 var L_Error_1 = require("../Errores/L_Error");
+var Entorno_1 = require("../Entorno/Entorno");
 var Statement = /** @class */ (function (_super) {
     __extends(Statement, _super);
     function Statement(code, line, column) {
@@ -23,11 +24,12 @@ var Statement = /** @class */ (function (_super) {
         _this.code = code;
         return _this;
     }
-    Statement.prototype.ejecutar = function () {
+    Statement.prototype.ejecutar = function (entorno) {
+        var nuevoentorno = new Entorno_1.Entorno(entorno);
         for (var _i = 0, _a = this.code; _i < _a.length; _i++) {
             var instr = _a[_i];
             try {
-                var result = instr.ejecutar();
+                var result = instr.ejecutar(nuevoentorno);
                 if (result != undefined || result != null)
                     return result;
             }

@@ -1,6 +1,7 @@
 import { Expresion } from "../Abstracto/Expresion";
 import { Retorno, Tipo, TipoAritmetico } from "../Abstracto/Retorno";
 import { N_Error } from "../Errores/N_Error";
+import { Entorno } from "../Entorno/Entorno";
 
 
 export class Aritmetica extends Expresion{
@@ -9,9 +10,9 @@ export class Aritmetica extends Expresion{
         super(line,column);
     }
 
-    public ejecutar() : Retorno{
-        const valorizq = this.left.ejecutar();
-        const valorder = this.right.ejecutar();
+    public ejecutar( entorno : Entorno ) : Retorno{
+        const valorizq = this.left.ejecutar(entorno);
+        const valorder = this.right.ejecutar(entorno);
         const tipoDominante = this.Tipo_dominante(valorizq.tipo, valorder.tipo);
         
         if(this.type == TipoAritmetico.MAS){

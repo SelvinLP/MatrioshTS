@@ -1,3 +1,5 @@
+import { Entorno } from "../Entorno/Entorno";
+
 export abstract class Instruccion {
 
     public linea: number;
@@ -8,5 +10,5 @@ export abstract class Instruccion {
         this.columna = column;
     }
 
-    public abstract ejecutar() : any;
+    public abstract ejecutar(entorno:Entorno) : any;
 }

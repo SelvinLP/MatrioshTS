@@ -25,14 +25,14 @@ var While = /** @class */ (function (_super) {
         _this.codigo = codigo;
         return _this;
     }
-    While.prototype.ejecutar = function () {
-        var condicion = this.condicion.ejecutar();
+    While.prototype.ejecutar = function (entorno) {
+        var condicion = this.condicion.ejecutar(entorno);
         if (condicion.tipo == Retorno_1.Tipo.BOOLEAN) {
             while (condicion.valor == true) {
-                var resultado = this.codigo.ejecutar();
+                var resultado = this.codigo.ejecutar(entorno);
                 if (resultado != null || resultado != undefined) {
                 }
-                condicion = this.condicion.ejecutar();
+                condicion = this.condicion.ejecutar(entorno);
                 if (condicion.tipo != Retorno_1.Tipo.BOOLEAN) {
                     throw new N_Error_1.N_Error('Semantico', 'La operacion no es booleana en el while', this.linea, this.columna);
                 }

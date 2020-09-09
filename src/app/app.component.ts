@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { L_Errores } from "../../Backend/build/Errores/L_Error";
+import { Entorno } from "../../Backend/build/Entorno/Entorno";
 import Parser from "../../Backend/Gramatica/Gramatica";
 
 
@@ -11,7 +12,7 @@ import Parser from "../../Backend/Gramatica/Gramatica";
 export class AppComponent {
   title = 'MatrioshTS';
   Entrada="";
-  Salida="console.log(2*2+2);";
+  Salida="let hola=12;";
   options: any = {
     lineNumbers: true,
     theme:'mbo',
@@ -25,12 +26,14 @@ export class AppComponent {
     console.log("Funciona boton traducir");
   }
   Ev_Ejecutar(){
+    const entorno = new Entorno(null);
     L_Errores.splice(0,L_Errores.length)
+
     var ast=Parser.parse(this.Salida);
     console.log("--------------------------------- Instrucciones ---------------------------------");
     for(const Instruccion of ast){
         try {
-            Instruccion.ejecutar();
+            Instruccion.ejecutar(entorno);
         } catch (err) {
             L_Errores.push(err);  
         }

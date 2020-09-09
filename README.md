@@ -5,6 +5,7 @@ Proyecto 1 de Organizacion de Lenguajes y Compiladores 2 2s 2020
 * Expresiones 
 * Relacionales
 * Console.log
+* If Else
 
 ## Comandos 🔧
 _Levantar el frontend de angular_

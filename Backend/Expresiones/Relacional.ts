@@ -1,6 +1,7 @@
 import { Expresion } from "../Abstracto/Expresion";
 import { Retorno, Tipo, TipoRelacional } from "../Abstracto/Retorno";
 import { N_Error } from "../Errores/N_Error";
+import { Entorno } from "../Entorno/Entorno";
 
 export class Relacional extends Expresion{
 
@@ -8,9 +9,9 @@ export class Relacional extends Expresion{
         super(line,column);
     }
 
-    public ejecutar() : Retorno{
-        const valorizq = this.left.ejecutar();
-        const valorder = this.right.ejecutar();
+    public ejecutar(entorno : Entorno) : Retorno{
+        const valorizq = this.left.ejecutar(entorno);
+        const valorder = this.right.ejecutar(entorno);
 
         if(this.type == TipoRelacional.MAYORQUE){
             const resultado = valorizq.valor > valorder.valor;

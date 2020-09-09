@@ -1,6 +1,7 @@
 import { Expresion } from "../Abstracto/Expresion";
 import { Retorno, Tipo, TipoLogica } from "../Abstracto/Retorno";
 import { N_Error } from "../Errores/N_Error";
+import { Entorno } from "../Entorno/Entorno";
 
 export class Logica extends Expresion{
     
@@ -8,11 +9,11 @@ export class Logica extends Expresion{
         super(line,column);
     }
 
-    public ejecutar():Retorno{
+    public ejecutar(entorno : Entorno):Retorno{
 
         if(this.right != null){
-            const valorizq = this.left.ejecutar();
-            const valorder = this.right.ejecutar();
+            const valorizq = this.left.ejecutar(entorno);
+            const valorder = this.right.ejecutar(entorno);
             if(this.type == TipoLogica.AND){
                 if(valorizq.tipo != Tipo.BOOLEAN || valorder.tipo != Tipo.BOOLEAN){
                     throw new N_Error('Semantico','No se puede operar: '+valorizq.valor+" && "+valorder.valor, this.linea,this.columna);
@@ -31,7 +32,7 @@ export class Logica extends Expresion{
             }
         }else{
             //Validamos el not
-            const valorizq = this.left.ejecutar();
+            const valorizq = this.left.ejecutar(entorno);
             if(valorizq.tipo != Tipo.BOOLEAN ){
                 throw new N_Error('Semantico','No se puede operar: !'+valorizq.valor, this.linea,this.columna);
             }else{

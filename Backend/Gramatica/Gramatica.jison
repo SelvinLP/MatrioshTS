@@ -10,8 +10,9 @@
     const {Imprimir} = require('../build/Instrucciones/Imprimir');
     const {Ifelse} = require('../build/Instrucciones/Ifelse');
     const {While} = require('../build/Instrucciones/While');
+    const {Declaracion} = require('../build/Instrucciones/Declaracion');
     const {Statement} = require('../build/Instrucciones/Statement');
-
+    const {Id} = require('../build/Expresiones/Id');
 %}
 
 /*------------------------------------------------PARTE LEXICA--------------------------------------------------- */
@@ -79,7 +80,7 @@
 [0-9]+"."[0-9]+                    return 'tk_decimal'
 [0-9]+                             return 'tk_entero'
 [\"|\']([^\"\n]|(\\\"))*[\"|\']    return 'tk_cadena'
-([a-zA-Z_])[a-zA-Z0-9_ñÑ]+	       return 'tk_id';
+([a-zA-Z])[a-zA-Z0-9_ñÑ]*	       return 'tk_id';
 
 
 //Operaciones Aritmeticas
@@ -100,7 +101,7 @@
 
 %left '+' '-'
 %left '*' '/'
-$left '**' '%'
+%left '**' '%'
 %left '||'
 %left '&&'
 %right '!'
@@ -133,6 +134,9 @@ LInstrucciones:
 
 Instruccion:
     Declaracion
+    {
+        $$=$1;
+    }
     | Impresion  
     {
         $$=$1;
@@ -148,11 +152,17 @@ Instruccion:
 ;
 
 Declaracion:
-    tk_id '=' Expresion ';'  
+    tk_let tk_id '=' Expresion ';'  
     {
-        console.log("Reconocio Declaracion");
+        $$ = new Declaracion($2, $4, @1.first_line, @1.first_column);
+    }
+
+    | tk_const tk_id '=' Expresion ';'  
+    {
+        $$ = new Declaracion($2, $4, @1.first_line, @1.first_column);
     }
 ;
+
 
 Impresion:
     tk_console '(' Expresion ')' ';'
@@ -200,7 +210,27 @@ Cuerpo:
         $$ = new Statement(new Array(), @1.first_line, @1.first_column);
     }
 ;
+
 Expresion:
+    E_aritmetica
+    {
+        $$=$1;
+    }
+    | E_relacional
+    {
+        $$=$1;
+    }
+    | E_logica
+    {
+        $$=$1;
+    }
+    | Factor
+    {
+        $$=$1;
+    }
+;
+
+E_aritmetica:
     Expresion '+' Expresion
     {
         $$ = new Aritmetica($1, $3, TipoAritmetico.MAS, @1.first_line,@1.first_column);
@@ -225,7 +255,10 @@ Expresion:
     {
         $$ = new Aritmetica($1, $3, TipoAritmetico.MOD, @1.first_line,@1.first_column);
     }
-    | Expresion '>' Expresion
+;
+
+E_relacional:
+    Expresion '>' Expresion
     {
         $$ = new Relacional($1, $3,TipoRelacional.MAYORQUE, @1.first_line, @1.first_column);
     }
@@ -249,7 +282,10 @@ Expresion:
     {
         $$ = new Relacional($1, $3,TipoRelacional.DIFERENCIA, @1.first_line, @1.first_column);
     }
-    | Expresion '&&' Expresion
+;
+
+E_logica:
+    Expresion '&&' Expresion
     {
         $$ = new Logica($1, $3,TipoLogica.AND, @1.first_line, @1.first_column);
     }
@@ -260,10 +296,6 @@ Expresion:
     | '!' Expresion
     {
         $$ = new Logica($2, null,TipoLogica.NOT, @1.first_line, @1.first_column);
-    }
-    | Factor
-    {
-        $$=$1;
     }
 ;
 
@@ -290,5 +322,6 @@ Factor:
     }
     | tk_id
     {
+        $$ = new Id($1, @1.first_line, @1.first_column);
     }
 ;

@@ -13,20 +13,26 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Declaracion = void 0;
-var Instruccion_1 = require("../Abstracto/Instruccion");
-var Declaracion = /** @class */ (function (_super) {
-    __extends(Declaracion, _super);
-    function Declaracion(id, value, line, column) {
+exports.Id = void 0;
+var Expresion_1 = require("../Abstracto/Expresion");
+var N_Error_1 = require("../Errores/N_Error");
+var Id = /** @class */ (function (_super) {
+    __extends(Id, _super);
+    function Id(id, line, column) {
         var _this = _super.call(this, line, column) || this;
         _this.id = id;
-        _this.value = value;
         return _this;
     }
-    Declaracion.prototype.ejecutar = function (entorno) {
-        var val = this.value.ejecutar(entorno);
-        entorno.guardarvar(this.id, this.value, val.tipo);
+    Id.prototype.ejecutar = function (entorno) {
+        var value = entorno.getvar(this.id);
+        if (value == null) {
+            throw new N_Error_1.N_Error('Semantico', 'La variable no existe: ' + this.id, this.linea, this.columna);
+        }
+        else {
+            var resultado = value.valor.ejecutar(entorno);
+            return resultado;
+        }
     };
-    return Declaracion;
-}(Instruccion_1.Instruccion));
-exports.Declaracion = Declaracion;
+    return Id;
+}(Expresion_1.Expresion));
+exports.Id = Id;

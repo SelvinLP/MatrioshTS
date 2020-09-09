@@ -2,6 +2,7 @@ import { Expresion } from "../Abstracto/Expresion";
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Tipo } from "../Abstracto/Retorno";
 import { N_Error } from "../Errores/N_Error";
+import { Entorno } from "../Entorno/Entorno";
 
 export class While extends Instruccion{
 
@@ -9,14 +10,14 @@ export class While extends Instruccion{
         super(line, column);
     }
 
-    public ejecutar() {
-        let condicion = this.condicion.ejecutar();
+    public ejecutar(entorno:Entorno) {
+        let condicion = this.condicion.ejecutar(entorno);
         if(condicion.tipo == Tipo.BOOLEAN){
             while(condicion.valor == true){
-                const resultado = this.codigo.ejecutar();
+                const resultado = this.codigo.ejecutar(entorno);
                 if( resultado != null || resultado != undefined){
                 }
-                condicion = this.condicion.ejecutar();
+                condicion = this.condicion.ejecutar(entorno);
                 if(condicion.tipo != Tipo.BOOLEAN){
                     throw new N_Error('Semantico','La operacion no es booleana en el while', this.linea,this.columna);
                 }

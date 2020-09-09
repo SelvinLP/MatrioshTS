@@ -22,8 +22,8 @@ var Imprimir = /** @class */ (function (_super) {
         _this.value = value;
         return _this;
     }
-    Imprimir.prototype.ejecutar = function () {
-        var resultado = this.value.ejecutar();
+    Imprimir.prototype.ejecutar = function (entorno) {
+        var resultado = this.value.ejecutar(entorno);
         console.log(resultado);
     };
     return Imprimir;

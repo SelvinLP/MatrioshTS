@@ -13,20 +13,19 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Declaracion = void 0;
-var Instruccion_1 = require("../Abstracto/Instruccion");
-var Declaracion = /** @class */ (function (_super) {
-    __extends(Declaracion, _super);
-    function Declaracion(id, value, line, column) {
+exports.Access = void 0;
+var Expresion_1 = require("../Abstracto/Expresion");
+var Retorno_1 = require("../Abstracto/Retorno");
+var Access = /** @class */ (function (_super) {
+    __extends(Access, _super);
+    function Access(id, line, column) {
         var _this = _super.call(this, line, column) || this;
         _this.id = id;
-        _this.value = value;
         return _this;
     }
-    Declaracion.prototype.ejecutar = function (entorno) {
-        var val = this.value.ejecutar(entorno);
-        entorno.guardarvar(this.id, this.value, val.tipo);
+    Access.prototype.ejecutar = function () {
+        return { valor: "temporal", tipo: Retorno_1.Tipo.BOOLEAN };
     };
-    return Declaracion;
-}(Instruccion_1.Instruccion));
-exports.Declaracion = Declaracion;
+    return Access;
+}(Expresion_1.Expresion));
+exports.Access = Access;

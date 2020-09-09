@@ -26,10 +26,10 @@ var Logica = /** @class */ (function (_super) {
         _this.type = type;
         return _this;
     }
-    Logica.prototype.ejecutar = function () {
+    Logica.prototype.ejecutar = function (entorno) {
         if (this.right != null) {
-            var valorizq = this.left.ejecutar();
-            var valorder = this.right.ejecutar();
+            var valorizq = this.left.ejecutar(entorno);
+            var valorder = this.right.ejecutar(entorno);
             if (this.type == Retorno_1.TipoLogica.AND) {
                 if (valorizq.tipo != Retorno_1.Tipo.BOOLEAN || valorder.tipo != Retorno_1.Tipo.BOOLEAN) {
                     throw new N_Error_1.N_Error('Semantico', 'No se puede operar: ' + valorizq.valor + " && " + valorder.valor, this.linea, this.columna);
@@ -51,7 +51,7 @@ var Logica = /** @class */ (function (_super) {
         }
         else {
             //Validamos el not
-            var valorizq = this.left.ejecutar();
+            var valorizq = this.left.ejecutar(entorno);
             if (valorizq.tipo != Retorno_1.Tipo.BOOLEAN) {
                 throw new N_Error_1.N_Error('Semantico', 'No se puede operar: !' + valorizq.valor, this.linea, this.columna);
             }

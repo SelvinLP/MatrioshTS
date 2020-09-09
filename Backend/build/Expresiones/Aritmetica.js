@@ -26,9 +26,9 @@ var Aritmetica = /** @class */ (function (_super) {
         _this.type = type;
         return _this;
     }
-    Aritmetica.prototype.ejecutar = function () {
-        var valorizq = this.left.ejecutar();
-        var valorder = this.right.ejecutar();
+    Aritmetica.prototype.ejecutar = function (entorno) {
+        var valorizq = this.left.ejecutar(entorno);
+        var valorder = this.right.ejecutar(entorno);
         var tipoDominante = this.Tipo_dominante(valorizq.tipo, valorder.tipo);
         if (this.type == Retorno_1.TipoAritmetico.MAS) {
             console.log(tipoDominante);

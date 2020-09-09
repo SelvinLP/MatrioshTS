@@ -26,9 +26,9 @@ var Relacional = /** @class */ (function (_super) {
         _this.type = type;
         return _this;
     }
-    Relacional.prototype.ejecutar = function () {
-        var valorizq = this.left.ejecutar();
-        var valorder = this.right.ejecutar();
+    Relacional.prototype.ejecutar = function (entorno) {
+        var valorizq = this.left.ejecutar(entorno);
+        var valorder = this.right.ejecutar(entorno);
         if (this.type == Retorno_1.TipoRelacional.MAYORQUE) {
             var resultado = valorizq.valor > valorder.valor;
             return { valor: resultado, tipo: Retorno_1.Tipo.BOOLEAN };

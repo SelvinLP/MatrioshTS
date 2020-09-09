@@ -2,7 +2,7 @@ import { Expresion } from "../Abstracto/Expresion";
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Tipo } from "../Abstracto/Retorno";
 import { N_Error } from "../Errores/N_Error";
-
+import { Entorno } from "../Entorno/Entorno";
 
 export class Ifelse extends Instruccion{
 
@@ -11,15 +11,15 @@ export class Ifelse extends Instruccion{
         super(line, column);
     }
 
-    public ejecutar() {
-        const condicion = this.condicion.ejecutar();
+    public ejecutar(entorno:Entorno) {
+        const condicion = this.condicion.ejecutar(entorno);
         if(condicion.tipo == Tipo.BOOLEAN){
             if(condicion.valor == true){
-                return this.codigo.ejecutar();
+                return this.codigo.ejecutar(entorno);
             }
             else{
                 if(this.elsest != null)
-                    this.elsest.ejecutar();
+                    this.elsest.ejecutar(entorno);
             }
         }else{
             throw new N_Error('Semantico','La operacion no es booleana en el If', this.linea,this.columna);  

@@ -10,6 +10,7 @@
     const {Imprimir} = require('../build/Instrucciones/Imprimir');
     const {Ifelse} = require('../build/Instrucciones/Ifelse');
     const {While} = require('../build/Instrucciones/While');
+    const {Dowhile} = require('../build/Instrucciones/Dowhile');
     const {Declaracion} = require('../build/Instrucciones/Declaracion');
     const {Asignacion} = require('../build/Instrucciones/Asignacion');
     const {Statement} = require('../build/Instrucciones/Statement');
@@ -134,6 +135,7 @@ Instruccion:
     | Impresion             {$$=$1;}
     | Ift                   {$$=$1;}
     | Whilet                {$$=$1;}
+    | Dowhilet              {$$=$1;}
 ;
 
 Declaracion:
@@ -191,6 +193,13 @@ Whilet:
     tk_while '(' Expresion ')' Cuerpo
     {
         $$ = new While($3, $5, @1.first_line, @1.first_column);
+    }
+;
+
+Dowhilet:
+    tk_do Cuerpo tk_while '(' Expresion ')' ';'
+    {
+        $$ = new Dowhile($5, $2, @1.first_line, @1.first_column);
     }
 ;
 

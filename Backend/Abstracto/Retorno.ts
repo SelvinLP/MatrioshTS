@@ -41,3 +41,9 @@ export enum TipoLogica{
     OR,
     NOT 
 }
+
+//Tipo de dato
+export enum TipoDato{
+    LET,
+    CONST
+}

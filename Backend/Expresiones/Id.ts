@@ -10,14 +10,16 @@ export class Id extends Expresion{
     }
 
     public ejecutar(entorno: Entorno): Retorno {
-        const value = entorno.getvar(this.id);
-        if(value == null){
+
+        const resultado = entorno.obtenervar(this.id);
+        if(resultado == null){
             throw new N_Error('Semantico','La variable no existe: '+ this.id, this.linea,this.columna);
-        }else{
-            let resultado=value.valor.ejecutar(entorno);
-            return resultado;
-            
         }
+        if(resultado.valor==null){
+            throw new N_Error('Semantico','La variable '+this.id+' no contiene valor ', this.linea,this.columna);
+        }
+        let retorno=resultado.valor.ejecutar(entorno);
+        return retorno;
         
     }
 }

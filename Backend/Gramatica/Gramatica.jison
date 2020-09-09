@@ -2,7 +2,7 @@
 %{
     const CL_Error = require('../build/Errores/L_Error');
     const CN_Error = require('../build/Errores/N_Error');
-    const {TipoAritmetico, TipoRelacional, TipoLogica} = require('../build/Abstracto/Retorno');
+    const {TipoDato, Tipo, TipoAritmetico, TipoRelacional, TipoLogica} = require('../build/Abstracto/Retorno');
     const {Literal} = require('../build/Expresiones/Literal');
     const {Aritmetica} = require('../build/Expresiones/Aritmetica');
     const {Relacional} = require('../build/Expresiones/Relacional');
@@ -27,6 +27,11 @@
 //Tipos de Datos
 "let"               return 'tk_let'
 "const"             return 'tk_const'
+"string"            return 'tk_string'
+"number"            return 'tk_number'
+"boolean"           return 'tk_boolean'
+"void"              return 'tk_void'
+
 
 //Palabras Reservadas
 "if"                return 'tk_if'
@@ -40,7 +45,7 @@
 "continue"          return 'tk_continue'
 "return"            return 'tk_return'
 "break"             return 'tk_break'
-"void"              return 'tk_void'
+
 "console.log"       return 'tk_console'
 
 
@@ -59,8 +64,8 @@
 "!"     return '!'
 
 //Unarias de Incremento y Decremento
-"++"    return 'tk_inc'
-"--"    return 'tk_dec'
+"++"    return '++'
+"--"    return '--'
 
 
 //Otros
@@ -114,55 +119,44 @@
 %% 
 
 START:
-    LInstrucciones EOF  
-    {
-        return $1;
-    }            
+    LInstrucciones EOF                  {return $1;}            
 ;
 
 LInstrucciones:
-    LInstrucciones Instruccion 
-    {
-        $1.push($2);
-        $$ = $1;
-    }
-    | Instruccion
-    {
-        $$ = [$1];
-    }
+    LInstrucciones Instruccion          {$1.push($2); $$ = $1;}
+    | Instruccion                       {$$ = [$1];}
 ;
 
 Instruccion:
-    Declaracion
-    {
-        $$=$1;
-    }
-    | Impresion  
-    {
-        $$=$1;
-    }
-    | Ift
-    {
-        $$=$1;
-    }
-    | Whilet
-    {
-        $$=$1;
-    }
+    Declaracion             {$$=$1;}
+    | Impresion             {$$=$1;}
+    | Ift                   {$$=$1;}
+    | Whilet                {$$=$1;}
 ;
 
 Declaracion:
-    tk_let tk_id '=' Expresion ';'  
+    tk_let tk_id Tipodeclaracion PosibleAsignacion ';'  
     {
-        $$ = new Declaracion($2, $4, @1.first_line, @1.first_column);
+        $$ = new Declaracion(TipoDato.LET, $2, $3, $4, @1.first_line, @1.first_column);
     }
-
-    | tk_const tk_id '=' Expresion ';'  
+    | tk_const tk_id Tipodeclaracion PosibleAsignacion ';'  
     {
-        $$ = new Declaracion($2, $4, @1.first_line, @1.first_column);
+        $$ = new Declaracion(TipoDato.CONST, $2, $3, $4, @1.first_line, @1.first_column);
     }
 ;
 
+Tipodeclaracion:
+    ':' tk_number                       {$$=Tipo.NUMBER}
+    | ':' tk_string                     {$$=Tipo.STRING}
+    | ':' tk_boolean                    {$$=Tipo.BOOLEAN}
+    | ':' tk_void                       {$$=Tipo.NULL}
+    | %empty                            {$$=null;} 
+;
+
+PosibleAsignacion:
+    '=' Expresion                   {$$=$2;}
+    | %empty                        {$$=null;}
+;
 
 Impresion:
     tk_console '(' Expresion ')' ';'
@@ -179,18 +173,9 @@ Ift:
 ;
 
 Elset:
-    tk_else Cuerpo
-    {
-        $$=$2;
-    }
-    | tk_else Ift
-    {
-        $$=$2;
-    }
-    | %empty
-    {
-        $$=null;
-    }
+    tk_else Cuerpo                  {$$=$2;}
+    | tk_else Ift                   {$$=$2;}
+    | %empty                        {$$=null;}
 ;
 
 Whilet:
@@ -212,22 +197,10 @@ Cuerpo:
 ;
 
 Expresion:
-    E_aritmetica
-    {
-        $$=$1;
-    }
-    | E_relacional
-    {
-        $$=$1;
-    }
-    | E_logica
-    {
-        $$=$1;
-    }
-    | Factor
-    {
-        $$=$1;
-    }
+    E_aritmetica            {$$=$1;}
+    | E_relacional          {$$=$1;}
+    | E_logica              {$$=$1;}
+    | Factor                {$$=$1;}
 ;
 
 E_aritmetica:

@@ -1,14 +1,7 @@
-import { Tipo } from "../Abstracto/Retorno";
+import { Tipo, TipoDato } from "../Abstracto/Retorno";
 import { Expresion } from "../Abstracto/Expresion";
 
 export class Simbolo{
-    public id : string;
-    public valor :Expresion;
-    public tipo : Tipo;
-
-    constructor(id: string, valor: Expresion, tipo: Tipo){
-        this.valor = valor;
-        this.id = id;
-        this.tipo = tipo;
+    constructor(public letoconst: TipoDato, public id: string, public tipo: Tipo, public valor: Expresion){
     }
 }

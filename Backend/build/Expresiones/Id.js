@@ -24,14 +24,15 @@ var Id = /** @class */ (function (_super) {
         return _this;
     }
     Id.prototype.ejecutar = function (entorno) {
-        var value = entorno.getvar(this.id);
-        if (value == null) {
+        var resultado = entorno.obtenervar(this.id);
+        if (resultado == null) {
             throw new N_Error_1.N_Error('Semantico', 'La variable no existe: ' + this.id, this.linea, this.columna);
         }
-        else {
-            var resultado = value.valor.ejecutar(entorno);
-            return resultado;
+        if (resultado.valor == null) {
+            throw new N_Error_1.N_Error('Semantico', 'La variable ' + this.id + ' no contiene valor ', this.linea, this.columna);
         }
+        var retorno = resultado.valor.ejecutar(entorno);
+        return retorno;
     };
     return Id;
 }(Expresion_1.Expresion));

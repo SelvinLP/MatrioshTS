@@ -1,6 +1,7 @@
-import { Tipo } from "../Abstracto/Retorno";
+import { Tipo, TipoDato } from "../Abstracto/Retorno";
 import { Simbolo } from "./Simbolo";
 import { Expresion } from "../Abstracto/Expresion";
+import { N_Error } from "../Errores/N_Error";
 
 export class Entorno{
     
@@ -10,25 +11,22 @@ export class Entorno{
         this.variables = new Map();
     }
 
-    public guardarvar(id: string, valor: Expresion, tipo: Tipo){
+    public guardarvar(letoconst: TipoDato,id: string, valor: Expresion, tipo: Tipo, line : number, column: number){
 
         let env : Entorno | null = this;
-        let bandera=true;
         while(env != null){
             if(env.variables.has(id)){
-                env.variables.set(id, new Simbolo(id, valor, tipo));
-                bandera=false;
+                //Ya existe entonces no insertamos
+                throw new N_Error('Semantico','La variable ya existe: '+id, line, column);
                 break;
             }
             env = env.anterior;
         }
         //sino se cumple lo guarda en el entorno actual
-        if(bandera == true){
-            this.variables.set(id, new Simbolo(id, valor, tipo));
-        }
+        this.variables.set(id, new Simbolo(letoconst,id, tipo, valor));
     }
 
-    public getvar(id: string) : Simbolo | undefined | null{
+    public obtenervar(id: string) : Simbolo | undefined | null{
         let env : Entorno | null = this;
         while(env != null){
             if(env.variables.has(id)){

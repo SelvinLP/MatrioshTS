@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TipoLogica = exports.TipoRelacional = exports.TipoAritmetico = exports.Tipo = void 0;
+exports.TipoDato = exports.TipoLogica = exports.TipoRelacional = exports.TipoAritmetico = exports.Tipo = void 0;
 //Tipos de variables
 var Tipo;
 (function (Tipo) {
@@ -39,3 +39,9 @@ var TipoLogica;
     TipoLogica[TipoLogica["OR"] = 1] = "OR";
     TipoLogica[TipoLogica["NOT"] = 2] = "NOT";
 })(TipoLogica = exports.TipoLogica || (exports.TipoLogica = {}));
+//Tipo de dato
+var TipoDato;
+(function (TipoDato) {
+    TipoDato[TipoDato["LET"] = 0] = "LET";
+    TipoDato[TipoDato["CONST"] = 1] = "CONST";
+})(TipoDato = exports.TipoDato || (exports.TipoDato = {}));

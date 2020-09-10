@@ -1,6 +1,4 @@
 .ngx-codemirror {
-    overflow-y: auto; 
-    overflow-x: scroll; 
     border: 1px solid whitesmoke;
     width: 100%;
     height: 90%;

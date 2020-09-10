@@ -10,6 +10,7 @@
     const {Imprimir} = require('../build/Instrucciones/Imprimir');
     const {Ifelse} = require('../build/Instrucciones/Ifelse');
     const {While} = require('../build/Instrucciones/While');
+    const {For} = require('../build/Instrucciones/For');
     const {Dowhile} = require('../build/Instrucciones/Dowhile');
     const {Declaracion} = require('../build/Instrucciones/Declaracion');
     const {Asignacion} = require('../build/Instrucciones/Asignacion');
@@ -51,6 +52,7 @@
 "break"             return 'tk_break'
 "function"          return 'tk_function'
 "console.log"       return 'tk_console'
+"graficar_ts"       return 'graficar_ts'
 
 
 //Relacionales
@@ -142,6 +144,7 @@ Instruccion:
     | Ift                   {$$=$1;}
     | Whilet                {$$=$1;}
     | Dowhilet              {$$=$1;}
+    | Fort                  {$$=$1;}
     | Funciones             {$$=$1;}
 ;
 
@@ -211,6 +214,13 @@ Dowhilet:
     tk_do Cuerpo tk_while '(' Expresion ')' ';'
     {
         $$ = new Dowhile($5, $2, @1.first_line, @1.first_column);
+    }
+;
+
+Fort:
+    tk_for '(' Declaracion E_relacional ';' Incydec ')' Cuerpo
+    {
+        $$ = new For($3, $4, $6, $8, @1.first_line, @1.first_column);
     }
 ;
 

@@ -21,6 +21,8 @@ var TipoAritmetico;
     TipoAritmetico[TipoAritmetico["MOD"] = 5] = "MOD";
     TipoAritmetico[TipoAritmetico["INC"] = 6] = "INC";
     TipoAritmetico[TipoAritmetico["DEC"] = 7] = "DEC";
+    TipoAritmetico[TipoAritmetico["UMENOS"] = 8] = "UMENOS";
+    TipoAritmetico[TipoAritmetico["UMAS"] = 9] = "UMAS";
 })(TipoAritmetico = exports.TipoAritmetico || (exports.TipoAritmetico = {}));
 //Tipos de operaciones logicas
 var TipoRelacional;

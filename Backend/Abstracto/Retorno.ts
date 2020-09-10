@@ -22,7 +22,9 @@ export enum TipoAritmetico{
     POT,
     MOD,
     INC,
-    DEC
+    DEC,
+    UMENOS,
+    UMAS
 }
 
 //Tipos de operaciones logicas

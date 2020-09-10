@@ -27,52 +27,70 @@ var Aritmetica = /** @class */ (function (_super) {
         return _this;
     }
     Aritmetica.prototype.ejecutar = function (entorno) {
-        var valorizq = this.left.ejecutar(entorno);
-        var valorder = this.right.ejecutar(entorno);
-        var tipoDominante = this.Tipo_dominante(valorizq.tipo, valorder.tipo);
-        if (this.type == Retorno_1.TipoAritmetico.MAS) {
-            if (tipoDominante == Retorno_1.Tipo.STRING)
-                return { valor: (valorizq.valor.toString() + valorder.valor.toString()), tipo: Retorno_1.Tipo.STRING };
-            else if (tipoDominante == Retorno_1.Tipo.NUMBER)
-                return { valor: (valorizq.valor + valorder.valor), tipo: Retorno_1.Tipo.NUMBER };
-            else
-                throw new N_Error_1.N_Error('Semantico', 'No se puede operar: ' + valorizq.valor + " + " + valorder.valor, this.linea, this.columna);
-        }
-        else if (this.type == Retorno_1.TipoAritmetico.MENOS) {
-            if (tipoDominante == Retorno_1.Tipo.NUMBER)
-                return { valor: (valorizq.valor - valorder.valor), tipo: Retorno_1.Tipo.NUMBER };
-            else
-                throw new N_Error_1.N_Error('Semantico', 'No se puede operar: ' + valorizq.valor + " - " + valorder.valor, this.linea, this.columna);
-        }
-        else if (this.type == Retorno_1.TipoAritmetico.MULT) {
-            if (tipoDominante == Retorno_1.Tipo.NUMBER)
-                return { valor: (valorizq.valor * valorder.valor), tipo: Retorno_1.Tipo.NUMBER };
-            else
-                throw new N_Error_1.N_Error('Semantico', 'No se puede operar: ' + valorizq.valor + " * " + valorder.valor, this.linea, this.columna);
-        }
-        else if (this.type == Retorno_1.TipoAritmetico.DIV) {
-            if (tipoDominante == Retorno_1.Tipo.NUMBER)
-                if (valorder.valor != 0)
-                    return { valor: (valorizq.valor / valorder.valor), tipo: Retorno_1.Tipo.NUMBER };
+        if (this.type != Retorno_1.TipoAritmetico.UMAS && this.type != Retorno_1.TipoAritmetico.UMENOS
+            && this.type != Retorno_1.TipoAritmetico.INC && this.type != Retorno_1.TipoAritmetico.DEC) {
+            var valorizq = this.left.ejecutar(entorno);
+            var valorder = this.right.ejecutar(entorno);
+            var tipoDominante = this.Tipo_dominante(valorizq.tipo, valorder.tipo);
+            if (this.type == Retorno_1.TipoAritmetico.MAS) {
+                if (tipoDominante == Retorno_1.Tipo.STRING)
+                    return { valor: (valorizq.valor.toString() + valorder.valor.toString()), tipo: Retorno_1.Tipo.STRING };
+                else if (tipoDominante == Retorno_1.Tipo.NUMBER)
+                    return { valor: (valorizq.valor + valorder.valor), tipo: Retorno_1.Tipo.NUMBER };
                 else
-                    throw new N_Error_1.N_Error('Semantico', 'No se puede dividir entre 0', this.linea, this.columna);
-            else
-                throw new N_Error_1.N_Error('Semantico', 'No se puede operar: ' + valorizq.valor + " / " + valorder.valor, this.linea, this.columna);
-        }
-        else if (this.type == Retorno_1.TipoAritmetico.POT) {
-            if (tipoDominante == Retorno_1.Tipo.NUMBER)
-                return { valor: (Math.pow(valorizq.valor, valorder.valor)), tipo: Retorno_1.Tipo.NUMBER };
-            else
-                throw new N_Error_1.N_Error('Semantico', 'No se puede operar: ' + valorizq.valor + " ** " + valorder.valor, this.linea, this.columna);
-        }
-        else {
-            if (tipoDominante == Retorno_1.Tipo.NUMBER)
-                if (valorder.valor != 0)
-                    return { valor: (valorizq.valor % valorder.valor), tipo: Retorno_1.Tipo.NUMBER };
+                    throw new N_Error_1.N_Error('Semantico', 'No se puede operar: ' + valorizq.valor + " + " + valorder.valor, this.linea, this.columna);
+            }
+            else if (this.type == Retorno_1.TipoAritmetico.MENOS) {
+                if (tipoDominante == Retorno_1.Tipo.NUMBER)
+                    return { valor: (valorizq.valor - valorder.valor), tipo: Retorno_1.Tipo.NUMBER };
                 else
-                    throw new N_Error_1.N_Error('Semantico', 'No se puede sacar modulo entre 0', this.linea, this.columna);
-            else
-                throw new N_Error_1.N_Error('Semantico', 'No se puede operar: ' + valorizq.valor + " % " + valorder.valor, this.linea, this.columna);
+                    throw new N_Error_1.N_Error('Semantico', 'No se puede operar: ' + valorizq.valor + " - " + valorder.valor, this.linea, this.columna);
+            }
+            else if (this.type == Retorno_1.TipoAritmetico.MULT) {
+                if (tipoDominante == Retorno_1.Tipo.NUMBER)
+                    return { valor: (valorizq.valor * valorder.valor), tipo: Retorno_1.Tipo.NUMBER };
+                else
+                    throw new N_Error_1.N_Error('Semantico', 'No se puede operar: ' + valorizq.valor + " * " + valorder.valor, this.linea, this.columna);
+            }
+            else if (this.type == Retorno_1.TipoAritmetico.DIV) {
+                if (tipoDominante == Retorno_1.Tipo.NUMBER)
+                    if (valorder.valor != 0)
+                        return { valor: (valorizq.valor / valorder.valor), tipo: Retorno_1.Tipo.NUMBER };
+                    else
+                        throw new N_Error_1.N_Error('Semantico', 'No se puede dividir entre 0', this.linea, this.columna);
+                else
+                    throw new N_Error_1.N_Error('Semantico', 'No se puede operar: ' + valorizq.valor + " / " + valorder.valor, this.linea, this.columna);
+            }
+            else if (this.type == Retorno_1.TipoAritmetico.POT) {
+                if (tipoDominante == Retorno_1.Tipo.NUMBER)
+                    return { valor: (Math.pow(valorizq.valor, valorder.valor)), tipo: Retorno_1.Tipo.NUMBER };
+                else
+                    throw new N_Error_1.N_Error('Semantico', 'No se puede operar: ' + valorizq.valor + " ** " + valorder.valor, this.linea, this.columna);
+            }
+            else {
+                if (tipoDominante == Retorno_1.Tipo.NUMBER)
+                    if (valorder.valor != 0)
+                        return { valor: (valorizq.valor % valorder.valor), tipo: Retorno_1.Tipo.NUMBER };
+                    else
+                        throw new N_Error_1.N_Error('Semantico', 'No se puede sacar modulo entre 0', this.linea, this.columna);
+                else
+                    throw new N_Error_1.N_Error('Semantico', 'No se puede operar: ' + valorizq.valor + " % " + valorder.valor, this.linea, this.columna);
+            }
+        }
+        else { //evitamos el error de validar el lado derecho con umas y u menos
+            var valorizq = this.left.ejecutar(entorno);
+            if (this.type == Retorno_1.TipoAritmetico.UMENOS) {
+                if (valorizq.tipo == Retorno_1.Tipo.NUMBER)
+                    return { valor: (valorizq.valor * -1), tipo: Retorno_1.Tipo.NUMBER };
+                else
+                    throw new N_Error_1.N_Error('Semantico', 'No se puede operar: -' + valorizq.valor, this.linea, this.columna);
+            }
+            else {
+                if (valorizq.tipo == Retorno_1.Tipo.NUMBER)
+                    return { valor: (valorizq.valor), tipo: Retorno_1.Tipo.NUMBER };
+                else
+                    throw new N_Error_1.N_Error('Semantico', 'No se puede operar: +' + valorizq.valor, this.linea, this.columna);
+            }
         }
     };
     return Aritmetica;

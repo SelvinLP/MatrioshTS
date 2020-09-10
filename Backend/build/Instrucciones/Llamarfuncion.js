@@ -13,34 +13,24 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Ifelse = void 0;
+exports.Llamarfuncion = void 0;
 var Instruccion_1 = require("../Abstracto/Instruccion");
-var Retorno_1 = require("../Abstracto/Retorno");
 var N_Error_1 = require("../Errores/N_Error");
-var Ifelse = /** @class */ (function (_super) {
-    __extends(Ifelse, _super);
-    function Ifelse(condicion, codigo, elsest, line, column) {
+var Llamarfuncion = /** @class */ (function (_super) {
+    __extends(Llamarfuncion, _super);
+    function Llamarfuncion(id, expresiones, line, column) {
         var _this = _super.call(this, line, column) || this;
-        _this.condicion = condicion;
-        _this.codigo = codigo;
-        _this.elsest = elsest;
+        _this.id = id;
+        _this.expresiones = expresiones;
         return _this;
     }
-    Ifelse.prototype.ejecutar = function (entorno) {
-        var condicion = this.condicion.ejecutar(entorno);
-        if (condicion.tipo == Retorno_1.Tipo.BOOLEAN) {
-            if (condicion.valor == true) {
-                return this.codigo.ejecutar(entorno);
-            }
-            else {
-                if (this.elsest != null)
-                    this.elsest.ejecutar(entorno);
-            }
+    Llamarfuncion.prototype.ejecutar = function (entorno) {
+        var funcion = entorno.obtenerfuncion(this.id);
+        if (funcion == null) {
+            throw new N_Error_1.N_Error('Semantico', 'La funcion ' + this.id + " no existe", this.linea, this.columna);
         }
-        else {
-            throw new N_Error_1.N_Error('Semantico', 'La operacion no es booleana en el If ' + condicion.valor, this.linea, this.columna);
-        }
+        funcion.codigo.ejecutar(entorno);
     };
-    return Ifelse;
+    return Llamarfuncion;
 }(Instruccion_1.Instruccion));
-exports.Ifelse = Ifelse;
+exports.Llamarfuncion = Llamarfuncion;

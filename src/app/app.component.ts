@@ -16,7 +16,7 @@ export class AppComponent {
   options: any = {
     lineNumbers: true,
     theme:'mbo',
-    lineWrapping : true,
+    lineWrapping: true,
     indentWithTabs: true,
     mode: 'javascript',
     styleActiveLine: true,

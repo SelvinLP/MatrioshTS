@@ -15,6 +15,8 @@
     const {Asignacion} = require('../build/Instrucciones/Asignacion');
     const {Statement} = require('../build/Instrucciones/Statement');
     const {Id} = require('../build/Expresiones/Id');
+    const {Funcion} = require('../build/Instrucciones/Funcion');
+    const {Llamarfuncion} = require('../build/Instrucciones/Llamarfuncion');
 %}
 
 /*------------------------------------------------PARTE LEXICA--------------------------------------------------- */
@@ -47,7 +49,7 @@
 "continue"          return 'tk_continue'
 "return"            return 'tk_return'
 "break"             return 'tk_break'
-
+"function"          return 'tk_function'
 "console.log"       return 'tk_console'
 
 
@@ -106,14 +108,18 @@
 
 /lex
 
+%left '++' '--'
+%left '||'
+%left '&&'
+%left '==', '!='
+%nonassoc '>=', '<=', '<', '>'
 %left '+' '-'
 %left '*' '/'
 %left '**' '%'
-%left '||'
-%left '&&'
 %right '!'
-%left '==', '!='
-%left '>=', '<=', '<', '>'
+
+
+%right UMENOS UMAS
 
 /*------------------------------------------------PARTE SINTACTICA--------------------------------------------------- */
 
@@ -136,6 +142,7 @@ Instruccion:
     | Ift                   {$$=$1;}
     | Whilet                {$$=$1;}
     | Dowhilet              {$$=$1;}
+    | Funciones             {$$=$1;}
 ;
 
 Declaracion:
@@ -165,7 +172,11 @@ PosibleAsignacion:
 Asignacion:
     tk_id '=' Expresion ';'
     {
-        $$ = new Asignacion($1, $3, @1.first_line, @1.first_column);
+        $$ = new Asignacion($1, $3, null, @1.first_line, @1.first_column);
+    }
+    | Incydec ';'
+    {
+        $$=$1;
     }
 ;
 
@@ -203,6 +214,17 @@ Dowhilet:
     }
 ;
 
+Funciones:
+    tk_function tk_id '(' ')' Cuerpo
+    {
+        $$ = new Funcion($2, [], $5, @1.first_line, @1.first_column);
+    }
+    | tk_id '(' ')' ';'
+    {
+        $$ = new Llamarfuncion($1, [], @1.first_line, @1.first_column);
+    }
+;
+
 Cuerpo:
     '{' LInstrucciones '}' 
     {
@@ -215,7 +237,8 @@ Cuerpo:
 ;
 
 Expresion:
-    E_aritmetica            {$$=$1;}
+    '(' Expresion ')'       {$$=$2;}
+    | E_aritmetica          {$$=$1;}
     | E_relacional          {$$=$1;}
     | E_logica              {$$=$1;}
     | Factor                {$$=$1;}
@@ -245,6 +268,14 @@ E_aritmetica:
     | Expresion '%' Expresion
     {
         $$ = new Aritmetica($1, $3, TipoAritmetico.MOD, @1.first_line,@1.first_column);
+    }
+    | '-' Expresion %prec UMENOS
+    {
+        $$ = new Aritmetica($2, null, TipoAritmetico.UMENOS, @1.first_line,@1.first_column);
+    }
+    | '+' Expresion %prec UMAS
+    {
+        $$ = new Aritmetica($2, null, TipoAritmetico.UMAS, @1.first_line,@1.first_column);
     }
 ;
 
@@ -291,11 +322,7 @@ E_logica:
 ;
 
 Factor:
-    '(' Expresion ')'
-    { 
-        $$ = $2;
-    }
-    | tk_entero
+    tk_entero
     { 
         $$ = new Literal($1, @1.first_line, @1.first_column, 0);
     }
@@ -314,5 +341,16 @@ Factor:
     | tk_id
     {
         $$ = new Id($1, @1.first_line, @1.first_column);
+    }
+;
+
+Incydec:
+    tk_id '++'
+    {
+        $$ = new Asignacion($1, null, TipoAritmetico.INC,@1.first_line, @1.first_column);
+    }
+    | tk_id '--'
+    {
+        $$ = new Asignacion($1, null, TipoAritmetico.DEC, @1.first_line, @1.first_column);
     }
 ;

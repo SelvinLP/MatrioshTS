@@ -24,11 +24,11 @@ export class For extends Instruccion{
                 //validacion nuevamente de la condicion sino se encicla
                 rescondicion = this.condicion.ejecutar(entorno);
                 if(rescondicion.tipo != Tipo.BOOLEAN){
-                    throw new N_Error('Semantico','La operacion no es booleana en el for', this.linea,this.columna);
+                    throw new N_Error('Semantico','La operacion no es booleana en el for','', this.linea,this.columna);
                 }
             }
         }else{
-            throw new N_Error('Semantico','La operacion no es booleana en el for', this.linea,this.columna);
+            throw new N_Error('Semantico','La operacion no es booleana en el for','', this.linea,this.columna);
         }
     }
 }

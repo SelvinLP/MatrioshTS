@@ -15,7 +15,7 @@ export class Declaracion extends Instruccion{
         if(this.value == null){
             //Validaciones de const
             if(this.letoconst == TipoDato.CONST){
-                throw new N_Error('Semantico','La variable '+this.id+" tipo const no tiene definido un valor", this.linea, this.columna);
+                throw new N_Error('Semantico','La variable '+this.id+" tipo const no tiene definido un valor",'', this.linea, this.columna);
             }else{
                 entorno.guardarvar(this.letoconst, this.id, this.value, this.tipo ,this.linea,this.columna);
             }
@@ -31,7 +31,7 @@ export class Declaracion extends Instruccion{
                 if(this.tipo == resp.tipo){
                         banderainsertar=true;
                 }else{
-                    throw new N_Error('Semantico','La variable '+this.id+" no es de tipo compatible con la expresion", this.linea, this.columna);
+                    throw new N_Error('Semantico','La variable '+this.id+" no es de tipo compatible con la expresion",'', this.linea, this.columna);
                 }
             }
             //Insertamos si cumple con las condiciones

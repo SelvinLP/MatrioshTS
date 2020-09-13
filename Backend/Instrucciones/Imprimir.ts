@@ -1,6 +1,7 @@
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Expresion } from "../Abstracto/Expresion";
 import { Entorno } from "../Entorno/Entorno";
+import { L_Print } from "../Otros/L_Print";
 
 export class Imprimir extends Instruccion{
 
@@ -10,6 +11,6 @@ export class Imprimir extends Instruccion{
 
     public ejecutar(entorno:Entorno ) {
         const resultado = this.value.ejecutar(entorno);
-        console.log(resultado);
+        L_Print.push(resultado.valor);
     }
 }

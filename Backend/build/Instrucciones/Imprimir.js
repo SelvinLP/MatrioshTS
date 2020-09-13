@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Imprimir = void 0;
 var Instruccion_1 = require("../Abstracto/Instruccion");
+var L_Print_1 = require("../Otros/L_Print");
 var Imprimir = /** @class */ (function (_super) {
     __extends(Imprimir, _super);
     function Imprimir(value, line, column) {
@@ -24,7 +25,7 @@ var Imprimir = /** @class */ (function (_super) {
     }
     Imprimir.prototype.ejecutar = function (entorno) {
         var resultado = this.value.ejecutar(entorno);
-        console.log(resultado);
+        L_Print_1.L_Print.push(resultado.valor);
     };
     return Imprimir;
 }(Instruccion_1.Instruccion));

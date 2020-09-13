@@ -12,7 +12,7 @@ export class Llamarfuncion extends Instruccion{
     public ejecutar(entorno : Entorno) {
         const funcion = entorno.obtenerfuncion(this.id);
         if(funcion == null){
-            throw new N_Error('Semantico','La funcion '+this.id+" no existe", this.linea, this.columna);
+            throw new N_Error('Semantico','La funcion '+this.id+" no existe",'', this.linea, this.columna);
         }
         funcion.codigo.ejecutar(entorno);
     }

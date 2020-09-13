@@ -1,6 +1,5 @@
 import { Tipo, TipoDato } from "../Abstracto/Retorno";
 import { Simbolo } from "./Simbolo";
-import { Expresion } from "../Abstracto/Expresion";
 import { N_Error } from "../Errores/N_Error";
 import { Funcion } from "../Instrucciones/Funcion";
 
@@ -18,7 +17,7 @@ export class Entorno{
         let env : Entorno | null = this;
         //verificacion si existe en el mismo entorno
         if(env.variables.has(id)){
-            throw new N_Error('Semantico','La variable ya existe: '+id, line, column);
+            throw new N_Error('Semantico','La variable ya existe: '+id,'', line, column);
         }else{
             //sino se cumple lo guarda en el entorno actual
             this.variables.set(id, new Simbolo(letoconst,id, tipo, valor));
@@ -41,7 +40,7 @@ export class Entorno{
         while(env != null){
             if(env.funciones.has(id)){
                 //Ya existe entonces no insertamos
-                throw new N_Error('Semantico','La funcion ya existe: '+id, line, column);
+                throw new N_Error('Semantico','La funcion ya existe: '+id,'', line, column);
             }
             env = env.anterior;
         }

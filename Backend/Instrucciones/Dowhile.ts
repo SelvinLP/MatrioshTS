@@ -16,7 +16,7 @@ export class Dowhile extends Instruccion{
             this.codigo.ejecutar(entorno);
             condicion=this.condicion.ejecutar(entorno);
             if(condicion.tipo != Tipo.BOOLEAN){
-                throw new N_Error('Semantico','La operacion no es booleana en el do..while', this.linea,this.columna);
+                throw new N_Error('Semantico','La operacion no es booleana en el do..while','', this.linea,this.columna);
             }
         }while(condicion.valor == true);
     }

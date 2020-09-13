@@ -38,7 +38,7 @@ export class Relacional extends Expresion{
             return {valor : resultado, tipo : Tipo.BOOLEAN};
         }
         else{
-            throw new N_Error('Semantico','No se reconoce el operador relacional', this.linea,this.columna);
+            throw new N_Error('Semantico','No se reconoce el operador relacional','', this.linea,this.columna);
         }
         
     }

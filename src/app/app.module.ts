@@ -6,10 +6,15 @@ import { AppComponent } from './app.component';
 
 import { FormsModule } from '@angular/forms';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
+import { ErroresComponent } from './components/errores/errores.component';
+import { HomeComponent } from './components/home/home.component';
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ErroresComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

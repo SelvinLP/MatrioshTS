@@ -13,10 +13,10 @@ export class Id extends Expresion{
 
         const resultado = entorno.obtenervar(this.id);
         if(resultado == null){
-            throw new N_Error('Semantico','La variable no existe: '+ this.id, this.linea,this.columna);
+            throw new N_Error('Semantico','La variable no existe: '+ this.id,'', this.linea,this.columna);
         }
         if(resultado.valor==null){
-            throw new N_Error('Semantico','La variable '+this.id+' no contiene valor ', this.linea,this.columna);
+            throw new N_Error('Semantico','La variable '+this.id+' no contiene valor ','', this.linea,this.columna);
         }
         return {valor : resultado.valor, tipo : resultado.tipo};
     }

@@ -16,7 +16,7 @@ export class Logica extends Expresion{
             const valorder = this.right.ejecutar(entorno);
             if(this.type == TipoLogica.AND){
                 if(valorizq.tipo != Tipo.BOOLEAN || valorder.tipo != Tipo.BOOLEAN){
-                    throw new N_Error('Semantico','No se puede operar: '+valorizq.valor+" && "+valorder.valor, this.linea,this.columna);
+                    throw new N_Error('Semantico','No se puede operar: '+valorizq.valor+" && "+valorder.valor,'', this.linea,this.columna);
                 }else{
                     const resultado = valorizq.valor && valorder.valor;
                     return {valor : resultado, tipo : Tipo.BOOLEAN};
@@ -24,7 +24,7 @@ export class Logica extends Expresion{
                 
             }else{
                 if(valorizq.tipo != Tipo.BOOLEAN || valorder.tipo != Tipo.BOOLEAN){
-                    throw new N_Error('Semantico','No se puede operar: '+valorizq.valor+" || "+valorder.valor, this.linea,this.columna);
+                    throw new N_Error('Semantico','No se puede operar: '+valorizq.valor+" || "+valorder.valor,'', this.linea,this.columna);
                 }else{
                     const resultado = valorizq.valor || valorder.valor;
                     return {valor : resultado, tipo : Tipo.BOOLEAN};
@@ -34,7 +34,7 @@ export class Logica extends Expresion{
             //Validamos el not
             const valorizq = this.left.ejecutar(entorno);
             if(valorizq.tipo != Tipo.BOOLEAN ){
-                throw new N_Error('Semantico','No se puede operar: !'+valorizq.valor, this.linea,this.columna);
+                throw new N_Error('Semantico','No se puede operar: !'+valorizq.valor,'', this.linea,this.columna);
             }else{
                 const resultado = !valorizq.valor;
                 return {valor : resultado, tipo : Tipo.BOOLEAN};

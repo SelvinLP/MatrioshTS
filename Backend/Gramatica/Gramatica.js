@@ -897,7 +897,7 @@ case 53: /*se ignoran*/
 break;
 case 54:  return 5;   
 break;
-case 55:CL_Error.L_Errores.push(new CN_Error.N_Error("Lexico",yy_.yytext,yy_.yylineno,yy_.yylloc.first_column))
+case 55:CL_Error.L_Errores.push(new CN_Error.N_Error("Lexico",yy_.yytext,"",yy_.yylineno,yy_.yylloc.first_column))
 break;
 }
 },

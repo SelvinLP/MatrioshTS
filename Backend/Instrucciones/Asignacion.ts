@@ -13,10 +13,10 @@ export class Asignacion extends Instruccion{
     public ejecutar(entorno:Entorno){
         const resultado= entorno.obtenervar(this.id);
         if(resultado == null){
-            throw new N_Error('Semantico','La variable no existe: '+ this.id, this.linea,this.columna);
+            throw new N_Error('Semantico','La variable no existe: '+ this.id,'', this.linea,this.columna);
         }
         if(resultado.letoconst == TipoDato.CONST){
-            throw new N_Error('Semantico','La variable '+this.id+' no se puede modificar', this.linea,this.columna);
+            throw new N_Error('Semantico','La variable '+this.id+' no se puede modificar','', this.linea,this.columna);
         }
 
         if(this.value ==null){
@@ -27,7 +27,7 @@ export class Asignacion extends Instruccion{
                 }else if(this.tipo == TipoAritmetico.DEC){
                     resultado.valor=resultado.valor-1;
                 }else{
-                    throw new N_Error('Semantico','La variable '+this.id+" no es de tipo compatible para incr o decr", this.linea, this.columna);
+                    throw new N_Error('Semantico','La variable '+this.id+" no es de tipo compatible para incr o decr",'', this.linea, this.columna);
                 }
             }
             
@@ -43,7 +43,7 @@ export class Asignacion extends Instruccion{
                     resultado.tipo = exp.tipo;
                     resultado.valor = exp.valor;
                 }else{
-                    throw new N_Error('Semantico','La variable '+this.id+" no es de tipo compatible con la asignacion", this.linea, this.columna);
+                    throw new N_Error('Semantico','La variable '+this.id+" no es de tipo compatible con la asignacion",'', this.linea, this.columna);
                 }
             }
         }

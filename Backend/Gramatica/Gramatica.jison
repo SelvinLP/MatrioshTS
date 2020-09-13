@@ -106,7 +106,7 @@
 
 <<EOF>>                        %{  return 'EOF';   %}
 
-.                               {CL_Error.L_Errores.push(new CN_Error.N_Error("Lexico",yytext,yylineno,yylloc.first_column))}
+.                               {CL_Error.L_Errores.push(new CN_Error.N_Error("Lexico",yytext,"",yylineno,yylloc.first_column))}
 
 /lex
 

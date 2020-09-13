@@ -22,7 +22,7 @@ export class Ifelse extends Instruccion{
                     this.elsest.ejecutar(entorno);
             }
         }else{
-            throw new N_Error('Semantico','La operacion no es booleana en el If '+ condicion.valor, this.linea,this.columna);  
+            throw new N_Error('Semantico','La operacion no es booleana en el If '+ condicion.valor,'', this.linea,this.columna);  
         }
     }
 }

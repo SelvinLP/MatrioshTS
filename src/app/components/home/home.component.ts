@@ -64,8 +64,7 @@ export class HomeComponent implements OnInit {
   }
 
   Ev_Ast(){
-    wasmFolder('/assets/@hpcc-js/wasm/dist/');
-    graphviz('div').renderDot('digraph {a -> c; c-> d}');
+    this.router.navigate(['/ast']);
   }
   
   Ev_Errores(){

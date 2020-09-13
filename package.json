@@ -28,6 +28,7 @@
     "angular-ui-codemirror": "^0.3.0",
     "bootstrap": "^4.5.2",
     "codemirror": "^5.57.0",
+    "d3-graphviz": "^3.1.0",
     "jquery": "^3.5.1",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",

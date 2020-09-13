@@ -1,4 +1,9 @@
+
 import { Component } from '@angular/core';
+//Librerias
+import { graphviz }  from 'd3-graphviz';
+import { wasmFolder } from "@hpcc-js/wasm";
+
 import { L_Errores } from "../../Backend/build/Errores/L_Error";
 import { Entorno } from "../../Backend/build/Entorno/Entorno";
 import Parser from "../../Backend/Gramatica/Gramatica";
@@ -23,6 +28,8 @@ export class AppComponent {
   };
 
   Ev_Traducir(){
+    wasmFolder('/assets/@hpcc-js/wasm/dist/');
+    graphviz('div').renderDot('digraph {a -> c}');
     console.log("Funciona boton traducir");
   }
   Ev_Ejecutar(){

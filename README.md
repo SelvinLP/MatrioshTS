@@ -7,6 +7,8 @@ Proyecto 1 de Organizacion de Lenguajes y Compiladores 2 2s 2020
 * Logicas
 * Console.log
 * If Else
+* While
+* For
 
 ## Comandos 🔧
 _Levantar el frontend de angular_

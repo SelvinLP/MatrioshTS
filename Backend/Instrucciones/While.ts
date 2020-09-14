@@ -3,6 +3,7 @@ import { Instruccion } from "../Abstracto/Instruccion";
 import { Tipo } from "../Abstracto/Retorno";
 import { N_Error } from "../Errores/N_Error";
 import { Entorno } from "../Entorno/Entorno";
+import { N_Ast } from "../Ast/Ast";
 
 export class While extends Instruccion{
 
@@ -24,5 +25,16 @@ export class While extends Instruccion{
         }else{
             throw new N_Error('Semantico','La operacion no es booleana en el while','', this.linea,this.columna);
         }
+    }
+
+    public ejecutarast(ast:N_Ast):N_Ast{
+        let Cadena:string=ast.cadena+"\n";
+        Cadena += ast.posdes+" [label =\"While\"];\n";
+        Cadena += ast.posant+" -> "+ast.posdes+";\n";
+        let result:N_Ast;
+        //Seccion Expresion
+        //Seccion Codigo
+        result=this.codigo.ejecutarast({posant:ast.posdes, posdes:ast.posdes+1,cadena:Cadena});
+        return result;
     }
 }

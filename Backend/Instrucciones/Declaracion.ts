@@ -3,6 +3,7 @@ import { Expresion } from "../Abstracto/Expresion";
 import { Tipo,TipoDato } from "../Abstracto/Retorno";
 import { Entorno } from "../Entorno/Entorno";
 import { N_Error } from "../Errores/N_Error";
+import { N_Ast } from "../Ast/Ast";
 
 export class Declaracion extends Instruccion{
 
@@ -39,5 +40,13 @@ export class Declaracion extends Instruccion{
                 entorno.guardarvar(this.letoconst, this.id, resp.valor, resp.tipo ,this.linea,this.columna);
             }
         }
+    }
+
+    public ejecutarast(ast:N_Ast):N_Ast{
+        let Cadena:string=ast.cadena+"\n";
+        Cadena += ast.posdes+" [label =\"Declaracion\"];\n";
+        Cadena += ast.posant+" -> "+ast.posdes+";\n";
+
+        return {posant:ast.posdes, posdes:ast.posdes+1,cadena:Cadena};
     }
 }

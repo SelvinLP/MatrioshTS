@@ -3,6 +3,7 @@ import { Expresion } from "../Abstracto/Expresion";
 import { Entorno } from "../Entorno/Entorno";
 import { N_Error } from "../Errores/N_Error";
 import { TipoDato, TipoAritmetico, Tipo } from "../Abstracto/Retorno";
+import { N_Ast } from "../Ast/Ast";
 
 export class Asignacion extends Instruccion{
 
@@ -47,5 +48,13 @@ export class Asignacion extends Instruccion{
                 }
             }
         }
+    }
+
+    public ejecutarast(ast:N_Ast):N_Ast{
+        let Cadena:string=ast.cadena+"\n";
+        Cadena += ast.posdes+" [label =\"Asignacion\"];\n";
+        Cadena += ast.posant+" -> "+ast.posdes+";\n";
+
+        return {posant:ast.posdes, posdes:ast.posdes+1,cadena:Cadena};
     }
 }

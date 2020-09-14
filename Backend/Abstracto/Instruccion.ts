@@ -1,4 +1,5 @@
 import { Entorno } from "../Entorno/Entorno";
+import { N_Ast } from "../Ast/Ast";
 
 export abstract class Instruccion {
 
@@ -11,4 +12,6 @@ export abstract class Instruccion {
     }
 
     public abstract ejecutar(entorno:Entorno) : any;
+
+    public abstract ejecutarast(ast:N_Ast):N_Ast;
 }

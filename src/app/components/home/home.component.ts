@@ -1,27 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 
-import { graphviz }  from 'd3-graphviz';
-import { wasmFolder } from "@hpcc-js/wasm";
-
 import { L_Errores } from "../../../../Backend/build/Errores/L_Error";
+import { N_Ast } from "../../../../Backend/build/Ast/Ast";
 import { L_Print } from "../../../../Backend/build/Otros/L_Print";
 import { Entorno } from "../../../../Backend/build/Entorno/Entorno";
 import Parser from "../../../../Backend/Gramatica/Gramatica";
+
+import { graphviz }  from 'd3-graphviz';
+import { wasmFolder } from "@hpcc-js/wasm";
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
+
 export class HomeComponent implements OnInit {
 
   constructor(public router: Router) { }
 
   ngOnInit(): void {}
+
   Entrada="";
   Salida="let hola=12; \n$console.log(hola);";
   Consola="";
+  CadenaGraphviz="";
+  ast;
+
   options: any = {
     lineNumbers: true,
     theme:'mbo',
@@ -41,8 +47,8 @@ export class HomeComponent implements OnInit {
     L_Errores.splice(0,L_Errores.length);
     L_Print.splice(0,L_Print.length)
 
-    var ast=Parser.parse(this.Salida);
-    for(const Instruccion of ast){
+    this.ast=Parser.parse(this.Salida);
+    for(const Instruccion of this.ast){
         try {
           Instruccion.ejecutar(entorno);
         } catch (err) {
@@ -64,11 +70,25 @@ export class HomeComponent implements OnInit {
   }
 
   Ev_Ast(){
-    this.router.navigate(['/ast']);
+    this.CadenaGraphviz = "digraph AST {\n rankdir=TB;\n node[shape=record,style=filled];\n";
+    this.CadenaGraphviz+="1 [label =\"Inicio\"]; ";
+    let inicio:N_Ast ={posant:1, posdes:2, cadena:""};
+    let cadenainst:N_Ast;
+    for(const Instruccion of this.ast){
+      cadenainst= Instruccion.ejecutarast(inicio);
+      inicio.posdes=cadenainst.posdes;
+      inicio.cadena=cadenainst.cadena;
+    }
+    this.CadenaGraphviz+=cadenainst.cadena;
+    this.CadenaGraphviz+="}";
+    wasmFolder('assets/');
+    graphviz('body').renderDot(this.CadenaGraphviz);
   }
   
   Ev_Errores(){
     this.router.navigate(['/errores']);
+    wasmFolder('assets/');
+    graphviz('body').renderDot('digraph AST {}');
   }
 
 }

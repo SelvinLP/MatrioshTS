@@ -45,6 +45,20 @@ var For = /** @class */ (function (_super) {
             throw new N_Error_1.N_Error('Semantico', 'La operacion no es booleana en el for', '', this.linea, this.columna);
         }
     };
+    For.prototype.ejecutarast = function (ast) {
+        var Cadena = ast.cadena + "\n";
+        Cadena += ast.posdes + " [label =\"For\"];\n";
+        Cadena += ast.posant + " -> " + ast.posdes + ";\n";
+        var result;
+        //Seccion Declaracion
+        result = this.declaracion.ejecutarast({ posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena });
+        //Seccion Condicion
+        //Seccion Asignacion
+        result = this.incydec.ejecutarast({ posant: ast.posdes, posdes: result.posdes, cadena: result.cadena });
+        //Seccion Codigo
+        result = this.codigo.ejecutarast({ posant: ast.posdes, posdes: result.posdes, cadena: result.cadena });
+        return result;
+    };
     return For;
 }(Instruccion_1.Instruccion));
 exports.For = For;

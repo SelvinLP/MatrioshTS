@@ -27,6 +27,12 @@ var Funcion = /** @class */ (function (_super) {
     Funcion.prototype.ejecutar = function (entorno) {
         entorno.guardarfuncion(this.id, this, this.linea, this.columna);
     };
+    Funcion.prototype.ejecutarast = function (ast) {
+        var Cadena = ast.cadena + "\n";
+        Cadena += ast.posdes + " [label =\"Funcion\"];\n";
+        Cadena += ast.posant + " -> " + ast.posdes + ";\n";
+        return { posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena };
+    };
     return Funcion;
 }(Instruccion_1.Instruccion));
 exports.Funcion = Funcion;

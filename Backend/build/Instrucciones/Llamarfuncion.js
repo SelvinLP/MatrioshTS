@@ -31,6 +31,12 @@ var Llamarfuncion = /** @class */ (function (_super) {
         }
         funcion.codigo.ejecutar(entorno);
     };
+    Llamarfuncion.prototype.ejecutarast = function (ast) {
+        var Cadena = ast.cadena + "\n";
+        Cadena += ast.posdes + " [label =\"Llamar funcion\"];\n";
+        Cadena += ast.posant + " -> " + ast.posdes + ";\n";
+        return { posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena };
+    };
     return Llamarfuncion;
 }(Instruccion_1.Instruccion));
 exports.Llamarfuncion = Llamarfuncion;

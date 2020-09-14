@@ -35,6 +35,16 @@ var Dowhile = /** @class */ (function (_super) {
             }
         } while (condicion.valor == true);
     };
+    Dowhile.prototype.ejecutarast = function (ast) {
+        var Cadena = ast.cadena + "\n";
+        Cadena += ast.posdes + " [label =\"Do while\"];\n";
+        Cadena += ast.posant + " -> " + ast.posdes + ";\n";
+        var result;
+        //Seccion Expresion
+        //Seccion Codigo
+        result = this.codigo.ejecutarast({ posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena });
+        return result;
+    };
     return Dowhile;
 }(Instruccion_1.Instruccion));
 exports.Dowhile = Dowhile;

@@ -67,6 +67,12 @@ var Asignacion = /** @class */ (function (_super) {
             }
         }
     };
+    Asignacion.prototype.ejecutarast = function (ast) {
+        var Cadena = ast.cadena + "\n";
+        Cadena += ast.posdes + " [label =\"Asignacion\"];\n";
+        Cadena += ast.posant + " -> " + ast.posdes + ";\n";
+        return { posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena };
+    };
     return Asignacion;
 }(Instruccion_1.Instruccion));
 exports.Asignacion = Asignacion;

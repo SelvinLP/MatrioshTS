@@ -41,6 +41,23 @@ var Ifelse = /** @class */ (function (_super) {
             throw new N_Error_1.N_Error('Semantico', 'La operacion no es booleana en el If ' + condicion.valor, '', this.linea, this.columna);
         }
     };
+    Ifelse.prototype.ejecutarast = function (ast) {
+        var Cadena = ast.cadena + "\n";
+        Cadena += ast.posdes + " [label =\"If\"];\n";
+        Cadena += ast.posant + " -> " + ast.posdes + ";\n";
+        var result;
+        //Seccion Condicion
+        //Seccion Codigo
+        result = this.codigo.ejecutarast({ posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena });
+        //Seccion Else
+        if (this.elsest != null) {
+            var Cadena_1 = result.cadena + "\n";
+            Cadena_1 += result.posdes + " [label =\"Else\"];\n";
+            Cadena_1 += ast.posdes + " -> " + result.posdes + ";\n";
+            result = this.elsest.ejecutarast({ posant: result.posdes, posdes: result.posdes + 1, cadena: Cadena_1 });
+        }
+        return result;
+    };
     return Ifelse;
 }(Instruccion_1.Instruccion));
 exports.Ifelse = Ifelse;

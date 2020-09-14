@@ -60,6 +60,12 @@ var Declaracion = /** @class */ (function (_super) {
             }
         }
     };
+    Declaracion.prototype.ejecutarast = function (ast) {
+        var Cadena = ast.cadena + "\n";
+        Cadena += ast.posdes + " [label =\"Declaracion\"];\n";
+        Cadena += ast.posant + " -> " + ast.posdes + ";\n";
+        return { posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena };
+    };
     return Declaracion;
 }(Instruccion_1.Instruccion));
 exports.Declaracion = Declaracion;

@@ -5,6 +5,7 @@ import { N_Error } from "../Errores/N_Error";
 import { Entorno } from "../Entorno/Entorno";
 import { Asignacion } from "./Asignacion";
 import { Declaracion } from "./Declaracion";
+import { N_Ast } from "../Ast/Ast";
 
 export class For extends Instruccion{
 
@@ -30,5 +31,20 @@ export class For extends Instruccion{
         }else{
             throw new N_Error('Semantico','La operacion no es booleana en el for','', this.linea,this.columna);
         }
+    }
+
+    public ejecutarast(ast:N_Ast):N_Ast{
+        let Cadena:string=ast.cadena+"\n";
+        Cadena += ast.posdes+" [label =\"For\"];\n";
+        Cadena += ast.posant+" -> "+ast.posdes+";\n";
+        let result:N_Ast;
+        //Seccion Declaracion
+        result =this.declaracion.ejecutarast({posant:ast.posdes, posdes:ast.posdes+1,cadena:Cadena});
+        //Seccion Condicion
+        //Seccion Asignacion
+        result =this.incydec.ejecutarast({posant:ast.posdes, posdes:result.posdes,cadena:result.cadena});
+        //Seccion Codigo
+        result =this.codigo.ejecutarast({posant:ast.posdes, posdes:result.posdes,cadena:result.cadena});
+        return result;
     }
 }

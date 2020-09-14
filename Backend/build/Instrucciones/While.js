@@ -41,6 +41,16 @@ var While = /** @class */ (function (_super) {
             throw new N_Error_1.N_Error('Semantico', 'La operacion no es booleana en el while', '', this.linea, this.columna);
         }
     };
+    While.prototype.ejecutarast = function (ast) {
+        var Cadena = ast.cadena + "\n";
+        Cadena += ast.posdes + " [label =\"While\"];\n";
+        Cadena += ast.posant + " -> " + ast.posdes + ";\n";
+        var result;
+        //Seccion Expresion
+        //Seccion Codigo
+        result = this.codigo.ejecutarast({ posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena });
+        return result;
+    };
     return While;
 }(Instruccion_1.Instruccion));
 exports.While = While;

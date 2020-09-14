@@ -27,6 +27,12 @@ var Imprimir = /** @class */ (function (_super) {
         var resultado = this.value.ejecutar(entorno);
         L_Print_1.L_Print.push(resultado.valor);
     };
+    Imprimir.prototype.ejecutarast = function (ast) {
+        var Cadena = ast.cadena + "\n";
+        Cadena += ast.posdes + " [label =\"Console.log\"];\n";
+        Cadena += ast.posant + " -> " + ast.posdes + ";\n";
+        return { posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena };
+    };
     return Imprimir;
 }(Instruccion_1.Instruccion));
 exports.Imprimir = Imprimir;

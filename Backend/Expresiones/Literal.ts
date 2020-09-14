@@ -1,5 +1,6 @@
 import { Expresion } from "../Abstracto/Expresion";
 import { Retorno, Tipo } from "../Abstracto/Retorno";
+import { N_Ast } from "../Ast/Ast";
 
 export class Literal extends Expresion{
     
@@ -28,4 +29,15 @@ export class Literal extends Expresion{
             return {valor : this.value, tipo : Tipo.ARRAY};
         }
     }
+
+    public ejecutarast(ast:N_Ast):N_Ast{
+        let Cadena:string=ast.cadena+"\n";
+        Cadena += ast.posdes+" [label =\"Expresion\"];\n";
+        Cadena += ast.posant+" -> "+ast.posdes+";\n";
+        Cadena += (ast.posdes+1)+" [label =\""+this.value+"\"];\n";
+        Cadena += ast.posdes+" -> "+(ast.posdes+1)+";\n";
+
+        return {posant:ast.posdes+1, posdes:ast.posdes+2,cadena:Cadena};
+    }
+
 }

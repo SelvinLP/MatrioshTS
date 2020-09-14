@@ -33,8 +33,9 @@ export class Ifelse extends Instruccion{
         Cadena += ast.posant+" -> "+ast.posdes+";\n";
         let result:N_Ast ;
         //Seccion Condicion
+        result=this.condicion.ejecutarast({posant:ast.posdes, posdes:ast.posdes+1,cadena:Cadena});
         //Seccion Codigo
-        result=this.codigo.ejecutarast({posant:ast.posdes, posdes:ast.posdes+1,cadena:Cadena});
+        result=this.codigo.ejecutarast({posant:ast.posdes, posdes:result.posdes,cadena:result.cadena});
         //Seccion Else
         if(this.elsest != null){
             let Cadena:string=result.cadena+"\n";

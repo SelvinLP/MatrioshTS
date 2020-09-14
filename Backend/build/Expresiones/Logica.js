@@ -61,6 +61,35 @@ var Logica = /** @class */ (function (_super) {
             }
         }
     };
+    Logica.prototype.ejecutarast = function (ast) {
+        var Cadena = ast.cadena + "\n";
+        Cadena += ast.posdes + " [label =\"Expresion\"];\n";
+        Cadena += ast.posant + " -> " + ast.posdes + ";\n";
+        var result;
+        if (this.right != null) {
+            result = this.left.ejecutarast({ posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena });
+            if (this.type == Retorno_1.TipoLogica.AND) {
+                result.cadena += result.posdes + " [label =\"AND\"];\n";
+                result.cadena += ast.posdes + " -> " + result.posdes + ";\n";
+            }
+            else { //or
+                result.cadena += result.posdes + " [label =\"OR\"];\n";
+                result.cadena += ast.posdes + " -> " + result.posdes + ";\n";
+            }
+            result = this.right.ejecutarast({ posant: ast.posdes, posdes: result.posdes + 1, cadena: result.cadena });
+        }
+        else {
+            if (this.type == Retorno_1.TipoLogica.NOT) {
+                Cadena += (ast.posdes + 1) + " [label =\"!\"];\n";
+                Cadena += ast.posdes + " -> " + (ast.posdes + 1) + ";\n";
+                result = this.left.ejecutarast({ posant: ast.posdes + 1, posdes: ast.posdes + 2, cadena: Cadena });
+            }
+            else {
+                result = { posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena };
+            }
+        }
+        return result;
+    };
     return Logica;
 }(Expresion_1.Expresion));
 exports.Logica = Logica;

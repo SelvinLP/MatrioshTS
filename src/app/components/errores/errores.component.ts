@@ -30,6 +30,7 @@ export class ErroresComponent implements OnInit {
         let text = document.createTextNode(element[key]);
         cell.appendChild(text);
       }
+      pos++;
     }
   }
   Ev_Regresar(){

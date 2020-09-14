@@ -41,6 +41,7 @@ export class For extends Instruccion{
         //Seccion Declaracion
         result =this.declaracion.ejecutarast({posant:ast.posdes, posdes:ast.posdes+1,cadena:Cadena});
         //Seccion Condicion
+        result =this.condicion.ejecutarast({posant:ast.posdes, posdes:result.posdes,cadena:result.cadena});
         //Seccion Asignacion
         result =this.incydec.ejecutarast({posant:ast.posdes, posdes:result.posdes,cadena:result.cadena});
         //Seccion Codigo

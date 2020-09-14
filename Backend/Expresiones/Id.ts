@@ -2,6 +2,7 @@ import { Expresion } from "../Abstracto/Expresion";
 import { Retorno } from "../Abstracto/Retorno";
 import { Entorno } from "../Entorno/Entorno";
 import { N_Error } from "../Errores/N_Error";
+import { N_Ast } from "../Ast/Ast";
 
 export class Id extends Expresion{
 
@@ -20,4 +21,13 @@ export class Id extends Expresion{
         }
         return {valor : resultado.valor, tipo : resultado.tipo};
     }
+
+    public ejecutarast(ast:N_Ast):N_Ast{
+        let Cadena:string=ast.cadena+"\n";
+        Cadena += ast.posdes+" [label =\""+this.id+"\"];\n";
+        Cadena += ast.posant+" -> "+ast.posdes+";\n";
+
+        return {posant:ast.posdes, posdes:ast.posdes+1,cadena:Cadena};
+    }
+
 }

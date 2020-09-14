@@ -51,10 +51,32 @@ export class Asignacion extends Instruccion{
     }
 
     public ejecutarast(ast:N_Ast):N_Ast{
+        
         let Cadena:string=ast.cadena+"\n";
         Cadena += ast.posdes+" [label =\"Asignacion\"];\n";
         Cadena += ast.posant+" -> "+ast.posdes+";\n";
-
-        return {posant:ast.posdes, posdes:ast.posdes+1,cadena:Cadena};
+        let resultado:N_Ast;
+        //Id
+        Cadena += (ast.posdes+1)+" [label =\""+this.id+"\"];\n";
+        Cadena += ast.posdes+" -> "+(ast.posdes+1)+";\n";
+        
+        if(this.value ==null){
+            //Es incremento o decremento
+            if(this.tipo == TipoAritmetico.INC){
+                Cadena += (ast.posdes+2)+" [label =\"++\"];\n";
+                Cadena += (ast.posdes)+" -> "+(ast.posdes+2)+";\n";
+            }else if(this.tipo == TipoAritmetico.DEC){
+                Cadena += (ast.posdes+2)+" [label =\"--\"];\n";
+                Cadena += (ast.posdes)+" -> "+(ast.posdes+2)+";\n";
+            }
+            resultado={posant:ast.posdes+2, posdes:ast.posdes+3,cadena:Cadena};
+        }else{
+            Cadena += (ast.posdes+2)+" [label =\"=\"];\n";
+            Cadena += (ast.posdes)+" -> "+(ast.posdes+2)+";\n";
+            //Expresion
+            resultado= this.value.ejecutarast({posant:ast.posdes, posdes:ast.posdes+3,cadena:Cadena});
+        }
+        
+        return resultado;
     }
 }

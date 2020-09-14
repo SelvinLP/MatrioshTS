@@ -40,9 +40,10 @@ var Dowhile = /** @class */ (function (_super) {
         Cadena += ast.posdes + " [label =\"Do while\"];\n";
         Cadena += ast.posant + " -> " + ast.posdes + ";\n";
         var result;
-        //Seccion Expresion
         //Seccion Codigo
         result = this.codigo.ejecutarast({ posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena });
+        //Seccion Condicion
+        result = this.condicion.ejecutarast({ posant: ast.posdes, posdes: result.posdes, cadena: result.cadena });
         return result;
     };
     return Dowhile;

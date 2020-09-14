@@ -27,8 +27,7 @@ var Aritmetica = /** @class */ (function (_super) {
         return _this;
     }
     Aritmetica.prototype.ejecutar = function (entorno) {
-        if (this.type != Retorno_1.TipoAritmetico.UMAS && this.type != Retorno_1.TipoAritmetico.UMENOS
-            && this.type != Retorno_1.TipoAritmetico.INC && this.type != Retorno_1.TipoAritmetico.DEC) {
+        if (this.type != Retorno_1.TipoAritmetico.UMAS && this.type != Retorno_1.TipoAritmetico.UMENOS) {
             var valorizq = this.left.ejecutar(entorno);
             var valorder = this.right.ejecutar(entorno);
             var tipoDominante = this.Tipo_dominante(valorizq.tipo, valorder.tipo);
@@ -92,6 +91,54 @@ var Aritmetica = /** @class */ (function (_super) {
                     throw new N_Error_1.N_Error('Semantico', 'No se puede operar: +' + valorizq.valor, '', this.linea, this.columna);
             }
         }
+    };
+    Aritmetica.prototype.ejecutarast = function (ast) {
+        var Cadena = ast.cadena + "\n";
+        Cadena += ast.posdes + " [label =\"Expresion\"];\n";
+        Cadena += ast.posant + " -> " + ast.posdes + ";\n";
+        var result;
+        if (this.type != Retorno_1.TipoAritmetico.UMAS && this.type != Retorno_1.TipoAritmetico.UMENOS) {
+            result = this.left.ejecutarast({ posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena });
+            if (this.type == Retorno_1.TipoAritmetico.MAS) {
+                result.cadena += result.posdes + " [label =\"+\"];\n";
+                result.cadena += ast.posdes + " -> " + result.posdes + ";\n";
+            }
+            else if (this.type == Retorno_1.TipoAritmetico.MENOS) {
+                result.cadena += result.posdes + " [label =\"-\"];\n";
+                result.cadena += ast.posdes + " -> " + result.posdes + ";\n";
+            }
+            else if (this.type == Retorno_1.TipoAritmetico.MULT) {
+                result.cadena += result.posdes + " [label =\"*\"];\n";
+                result.cadena += ast.posdes + " -> " + result.posdes + ";\n";
+            }
+            else if (this.type == Retorno_1.TipoAritmetico.DIV) {
+                result.cadena += result.posdes + " [label =\"/\"];\n";
+                result.cadena += ast.posdes + " -> " + result.posdes + ";\n";
+            }
+            else if (this.type == Retorno_1.TipoAritmetico.POT) {
+                result.cadena += result.posdes + " [label =\"**\"];\n";
+                result.cadena += ast.posdes + " -> " + result.posdes + ";\n";
+            }
+            else {
+                result.cadena += result.posdes + " [label =\"%\"];\n";
+                result.cadena += ast.posdes + " -> " + result.posdes + ";\n";
+            }
+            result = this.right.ejecutarast({ posant: ast.posdes, posdes: result.posdes + 1, cadena: result.cadena });
+        }
+        else {
+            result = this.left.ejecutarast(ast);
+            var Cadena_1 = result.cadena + "\n";
+            if (this.type == Retorno_1.TipoAritmetico.UMENOS) {
+                Cadena_1 += result.posdes + " [label =\"Umenos\"];\n";
+                Cadena_1 += ast.posant + " -> " + result.posdes + ";\n";
+            }
+            else {
+                Cadena_1 += result.posdes + " [label =\"Umas\"];\n";
+                Cadena_1 += ast.posant + " -> " + result.posdes + ";\n";
+            }
+            result = { posant: result.posdes, posdes: result.posdes + 1, cadena: Cadena_1 };
+        }
+        return result;
     };
     return Aritmetica;
 }(Expresion_1.Expresion));

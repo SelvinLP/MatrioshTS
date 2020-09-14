@@ -57,6 +57,39 @@ var Relacional = /** @class */ (function (_super) {
             throw new N_Error_1.N_Error('Semantico', 'No se reconoce el operador relacional', '', this.linea, this.columna);
         }
     };
+    Relacional.prototype.ejecutarast = function (ast) {
+        var Cadena = ast.cadena + "\n";
+        Cadena += ast.posdes + " [label =\"Expresion\"];\n";
+        Cadena += ast.posant + " -> " + ast.posdes + ";\n";
+        var result;
+        result = this.left.ejecutarast({ posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena });
+        if (this.type == Retorno_1.TipoRelacional.DIFERENCIA) {
+            result.cadena += result.posdes + " [label =\"DIFERENTE\"];\n";
+            result.cadena += ast.posdes + " -> " + result.posdes + ";\n";
+        }
+        else if (this.type == Retorno_1.TipoRelacional.IGUAL) {
+            result.cadena += result.posdes + " [label =\"IGUAL\"];\n";
+            result.cadena += ast.posdes + " -> " + result.posdes + ";\n";
+        }
+        else if (this.type == Retorno_1.TipoRelacional.MAYORIGUAL) {
+            result.cadena += result.posdes + " [label =\"MAYOR IGUAL\"];\n";
+            result.cadena += ast.posdes + " -> " + result.posdes + ";\n";
+        }
+        else if (this.type == Retorno_1.TipoRelacional.MAYORQUE) {
+            result.cadena += result.posdes + " [label =\"MAYOR QUE\"];\n";
+            result.cadena += ast.posdes + " -> " + result.posdes + ";\n";
+        }
+        else if (this.type == Retorno_1.TipoRelacional.MENORIGUAL) {
+            result.cadena += result.posdes + " [label =\"MENOR IGUAL\"];\n";
+            result.cadena += ast.posdes + " -> " + result.posdes + ";\n";
+        }
+        else if (this.type == Retorno_1.TipoRelacional.MENORQUE) {
+            result.cadena += result.posdes + " [label =\"MENOR QUE\"];\n";
+            result.cadena += ast.posdes + " -> " + result.posdes + ";\n";
+        }
+        result = this.right.ejecutarast({ posant: ast.posdes, posdes: result.posdes + 1, cadena: result.cadena });
+        return result;
+    };
     return Relacional;
 }(Expresion_1.Expresion));
 exports.Relacional = Relacional;

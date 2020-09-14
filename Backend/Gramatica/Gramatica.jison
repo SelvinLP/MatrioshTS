@@ -106,7 +106,7 @@
 
 <<EOF>>                        %{  return 'EOF';   %}
 
-.                               {CL_Error.L_Errores.push(new CN_Error.N_Error("Lexico",yytext,"",yylineno,yylloc.first_column))}
+.                               {CL_Error.L_Errores.push(new CN_Error.N_Error("Lexico",yytext,"",yylineno,yylloc.first_column));}
 
 /lex
 
@@ -146,6 +146,7 @@ Instruccion:
     | Dowhilet              {$$=$1;}
     | Fort                  {$$=$1;}
     | Funciones             {$$=$1;}
+    | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error en la Instruccion "+yytext,"",this._$.first_line,this._$.first_column));}
 ;
 
 Declaracion:
@@ -165,6 +166,7 @@ Tipodeclaracion:
     | ':' tk_boolean                    {$$=Tipo.BOOLEAN}
     | ':' tk_void                       {$$=Tipo.NULL}
     | %empty                            {$$=null;} 
+    | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error al definir tipo "+yytext,"",this._$.first_line,this._$.first_column))}
 ;
 
 PosibleAsignacion:
@@ -244,6 +246,7 @@ Cuerpo:
     {
         $$ = new Statement(new Array(), @1.first_line, @1.first_column);
     }
+    | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error en las llaves {} "+yytext,"",this._$.first_line,this._$.first_column));}
 ;
 
 Expresion:
@@ -252,6 +255,7 @@ Expresion:
     | E_relacional          {$$=$1;}
     | E_logica              {$$=$1;}
     | Factor                {$$=$1;}
+    | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error en la expresion "+yytext,"",this._$.first_line,this._$.first_column));}
 ;
 
 E_aritmetica:

@@ -1,4 +1,4 @@
-import { env } from "process"
+import { N_Ast } from "../Ast/Ast";
 import { Entorno } from "../Entorno/Entorno";
 import { Retorno, Tipo} from "./Retorno";
 import { L_tipos } from "../Otros/Tb_Tipos";
@@ -20,4 +20,6 @@ export abstract class Expresion {
         const tipo = L_tipos[tipoIzq][tipoDer];
         return tipo;
     }
+
+    public abstract ejecutarast(ast:N_Ast):N_Ast;
 }

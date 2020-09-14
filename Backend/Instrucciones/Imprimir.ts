@@ -19,7 +19,9 @@ export class Imprimir extends Instruccion{
         let Cadena:string=ast.cadena+"\n";
         Cadena += ast.posdes+" [label =\"Console.log\"];\n";
         Cadena += ast.posant+" -> "+ast.posdes+";\n";
-
-        return {posant:ast.posdes, posdes:ast.posdes+1,cadena:Cadena};
+        let result:N_Ast;
+        //Expresion
+        result=this.value.ejecutarast({posant:ast.posdes, posdes:ast.posdes+1,cadena:Cadena});
+        return result;
     }
 }

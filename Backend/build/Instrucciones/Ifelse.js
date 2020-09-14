@@ -47,8 +47,9 @@ var Ifelse = /** @class */ (function (_super) {
         Cadena += ast.posant + " -> " + ast.posdes + ";\n";
         var result;
         //Seccion Condicion
+        result = this.condicion.ejecutarast({ posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena });
         //Seccion Codigo
-        result = this.codigo.ejecutarast({ posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena });
+        result = this.codigo.ejecutarast({ posant: ast.posdes, posdes: result.posdes, cadena: result.cadena });
         //Seccion Else
         if (this.elsest != null) {
             var Cadena_1 = result.cadena + "\n";

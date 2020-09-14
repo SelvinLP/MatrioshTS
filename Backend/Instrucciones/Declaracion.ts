@@ -46,7 +46,27 @@ export class Declaracion extends Instruccion{
         let Cadena:string=ast.cadena+"\n";
         Cadena += ast.posdes+" [label =\"Declaracion\"];\n";
         Cadena += ast.posant+" -> "+ast.posdes+";\n";
-
-        return {posant:ast.posdes, posdes:ast.posdes+1,cadena:Cadena};
+        let result:N_Ast;
+        //Id
+        if(this.letoconst == TipoDato.CONST){
+            Cadena += (ast.posdes+1)+" [label =\"const\"];\n";
+            Cadena += ast.posdes+" -> "+(ast.posdes+1)+";\n";
+        }else{
+            Cadena += (ast.posdes+1)+" [label =\"let\"];\n";
+            Cadena += ast.posdes+" -> "+(ast.posdes+1)+";\n";
+        }
+        Cadena += (ast.posdes+2)+" [label =\""+this.id+"\"];\n";
+        Cadena += ast.posdes+" -> "+(ast.posdes+2)+";\n";
+        if(this.value==null){
+            result={posant:ast.posdes+2, posdes:ast.posdes+3,cadena:Cadena};
+        }else{
+            //=
+            Cadena += (ast.posdes+3)+" [label =\"=\"];\n";
+            Cadena += (ast.posdes)+" -> "+(ast.posdes+3)+";\n";
+            //Expresion
+            result=this.value.ejecutarast({posant:ast.posdes, posdes:ast.posdes+4,cadena:Cadena});
+        }
+        
+        return result;
     }
 }

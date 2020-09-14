@@ -46,6 +46,14 @@ var Literal = /** @class */ (function (_super) {
             return { valor: this.value, tipo: Retorno_1.Tipo.ARRAY };
         }
     };
+    Literal.prototype.ejecutarast = function (ast) {
+        var Cadena = ast.cadena + "\n";
+        Cadena += ast.posdes + " [label =\"Expresion\"];\n";
+        Cadena += ast.posant + " -> " + ast.posdes + ";\n";
+        Cadena += (ast.posdes + 1) + " [label =\"" + this.value + "\"];\n";
+        Cadena += ast.posdes + " -> " + (ast.posdes + 1) + ";\n";
+        return { posant: ast.posdes + 1, posdes: ast.posdes + 2, cadena: Cadena };
+    };
     return Literal;
 }(Expresion_1.Expresion));
 exports.Literal = Literal;

@@ -33,6 +33,12 @@ var Id = /** @class */ (function (_super) {
         }
         return { valor: resultado.valor, tipo: resultado.tipo };
     };
+    Id.prototype.ejecutarast = function (ast) {
+        var Cadena = ast.cadena + "\n";
+        Cadena += ast.posdes + " [label =\"" + this.id + "\"];\n";
+        Cadena += ast.posant + " -> " + ast.posdes + ";\n";
+        return { posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena };
+    };
     return Id;
 }(Expresion_1.Expresion));
 exports.Id = Id;

@@ -71,7 +71,29 @@ var Asignacion = /** @class */ (function (_super) {
         var Cadena = ast.cadena + "\n";
         Cadena += ast.posdes + " [label =\"Asignacion\"];\n";
         Cadena += ast.posant + " -> " + ast.posdes + ";\n";
-        return { posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena };
+        var resultado;
+        //Id
+        Cadena += (ast.posdes + 1) + " [label =\"" + this.id + "\"];\n";
+        Cadena += ast.posdes + " -> " + (ast.posdes + 1) + ";\n";
+        if (this.value == null) {
+            //Es incremento o decremento
+            if (this.tipo == Retorno_1.TipoAritmetico.INC) {
+                Cadena += (ast.posdes + 2) + " [label =\"++\"];\n";
+                Cadena += (ast.posdes) + " -> " + (ast.posdes + 2) + ";\n";
+            }
+            else if (this.tipo == Retorno_1.TipoAritmetico.DEC) {
+                Cadena += (ast.posdes + 2) + " [label =\"--\"];\n";
+                Cadena += (ast.posdes) + " -> " + (ast.posdes + 2) + ";\n";
+            }
+            resultado = { posant: ast.posdes + 2, posdes: ast.posdes + 3, cadena: Cadena };
+        }
+        else {
+            Cadena += (ast.posdes + 2) + " [label =\"=\"];\n";
+            Cadena += (ast.posdes) + " -> " + (ast.posdes + 2) + ";\n";
+            //Expresion
+            resultado = this.value.ejecutarast({ posant: ast.posdes, posdes: ast.posdes + 3, cadena: Cadena });
+        }
+        return resultado;
     };
     return Asignacion;
 }(Instruccion_1.Instruccion));

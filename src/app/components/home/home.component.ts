@@ -81,6 +81,7 @@ export class HomeComponent implements OnInit {
     }
     this.CadenaGraphviz+=cadenainst.cadena;
     this.CadenaGraphviz+="}";
+    //console.log(this.CadenaGraphviz);
     wasmFolder('assets/');
     graphviz('body').renderDot(this.CadenaGraphviz);
   }

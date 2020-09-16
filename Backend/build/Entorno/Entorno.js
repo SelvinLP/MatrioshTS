@@ -3,11 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Entorno = void 0;
 var Simbolo_1 = require("./Simbolo");
 var N_Error_1 = require("../Errores/N_Error");
+var L_Types_1 = require("../Otros/L_Types");
 var Entorno = /** @class */ (function () {
     function Entorno(anterior) {
         this.anterior = anterior;
         this.variables = new Map();
         this.funciones = new Map();
+        this.types = new L_Types_1.L_type();
     }
     Entorno.prototype.guardarvar = function (letoconst, id, valor, tipo, line, column) {
         var env = this;

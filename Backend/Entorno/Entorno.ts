@@ -1,19 +1,24 @@
-import { Tipo, TipoDato } from "../Abstracto/Retorno";
+import { TipoDato } from "../Abstracto/Retorno";
 import { Simbolo } from "./Simbolo";
 import { N_Error } from "../Errores/N_Error";
 import { Funcion } from "../Instrucciones/Funcion";
+import { N_Tipo } from "../Otros/N_Tipo";
+import { L_type } from "../Otros/L_Types";
 
 export class Entorno{
     
     private variables : Map<string,Simbolo>;
     public funciones : Map<string, Funcion>;
+    //Types
+    public types:L_type;
 
     constructor(public anterior : Entorno | null){
         this.variables = new Map();
         this.funciones = new Map();
+        this.types=new L_type();
     }
 
-    public guardarvar(letoconst: TipoDato,id: string, valor: any, tipo: Tipo, line : number, column: number){
+    public guardarvar(letoconst: TipoDato,id: string, valor: any, tipo: N_Tipo, line : number, column: number){
         let env : Entorno | null = this;
         //verificacion si existe en el mismo entorno
         if(env.variables.has(id)){

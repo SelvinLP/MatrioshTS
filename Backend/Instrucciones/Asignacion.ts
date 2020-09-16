@@ -4,6 +4,7 @@ import { Entorno } from "../Entorno/Entorno";
 import { N_Error } from "../Errores/N_Error";
 import { TipoDato, TipoAritmetico, Tipo } from "../Abstracto/Retorno";
 import { N_Ast } from "../Ast/Ast";
+import { N_Tipo } from "../Otros/N_Tipo";
 
 export class Asignacion extends Instruccion{
 
@@ -22,7 +23,7 @@ export class Asignacion extends Instruccion{
 
         if(this.value ==null){
             //Es incremento o decremento
-            if(resultado.tipo == Tipo.NUMBER){
+            if(resultado.tipo.tipo == Tipo.NUMBER){
                 if(this.tipo == TipoAritmetico.INC){
                     resultado.valor=resultado.valor+1;
                 }else if(this.tipo == TipoAritmetico.DEC){
@@ -36,12 +37,12 @@ export class Asignacion extends Instruccion{
             let exp =this.value.ejecutar(entorno);
             //Definicion de tipo sino tiene
             if(resultado.tipo == null){
-                resultado.tipo = exp.tipo;
+                resultado.tipo = new N_Tipo(exp.tipo,"");
                 resultado.valor = exp.valor; 
             }else{
                 //comprobacion de compatibilidad de datos
-                if(resultado.tipo == exp.tipo){
-                    resultado.tipo = exp.tipo;
+                if(resultado.tipo.tipo == exp.tipo){
+                    resultado.tipo.tipo = exp.tipo;
                     resultado.valor = exp.valor;
                 }else{
                     throw new N_Error('Semantico','La variable '+this.id+" no es de tipo compatible con la asignacion",'', this.linea, this.columna);

@@ -19,7 +19,7 @@ export class Id extends Expresion{
         if(resultado.valor==null){
             throw new N_Error('Semantico','La variable '+this.id+' no contiene valor ','', this.linea,this.columna);
         }
-        return {valor : resultado.valor, tipo : resultado.tipo};
+        return {valor : resultado.valor, tipo : resultado.tipo.tipo};
     }
 
     public ejecutarast(ast:N_Ast):N_Ast{

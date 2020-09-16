@@ -13,32 +13,34 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Id = void 0;
-var Expresion_1 = require("../Abstracto/Expresion");
+exports.Type = void 0;
+var Instruccion_1 = require("../Abstracto/Instruccion");
 var N_Error_1 = require("../Errores/N_Error");
-var Id = /** @class */ (function (_super) {
-    __extends(Id, _super);
-    function Id(id, line, column) {
+var Type = /** @class */ (function (_super) {
+    __extends(Type, _super);
+    function Type(id, listaparametos, line, column) {
         var _this = _super.call(this, line, column) || this;
         _this.id = id;
+        _this.listaparametos = listaparametos;
         return _this;
     }
-    Id.prototype.ejecutar = function (entorno) {
-        var resultado = entorno.obtenervar(this.id);
-        if (resultado == null) {
-            throw new N_Error_1.N_Error('Semantico', 'La variable no existe: ' + this.id, '', this.linea, this.columna);
+    Type.prototype.ejecutar = function (entorno) {
+        if (entorno.anterior != null) {
+            throw new N_Error_1.N_Error('Semantico', 'Los types solo se pueden definir global', '', this.linea, this.columna);
         }
-        if (resultado.valor == null) {
-            throw new N_Error_1.N_Error('Semantico', 'La variable ' + this.id + ' no contiene valor ', '', this.linea, this.columna);
+        else {
+            entorno.types.guardartype(this.id, this.listaparametos, this.linea, this.columna);
         }
-        return { valor: resultado.valor, tipo: resultado.tipo.tipo };
     };
-    Id.prototype.ejecutarast = function (ast) {
+    Type.prototype.ejecutarast = function (ast) {
         var Cadena = ast.cadena + "\n";
-        Cadena += ast.posdes + " [label =\"" + this.id + "\"];\n";
+        Cadena += ast.posdes + " [label =\"Type\"];\n";
         Cadena += ast.posant + " -> " + ast.posdes + ";\n";
-        return { posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena };
+        var result;
+        //Expresion
+        result = { posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena };
+        return result;
     };
-    return Id;
-}(Expresion_1.Expresion));
-exports.Id = Id;
+    return Type;
+}(Instruccion_1.Instruccion));
+exports.Type = Type;

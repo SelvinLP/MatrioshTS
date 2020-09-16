@@ -4,10 +4,11 @@ import { Tipo,TipoDato } from "../Abstracto/Retorno";
 import { Entorno } from "../Entorno/Entorno";
 import { N_Error } from "../Errores/N_Error";
 import { N_Ast } from "../Ast/Ast";
+import { N_Tipo } from "../Otros/N_Tipo";
 
 export class Declaracion extends Instruccion{
 
-    constructor(private letoconst:TipoDato , private id: string, private tipo:Tipo, private value : Expresion, 
+    constructor(private letoconst:TipoDato , private id: string, private tipo:N_Tipo, private value : Expresion, 
         line : number, column: number){
         super(line, column);
     }
@@ -24,12 +25,12 @@ export class Declaracion extends Instruccion{
             let banderainsertar=false;
             let resp=this.value.ejecutar(entorno);
             //Definicion de tipo sino tiene
-            if(this.tipo == Tipo.NULL || this.tipo == null){
-                this.tipo=resp.tipo;
+            if( this.tipo == null){
+                this.tipo=new N_Tipo(resp.tipo,"");
                 banderainsertar=true;
             }else{
                 //comprobacion de compatibilidad de datos
-                if(this.tipo == resp.tipo){
+                if(this.tipo.tipo == resp.tipo){
                         banderainsertar=true;
                 }else{
                     throw new N_Error('Semantico','La variable '+this.id+" no es de tipo compatible con la expresion",'', this.linea, this.columna);
@@ -37,7 +38,7 @@ export class Declaracion extends Instruccion{
             }
             //Insertamos si cumple con las condiciones
             if(banderainsertar == true){
-                entorno.guardarvar(this.letoconst, this.id, resp.valor, resp.tipo ,this.linea,this.columna);
+                entorno.guardarvar(this.letoconst, this.id, resp.valor, this.tipo ,this.linea,this.columna);
             }
         }
     }

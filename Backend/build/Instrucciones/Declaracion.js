@@ -17,6 +17,7 @@ exports.Declaracion = void 0;
 var Instruccion_1 = require("../Abstracto/Instruccion");
 var Retorno_1 = require("../Abstracto/Retorno");
 var N_Error_1 = require("../Errores/N_Error");
+var N_Tipo_1 = require("../Otros/N_Tipo");
 var Declaracion = /** @class */ (function (_super) {
     __extends(Declaracion, _super);
     function Declaracion(letoconst, id, tipo, value, line, column) {
@@ -41,13 +42,13 @@ var Declaracion = /** @class */ (function (_super) {
             var banderainsertar = false;
             var resp = this.value.ejecutar(entorno);
             //Definicion de tipo sino tiene
-            if (this.tipo == Retorno_1.Tipo.NULL || this.tipo == null) {
-                this.tipo = resp.tipo;
+            if (this.tipo == null) {
+                this.tipo = new N_Tipo_1.N_Tipo(resp.tipo, "");
                 banderainsertar = true;
             }
             else {
                 //comprobacion de compatibilidad de datos
-                if (this.tipo == resp.tipo) {
+                if (this.tipo.tipo == resp.tipo) {
                     banderainsertar = true;
                 }
                 else {
@@ -56,7 +57,7 @@ var Declaracion = /** @class */ (function (_super) {
             }
             //Insertamos si cumple con las condiciones
             if (banderainsertar == true) {
-                entorno.guardarvar(this.letoconst, this.id, resp.valor, resp.tipo, this.linea, this.columna);
+                entorno.guardarvar(this.letoconst, this.id, resp.valor, this.tipo, this.linea, this.columna);
             }
         }
     };

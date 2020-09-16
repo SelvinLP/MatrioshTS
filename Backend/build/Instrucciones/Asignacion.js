@@ -17,6 +17,7 @@ exports.Asignacion = void 0;
 var Instruccion_1 = require("../Abstracto/Instruccion");
 var N_Error_1 = require("../Errores/N_Error");
 var Retorno_1 = require("../Abstracto/Retorno");
+var N_Tipo_1 = require("../Otros/N_Tipo");
 var Asignacion = /** @class */ (function (_super) {
     __extends(Asignacion, _super);
     function Asignacion(id, value, tipo, line, column) {
@@ -36,7 +37,7 @@ var Asignacion = /** @class */ (function (_super) {
         }
         if (this.value == null) {
             //Es incremento o decremento
-            if (resultado.tipo == Retorno_1.Tipo.NUMBER) {
+            if (resultado.tipo.tipo == Retorno_1.Tipo.NUMBER) {
                 if (this.tipo == Retorno_1.TipoAritmetico.INC) {
                     resultado.valor = resultado.valor + 1;
                 }
@@ -52,13 +53,13 @@ var Asignacion = /** @class */ (function (_super) {
             var exp = this.value.ejecutar(entorno);
             //Definicion de tipo sino tiene
             if (resultado.tipo == null) {
-                resultado.tipo = exp.tipo;
+                resultado.tipo = new N_Tipo_1.N_Tipo(exp.tipo, "");
                 resultado.valor = exp.valor;
             }
             else {
                 //comprobacion de compatibilidad de datos
-                if (resultado.tipo == exp.tipo) {
-                    resultado.tipo = exp.tipo;
+                if (resultado.tipo.tipo == exp.tipo) {
+                    resultado.tipo.tipo = exp.tipo;
                     resultado.valor = exp.valor;
                 }
                 else {

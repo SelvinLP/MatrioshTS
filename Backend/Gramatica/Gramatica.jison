@@ -18,6 +18,9 @@
     const {Id} = require('../build/Expresiones/Id');
     const {Funcion} = require('../build/Instrucciones/Funcion');
     const {Llamarfuncion} = require('../build/Instrucciones/Llamarfuncion');
+    const {Type} = require('../build/Instrucciones/Type');
+    const {N_Type} = require('../build/Otros/L_Types');
+    const {N_Tipo} = require('../build/Otros/N_Tipo');
 %}
 
 /*------------------------------------------------PARTE LEXICA--------------------------------------------------- */
@@ -53,7 +56,7 @@
 "function"          return 'tk_function'
 "console.log"       return 'tk_console'
 "graficar_ts"       return 'graficar_ts'
-
+'type'              return 'tk_type'
 
 //Relacionales
 "=="    return '=='
@@ -145,6 +148,7 @@ Instruccion:
     | Whilet                {$$=$1;}
     | Dowhilet              {$$=$1;}
     | Fort                  {$$=$1;}
+    | Types                 {$$=$1;}
     | Funciones             {$$=$1;}
     | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error en la Instruccion "+yytext,"",this._$.first_line,this._$.first_column));}
 ;
@@ -161,10 +165,11 @@ Declaracion:
 ;
 
 Tipodeclaracion:
-    ':' tk_number                       {$$=Tipo.NUMBER}
-    | ':' tk_string                     {$$=Tipo.STRING}
-    | ':' tk_boolean                    {$$=Tipo.BOOLEAN}
-    | ':' tk_void                       {$$=Tipo.NULL}
+    ':' tk_number                       {$$ =new N_Tipo(Tipo.NUMBER, $2);}
+    | ':' tk_string                     {$$ =new N_Tipo(Tipo.STRING, $2);}
+    | ':' tk_boolean                    {$$ =new N_Tipo(Tipo.BOOLEAN, $2);}
+    | ':' tk_void                       {$$ =new N_Tipo(Tipo.NULL, $2);}
+    | ':' tk_id                         {$$ =new N_Tipo(Tipo.TYPE, $2);}
     | %empty                            {$$=null;} 
     | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error al definir tipo "+yytext,"",this._$.first_line,this._$.first_column))}
 ;
@@ -224,6 +229,32 @@ Fort:
     {
         $$ = new For($3, $4, $6, $8, @1.first_line, @1.first_column);
     }
+;
+
+Types:
+    tk_type tk_id '=' '{' Parametostype'}' ';'
+    {
+        $$ = new Type($2, $5, @1.first_line, @1.first_column);
+    }
+;
+
+Parametostype:
+    Parametostype ',' tk_id Tipodeclaracion 
+    {
+        $1.push(new N_Type($3,$4));
+        $$=$1;
+    }
+    }
+    | Parametostype ';' tk_id Tipodeclaracion ';'
+    {
+        $1.push(new N_Type($3,$4));
+        $$=$1;
+    }
+    | tk_id Tipodeclaracion
+    {
+        $$=[new N_Type($1,$2)];
+    }
+    | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error en los parametros type "+yytext,"",this._$.first_line,this._$.first_column));}
 ;
 
 Funciones:

@@ -9,6 +9,7 @@ var Tipo;
     Tipo[Tipo["BOOLEAN"] = 2] = "BOOLEAN";
     Tipo[Tipo["NULL"] = 3] = "NULL";
     Tipo[Tipo["ARRAY"] = 4] = "ARRAY";
+    Tipo[Tipo["TYPE"] = 5] = "TYPE";
 })(Tipo = exports.Tipo || (exports.Tipo = {}));
 //Tipos de operaciones Aritmeticas
 var TipoAritmetico;

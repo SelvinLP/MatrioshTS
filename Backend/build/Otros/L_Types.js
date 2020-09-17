@@ -35,19 +35,10 @@ var L_type = /** @class */ (function () {
                 if (cont >= 2) {
                     throw new N_Error_1.N_Error('Semantico', 'El parametro ' + tem.idpara + ' en el type ya existe', '', line, column);
                 }
-                else if (tem.tipo.tipo == Retorno_1.Tipo.TYPE && !(this.lista_types.has(tem.idpara) || tem.tipo.cadTipo == id)) {
-                    throw new N_Error_1.N_Error('Semantico', 'El el tipo del parametro ' + tem.idpara + ' no existe ' + id, '', line, column);
+                else if (tem.tipo == null || tem.tipo.tipo == Retorno_1.Tipo.TYPE && !(this.lista_types.has(tem.tipo.cadTipo) || tem.tipo.cadTipo == id)) {
+                    throw new N_Error_1.N_Error('Semantico', 'El el tipo del parametro ' + tem.idpara + ' no existe ', '', line, column);
                 }
                 cont = 0;
-            }
-            //verificaion de id por si es type sino error
-            for (var _b = 0, ltype_3 = ltype; _b < ltype_3.length; _b++) {
-                var tem = ltype_3[_b];
-                console.log(tem.idpara + "--" + tem.tipo.tipo);
-            }
-            for (var _c = 0, ltype_4 = ltype; _c < ltype_4.length; _c++) {
-                var tem = ltype_4[_c];
-                console.log(this.lista_types.has(id));
             }
             this.lista_types.set(id, ltype);
         }

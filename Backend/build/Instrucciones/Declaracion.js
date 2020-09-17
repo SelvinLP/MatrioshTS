@@ -13,51 +13,107 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Declaracion = void 0;
+exports.Declaracion = exports.N_Parametros = exports.N_Declaracion = void 0;
 var Instruccion_1 = require("../Abstracto/Instruccion");
 var Retorno_1 = require("../Abstracto/Retorno");
 var N_Error_1 = require("../Errores/N_Error");
 var N_Tipo_1 = require("../Otros/N_Tipo");
+var Array_1 = require("./Array");
+var N_Declaracion = /** @class */ (function () {
+    function N_Declaracion(value, array, types) {
+        this.value = value;
+        this.array = array;
+        this.types = types;
+    }
+    return N_Declaracion;
+}());
+exports.N_Declaracion = N_Declaracion;
+var N_Parametros = /** @class */ (function () {
+    function N_Parametros(id, value) {
+        this.id = id;
+        this.value = value;
+    }
+    return N_Parametros;
+}());
+exports.N_Parametros = N_Parametros;
 var Declaracion = /** @class */ (function (_super) {
     __extends(Declaracion, _super);
-    function Declaracion(letoconst, id, tipo, value, line, column) {
+    function Declaracion(letoconst, id, tipo, tarray, value, line, column) {
         var _this = _super.call(this, line, column) || this;
         _this.letoconst = letoconst;
         _this.id = id;
         _this.tipo = tipo;
+        _this.tarray = tarray;
         _this.value = value;
         return _this;
     }
     Declaracion.prototype.ejecutar = function (entorno) {
-        if (this.value == null) {
-            //Validaciones de const
-            if (this.letoconst == Retorno_1.TipoDato.CONST) {
-                throw new N_Error_1.N_Error('Semantico', 'La variable ' + this.id + " tipo const no tiene definido un valor", '', this.linea, this.columna);
+        //comprobacion si es array
+        if (this.tarray != null) {
+            if (this.tipo == null) {
+                this.tipo = new N_Tipo_1.N_Tipo(Retorno_1.Tipo.NULL, "");
             }
-            else {
-                entorno.guardarvar(this.letoconst, this.id, this.value, this.tipo, this.linea, this.columna);
+            entorno.guardararray(this.id, new Array_1.C_Array(this.tipo.tipo, this.tarray), this.linea, this.columna);
+            if (this.value != null) { //verificacion del array
+                this.insertararray(entorno);
             }
         }
         else {
-            var banderainsertar = false;
-            var resp = this.value.ejecutar(entorno);
-            //Definicion de tipo sino tiene
-            if (this.tipo == null) {
-                this.tipo = new N_Tipo_1.N_Tipo(resp.tipo, "");
-                banderainsertar = true;
+            //validacion si es de otro tipo de array
+            var banderaarray = false;
+            if (this.tipo != null) {
+                if (this.tipo.tipo == Retorno_1.Tipo.ARRAY) {
+                    if (this.tipo.cadTipo == "number") {
+                        this.tipo.tipo = Retorno_1.Tipo.NUMBER;
+                    }
+                    else if (this.tipo.cadTipo == "string") {
+                        this.tipo.tipo = Retorno_1.Tipo.STRING;
+                    }
+                    else if (this.tipo.cadTipo == "boolean") {
+                        this.tipo.tipo = Retorno_1.Tipo.BOOLEAN;
+                    }
+                    else if (this.tipo.cadTipo == "void") {
+                        this.tipo.tipo = Retorno_1.Tipo.NULL;
+                    }
+                    entorno.guardararray(this.id, new Array_1.C_Array(this.tipo.tipo, []), this.linea, this.columna);
+                    banderaarray = true;
+                    if (this.value != null) { //verificacion del array
+                        this.insertararray(entorno);
+                    }
+                }
             }
-            else {
-                //comprobacion de compatibilidad de datos
-                if (this.tipo.tipo == resp.tipo) {
-                    banderainsertar = true;
+            if (!banderaarray) {
+                if (this.value == null) {
+                    //Validaciones de const
+                    if (this.letoconst == Retorno_1.TipoDato.CONST) {
+                        throw new N_Error_1.N_Error('Semantico', 'La variable ' + this.id + " tipo const no tiene definido un valor", '', this.linea, this.columna);
+                    }
+                    else {
+                        entorno.guardarvar(this.letoconst, this.id, this.value, this.tipo, this.linea, this.columna);
+                    }
                 }
                 else {
-                    throw new N_Error_1.N_Error('Semantico', 'La variable ' + this.id + " no es de tipo compatible con la expresion", '', this.linea, this.columna);
+                    var banderainsertar = false;
+                    var resp = this.value.value.ejecutar(entorno);
+                    //Definicion de tipo sino tiene
+                    if (this.tipo == null) {
+                        this.tipo = new N_Tipo_1.N_Tipo(resp.tipo, "");
+                        banderainsertar = true;
+                    }
+                    else {
+                        //comprobacion de compatibilidad de datos
+                        if (this.tipo.tipo == resp.tipo) {
+                            banderainsertar = true;
+                        }
+                        else {
+                            throw new N_Error_1.N_Error('Semantico', 'La variable ' + this.id + " no es de tipo compatible con la expresion", '', this.linea, this.columna);
+                        }
+                    }
+                    //Insertamos si cumple con las condiciones
+                    if (banderainsertar == true) {
+                        entorno.guardarvar(this.letoconst, this.id, resp.valor, this.tipo, this.linea, this.columna);
+                    }
                 }
-            }
-            //Insertamos si cumple con las condiciones
-            if (banderainsertar == true) {
-                entorno.guardarvar(this.letoconst, this.id, resp.valor, this.tipo, this.linea, this.columna);
             }
         }
     };
@@ -77,17 +133,50 @@ var Declaracion = /** @class */ (function (_super) {
         }
         Cadena += (ast.posdes + 2) + " [label =\"" + this.id + "\"];\n";
         Cadena += ast.posdes + " -> " + (ast.posdes + 2) + ";\n";
-        if (this.value == null) {
-            result = { posant: ast.posdes + 2, posdes: ast.posdes + 3, cadena: Cadena };
+        result = { posant: ast.posdes + 2, posdes: ast.posdes + 3, cadena: Cadena };
+        //si es array
+        if (this.tarray != null) {
+            result.cadena += (result.posdes) + " [label =\"[]\"];\n";
+            result.cadena += ast.posdes + " -> " + (result.posdes) + ";\n";
+            result = { posant: result.posdes, posdes: result.posdes + 1, cadena: result.cadena };
         }
-        else {
+        if (this.value != null) {
             //=
-            Cadena += (ast.posdes + 3) + " [label =\"=\"];\n";
-            Cadena += (ast.posdes) + " -> " + (ast.posdes + 3) + ";\n";
+            result.cadena += (result.posdes) + " [label =\"=\"];\n";
+            result.cadena += ast.posdes + " -> " + (result.posdes) + ";\n";
             //Expresion
-            result = this.value.ejecutarast({ posant: ast.posdes, posdes: ast.posdes + 4, cadena: Cadena });
+            result = this.value.value.ejecutarast({ posant: ast.posdes, posdes: result.posdes + 1, cadena: result.cadena });
         }
         return result;
+    };
+    Declaracion.prototype.insertararray = function (entorno) {
+        var listaresult = entorno.obtenerarray(this.id);
+        if (listaresult == null) {
+            throw new N_Error_1.N_Error('Semantico', 'El array no existe: ' + this.id, '', this.linea, this.columna);
+        }
+        else {
+            if (listaresult.tipo == Retorno_1.Tipo.NULL) {
+                for (var _i = 0, _a = this.value.array; _i < _a.length; _i++) {
+                    var nodovalor = _a[_i];
+                    listaresult.tipo = nodovalor.ejecutar().tipo;
+                    var inicio = listaresult.listaarray[0];
+                    inicio.N_listaarray.push(nodovalor);
+                }
+            }
+            else {
+                for (var _b = 0, _c = this.value.array; _b < _c.length; _b++) {
+                    var nodovalor = _c[_b];
+                    if (nodovalor.ejecutar().tipo == listaresult.tipo) {
+                        var inicio = listaresult.listaarray[0];
+                        inicio.N_listaarray.push(nodovalor);
+                    }
+                    else {
+                        throw new N_Error_1.N_Error('Semantico', 'Tipo no compatible en el array' + this.id, '', this.linea, this.columna);
+                    }
+                }
+            }
+            console.log(listaresult.listaarray);
+        }
     };
     return Declaracion;
 }(Instruccion_1.Instruccion));

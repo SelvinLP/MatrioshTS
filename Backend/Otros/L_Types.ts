@@ -31,17 +31,10 @@ export class L_type{
                 }
                 if(cont>=2){
                     throw new N_Error('Semantico','El parametro '+tem.idpara+' en el type ya existe','', line, column);
-                }else if(tem.tipo.tipo == Tipo.TYPE && !(this.lista_types.has(tem.idpara) || tem.tipo.cadTipo == id)){
-                    throw new N_Error('Semantico','El el tipo del parametro '+tem.idpara+' no existe '+id,'', line, column);
+                }else if(tem.tipo==null ||tem.tipo.tipo == Tipo.TYPE && !(this.lista_types.has(tem.tipo.cadTipo) || tem.tipo.cadTipo == id)){
+                    throw new N_Error('Semantico','El el tipo del parametro '+tem.idpara+' no existe ','', line, column);
                 }
                 cont=0;
-            }
-            //verificaion de id por si es type sino error
-            for(const tem of ltype){
-                console.log(tem.idpara+"--"+tem.tipo.tipo);
-            }
-            for(const tem of ltype){
-                console.log(this.lista_types.has(id));
             }
             this.lista_types.set(id, ltype);
         }

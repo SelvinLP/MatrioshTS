@@ -10,6 +10,7 @@ var Entorno = /** @class */ (function () {
         this.variables = new Map();
         this.funciones = new Map();
         this.types = new L_Types_1.L_type();
+        this.array = new Map();
     }
     Entorno.prototype.guardarvar = function (letoconst, id, valor, tipo, line, column) {
         var env = this;
@@ -48,6 +49,27 @@ var Entorno = /** @class */ (function () {
         while (env != null) {
             if (env.funciones.has(id)) {
                 return env.funciones.get(id);
+            }
+            env = env.anterior;
+        }
+        return null;
+    };
+    Entorno.prototype.guardararray = function (id, cuerpoarray, line, column) {
+        var env = this;
+        //verificacion si existe en el mismo entorno
+        if (env.variables.has(id)) {
+            throw new N_Error_1.N_Error('Semantico', 'El array ya existe: ' + id, '', line, column);
+        }
+        else {
+            //sino se cumple lo guarda en el entorno actual
+            this.array.set(id, cuerpoarray);
+        }
+    };
+    Entorno.prototype.obtenerarray = function (id) {
+        var env = this;
+        while (env != null) {
+            if (env.array.has(id)) {
+                return env.array.get(id);
             }
             env = env.anterior;
         }

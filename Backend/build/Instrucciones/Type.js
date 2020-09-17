@@ -37,8 +37,19 @@ var Type = /** @class */ (function (_super) {
         Cadena += ast.posdes + " [label =\"Type\"];\n";
         Cadena += ast.posant + " -> " + ast.posdes + ";\n";
         var result;
-        //Expresion
         result = { posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena };
+        for (var _i = 0, _a = this.listaparametos; _i < _a.length; _i++) {
+            var tem = _a[_i];
+            Cadena += result.posdes + " [label =\"" + tem.idpara + "\"];\n";
+            Cadena += result.posant + " -> " + result.posdes + ";\n";
+            Cadena += (result.posdes + 1) + " [label =\":\"];\n";
+            Cadena += result.posant + " -> " + (result.posdes + 1) + ";\n";
+            Cadena += (result.posdes + 2) + " [label =\"Tipo: " + tem.tipo.tipo + "\"];\n";
+            Cadena += result.posant + " -> " + (result.posdes + 2) + ";\n";
+            Cadena += (result.posdes + 3) + " [label =\"Parametros type\"];\n";
+            Cadena += result.posant + " -> " + (result.posdes + 3) + ";\n";
+            result = { posant: result.posdes + 3, posdes: result.posdes + 4, cadena: Cadena };
+        }
         return result;
     };
     return Type;

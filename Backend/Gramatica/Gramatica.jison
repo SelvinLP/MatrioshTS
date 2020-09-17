@@ -12,7 +12,7 @@
     const {While} = require('../build/Instrucciones/While');
     const {For} = require('../build/Instrucciones/For');
     const {Dowhile} = require('../build/Instrucciones/Dowhile');
-    const {Declaracion} = require('../build/Instrucciones/Declaracion');
+    const {Declaracion, N_Declaracion, N_Parametros} = require('../build/Instrucciones/Declaracion');
     const {Asignacion} = require('../build/Instrucciones/Asignacion');
     const {Statement} = require('../build/Instrucciones/Statement');
     const {Id} = require('../build/Expresiones/Id');
@@ -21,6 +21,7 @@
     const {Type} = require('../build/Instrucciones/Type');
     const {N_Type} = require('../build/Otros/L_Types');
     const {N_Tipo} = require('../build/Otros/N_Tipo');
+    const {L_Array} = require('../build/Instrucciones/Array');
 %}
 
 /*------------------------------------------------PARTE LEXICA--------------------------------------------------- */
@@ -56,7 +57,8 @@
 "function"          return 'tk_function'
 "console.log"       return 'tk_console'
 "graficar_ts"       return 'graficar_ts'
-'type'              return 'tk_type'
+"type"              return 'tk_type'
+"Array"             return 'tk_array'
 
 //Relacionales
 "=="    return '=='
@@ -87,6 +89,8 @@
 ","     return ','
 ":"     return ':'
 "."     return '.'
+"["     return '['
+"]"     return ']'
 
 
 //Expresiones Regulares
@@ -154,13 +158,13 @@ Instruccion:
 ;
 
 Declaracion:
-    tk_let tk_id Tipodeclaracion PosibleAsignacion ';'  
+    tk_let tk_id Tipodeclaracion Posiblearray PosibleAsignacion ';'  
     {
-        $$ = new Declaracion(TipoDato.LET, $2, $3, $4, @1.first_line, @1.first_column);
+        $$ = new Declaracion(TipoDato.LET, $2, $3, $4, $5, @1.first_line, @1.first_column);
     }
-    | tk_const tk_id Tipodeclaracion PosibleAsignacion ';'  
+    | tk_const tk_id Tipodeclaracion Posiblearray PosibleAsignacion ';'  
     {
-        $$ = new Declaracion(TipoDato.CONST, $2, $3, $4, @1.first_line, @1.first_column);
+        $$ = new Declaracion(TipoDato.CONST, $2, $3, $4, $5, @1.first_line, @1.first_column);
     }
 ;
 
@@ -170,13 +174,57 @@ Tipodeclaracion:
     | ':' tk_boolean                    {$$ =new N_Tipo(Tipo.BOOLEAN, $2);}
     | ':' tk_void                       {$$ =new N_Tipo(Tipo.NULL, $2);}
     | ':' tk_id                         {$$ =new N_Tipo(Tipo.TYPE, $2);}
+    | ':' tk_array '<' TipoDato '>'     {$$ =new N_Tipo(Tipo.ARRAY, $4);}
     | %empty                            {$$=null;} 
     | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error al definir tipo "+yytext,"",this._$.first_line,this._$.first_column))}
 ;
 
+Posiblearray:
+    arrayllaves                         {$$=$1;}
+    | %empty                            {$$=null;} 
+;
+
+arrayllaves:
+    arrayllaves '[' ']'
+    {
+        $1.push(new L_Array([]));
+        $$=$1;
+    }
+    | '['']'
+    {
+        $$=[new L_Array([])];
+    }
+;
+
 PosibleAsignacion:
-    '=' Expresion                   {$$=$2;}
-    | %empty                        {$$=null;}
+    '=' Expresion                       {$$=new N_Declaracion($2, null, null)}
+    | '=' '[' Parametros ']'            {$$=new N_Declaracion(null, $3, null)}
+    | '=' '{' ParametrosTypevalor '}'   {$$=new N_Declaracion(null, null, $3)}
+    | %empty                            {$$=null;}
+;
+
+Parametros:
+    Parametros ',' Factor
+    {
+        $1.push($3);
+        $$=$1;
+    }
+    | Factor
+    {
+        $$=[$1];
+    }
+;
+
+ParametrosTypevalor:
+    ParametrosTypevalor ',' tk_id ':' Factor
+    {
+        $1.push(new N_Parametros($3,$5));
+        $$=$1;
+    }
+    | tk_id ':' Factor
+    {
+        $$=[new N_Parametros($1,$3)];
+    }
 ;
 
 Asignacion:
@@ -398,4 +446,12 @@ Incydec:
     {
         $$ = new Asignacion($1, null, TipoAritmetico.DEC, @1.first_line, @1.first_column);
     }
+;
+
+TipoDato:
+    tk_number                       {$$ = "number";}
+    | tk_string                     {$$ = "string";}
+    | tk_boolean                    {$$ = "boolean";}
+    | tk_void                       {$$ = "void";}
+    | tk_id                         {$$ = $1;}
 ;

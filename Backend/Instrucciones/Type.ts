@@ -24,8 +24,22 @@ export class Type extends Instruccion{
         Cadena += ast.posdes+" [label =\"Type\"];\n";
         Cadena += ast.posant+" -> "+ast.posdes+";\n";
         let result:N_Ast;
-        //Expresion
         result={posant:ast.posdes, posdes:ast.posdes+1,cadena:Cadena};
+        for(const tem of this.listaparametos){
+            Cadena += result.posdes+" [label =\""+tem.idpara+"\"];\n";
+            Cadena += result.posant+" -> "+result.posdes+";\n";
+            Cadena += (result.posdes+1)+" [label =\":\"];\n";
+            Cadena += result.posant+" -> "+(result.posdes+1)+";\n";
+            Cadena += (result.posdes+2)+" [label =\"Tipo: "+tem.tipo.tipo+"\"];\n";
+            Cadena += result.posant+" -> "+(result.posdes+2)+";\n";
+
+            Cadena += (result.posdes+3)+" [label =\"Parametros type\"];\n";
+            Cadena += result.posant+" -> "+(result.posdes+3)+";\n";
+            
+            result={posant:result.posdes+3, posdes:result.posdes+4,cadena:Cadena};
+
+        }
+        
         return result;
     }
 }

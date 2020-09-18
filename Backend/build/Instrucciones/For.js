@@ -32,7 +32,17 @@ var For = /** @class */ (function (_super) {
         var rescondicion = this.condicion.ejecutar(entorno);
         if (rescondicion.tipo == Retorno_1.Tipo.BOOLEAN) {
             while (rescondicion.valor == true) {
-                this.codigo.ejecutar(entorno);
+                var valor = this.codigo.ejecutar(entorno);
+                //verificacion si viene un break o continue
+                if (valor != null || valor != undefined) {
+                    if (valor.tipobyc == "continue") {
+                        continue;
+                    }
+                    else if (valor.tipobyc == "break") {
+                        break;
+                    }
+                }
+                //incremento o decremento
                 this.incydec.ejecutar(entorno);
                 //validacion nuevamente de la condicion sino se encicla
                 rescondicion = this.condicion.ejecutar(entorno);

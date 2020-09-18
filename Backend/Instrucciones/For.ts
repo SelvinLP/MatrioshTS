@@ -19,7 +19,16 @@ export class For extends Instruccion{
         let rescondicion = this.condicion.ejecutar(entorno);
         if(rescondicion.tipo == Tipo.BOOLEAN){
             while(rescondicion.valor == true){
-                this.codigo.ejecutar(entorno);
+                const valor=this.codigo.ejecutar(entorno);
+                //verificacion si viene un break o continue
+                if(valor != null || valor != undefined){
+                    if(valor.tipobyc == "continue"){
+                        continue;
+                    }else if(valor.tipobyc == "break"){
+                        break;
+                    }
+                }
+                //incremento o decremento
                 this.incydec.ejecutar(entorno);
 
                 //validacion nuevamente de la condicion sino se encicla

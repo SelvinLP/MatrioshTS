@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 
 import { L_Errores } from "../../../../Backend/build/Errores/L_Error";
+import { N_Error } from "../../../../Backend/build/Errores/N_Error";
 import { N_Ast } from "../../../../Backend/build/Ast/Ast";
 import { L_Print } from "../../../../Backend/build/Otros/L_Print";
 import { Entorno } from "../../../../Backend/build/Entorno/Entorno";
@@ -50,7 +51,14 @@ export class HomeComponent implements OnInit {
     this.ast=Parser.parse(this.Salida);
     for(const Instruccion of this.ast){
         try {
-          Instruccion.ejecutar(entorno);
+          const valor=Instruccion.ejecutar(entorno);
+          if(valor != null || valor != undefined){
+            if(valor.tipobyc == "continue"){
+                L_Errores.push(new N_Error('Semantico','Instruccion continue fuera de un ciclo','', valor.linea,valor.columna));
+            }else if(valor.tipobyc == "break"){
+              L_Errores.push(new N_Error('Semantico','Instruccion break fuera de un ciclo','', valor.linea,valor.columna));
+            }
+        }
         } catch (err) {
           L_Errores.push(err);  
         }

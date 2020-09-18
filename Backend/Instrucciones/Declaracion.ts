@@ -10,7 +10,7 @@ import { Literal } from "../Expresiones/Literal";
 import { Id } from "../Expresiones/Id";
 
 export class N_Declaracion{
-    constructor(public value:Expresion, public array:Literal[], public types:Array<N_Parametros>){}
+    constructor(public value:Expresion, public array:Expresion[], public types:Array<N_Parametros>){}
 }
 export class N_Parametros{
     constructor(public id:string, public value:Literal){}
@@ -126,22 +126,21 @@ export class Declaracion extends Instruccion{
         }else{
             if(listaresult.tipo==Tipo.NULL){
                 for(const nodovalor of this.value.array){
-                    listaresult.tipo=nodovalor.ejecutar().tipo;
+                    listaresult.tipo=nodovalor.ejecutar(entorno).tipo;
                     let inicio=listaresult.listaarray[0];
                     inicio.N_listaarray.push(nodovalor);
                 }
             }else{
                 for(const nodovalor of this.value.array){
-                    if(nodovalor.ejecutar().tipo==listaresult.tipo){
+                    if(nodovalor.ejecutar(entorno).tipo==listaresult.tipo){
                         let inicio=listaresult.listaarray[0];
                         inicio.N_listaarray.push(nodovalor);
                     }else{
-                        throw new N_Error('Semantico','Tipo no compatible en el array'+this.id,'', this.linea, this.columna);
+                        throw new N_Error('Semantico','Tipo no compatible en el array: '+this.id,'', this.linea, this.columna);
                     }
                     
                 }
             }
-            console.log(listaresult.listaarray);
         }
     }
 }

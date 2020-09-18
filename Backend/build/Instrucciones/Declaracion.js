@@ -158,7 +158,7 @@ var Declaracion = /** @class */ (function (_super) {
             if (listaresult.tipo == Retorno_1.Tipo.NULL) {
                 for (var _i = 0, _a = this.value.array; _i < _a.length; _i++) {
                     var nodovalor = _a[_i];
-                    listaresult.tipo = nodovalor.ejecutar().tipo;
+                    listaresult.tipo = nodovalor.ejecutar(entorno).tipo;
                     var inicio = listaresult.listaarray[0];
                     inicio.N_listaarray.push(nodovalor);
                 }
@@ -166,16 +166,15 @@ var Declaracion = /** @class */ (function (_super) {
             else {
                 for (var _b = 0, _c = this.value.array; _b < _c.length; _b++) {
                     var nodovalor = _c[_b];
-                    if (nodovalor.ejecutar().tipo == listaresult.tipo) {
+                    if (nodovalor.ejecutar(entorno).tipo == listaresult.tipo) {
                         var inicio = listaresult.listaarray[0];
                         inicio.N_listaarray.push(nodovalor);
                     }
                     else {
-                        throw new N_Error_1.N_Error('Semantico', 'Tipo no compatible en el array' + this.id, '', this.linea, this.columna);
+                        throw new N_Error_1.N_Error('Semantico', 'Tipo no compatible en el array: ' + this.id, '', this.linea, this.columna);
                     }
                 }
             }
-            console.log(listaresult.listaarray);
         }
     };
     return Declaracion;

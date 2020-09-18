@@ -22,6 +22,10 @@
     const {N_Type} = require('../build/Otros/L_Types');
     const {N_Tipo} = require('../build/Otros/N_Tipo');
     const {L_Array} = require('../build/Instrucciones/Array');
+    const {AsignacionArray, AsignacionArrayExp} = require('../build/Instrucciones/AsignacionArray');
+    const {SwitchCase, Case} = require('../build/Instrucciones/SwitchCase');
+    const {BreakContinue} = require('../build/Instrucciones/BreakContinue');
+
 %}
 
 /*------------------------------------------------PARTE LEXICA--------------------------------------------------- */
@@ -59,6 +63,9 @@
 "graficar_ts"       return 'graficar_ts'
 "type"              return 'tk_type'
 "Array"             return 'tk_array'
+"push"             return 'tk_push'
+"pop"             return 'tk_pop'
+"length"             return 'tk_length'
 
 //Relacionales
 "=="    return '=='
@@ -152,7 +159,9 @@ Instruccion:
     | Whilet                {$$=$1;}
     | Dowhilet              {$$=$1;}
     | Fort                  {$$=$1;}
+    | BreakyContinue        {$$=$1;}
     | Types                 {$$=$1;}
+    | Switcht               {$$=$1;}
     | Funciones             {$$=$1;}
     | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error en la Instruccion "+yytext,"",this._$.first_line,this._$.first_column));}
 ;
@@ -204,12 +213,12 @@ PosibleAsignacion:
 ;
 
 Parametros:
-    Parametros ',' Factor
+    Parametros ',' Expresion
     {
         $1.push($3);
         $$=$1;
     }
-    | Factor
+    | Expresion
     {
         $$=[$1];
     }
@@ -232,9 +241,29 @@ Asignacion:
     {
         $$ = new Asignacion($1, $3, null, @1.first_line, @1.first_column);
     }
+    | tk_id '.' tk_push '(' Expresion ')' ';'
+    {
+        $$ = new AsignacionArray($1, $3, $5, @1.first_line, @1.first_column);
+    }
+    | tk_id '.' tk_pop '(' ')' ';'
+    {
+        $$ = new AsignacionArray($1, $3, $5, @1.first_line, @1.first_column);
+    }
+    | tk_id Direccionarray '=' '['
     | Incydec ';'
     {
         $$=$1;
+    }
+;
+
+Direccionarray:
+    Direccionarray '[' Expresion ']'
+    {
+
+    }
+    | '[' Expresion ']'
+    {
+        
     }
 ;
 
@@ -279,6 +308,11 @@ Fort:
     }
 ;
 
+BreakyContinue:
+    tk_break ';'                    {$$=new BreakContinue($1, @1.first_line, @1.first_column);}
+    | tk_continue ';'               {$$=new BreakContinue($1, @1.first_line, @1.first_column);}
+;
+
 Types:
     tk_type tk_id '=' '{' Parametostype'}' ';'
     {
@@ -303,6 +337,33 @@ Parametostype:
         $$=[new N_Type($1,$2)];
     }
     | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error en los parametros type "+yytext,"",this._$.first_line,this._$.first_column));}
+;
+
+Switcht:
+    tk_switch '(' Expresion ')' '{' Casos Posibledefault '}'
+    {
+        $$= new SwitchCase($3,$6,$7,@1.first_line, @1.first_column);
+    }
+;
+
+Casos:
+    Casos tk_case  Expresion ':' LInstrucciones 'tk_break' ';'
+    {
+        $1.push(new Case($3,$5));
+        $$=$1;
+    }
+    | tk_case  Expresion ':' LInstrucciones 'tk_break' ';'
+    {
+        $$=[new Case($2,$4)];
+    }
+;
+
+Posibledefault:
+    tk_default ':' LInstrucciones 'tk_break' ';'
+    {
+        $$=$3;
+    }
+    | %empty                        {$$=null;}
 ;
 
 Funciones:
@@ -434,6 +495,10 @@ Factor:
     | tk_id
     {
         $$ = new Id($1, @1.first_line, @1.first_column);
+    }
+    | tk_id '.' tk_length '(' ')' 
+    {
+        $$ = new AsignacionArrayExp($1, @1.first_line, @1.first_column);
     }
 ;
 

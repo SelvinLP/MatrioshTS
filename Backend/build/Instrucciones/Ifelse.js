@@ -33,8 +33,9 @@ var Ifelse = /** @class */ (function (_super) {
                 return this.codigo.ejecutar(entorno);
             }
             else {
-                if (this.elsest != null)
-                    this.elsest.ejecutar(entorno);
+                if (this.elsest != null) {
+                    return this.elsest.ejecutar(entorno);
+                }
             }
         }
         else {

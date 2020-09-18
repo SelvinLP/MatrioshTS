@@ -29,7 +29,16 @@ var While = /** @class */ (function (_super) {
         var condicion = this.condicion.ejecutar(entorno);
         if (condicion.tipo == Retorno_1.Tipo.BOOLEAN) {
             while (condicion.valor == true) {
-                this.codigo.ejecutar(entorno);
+                var valor = this.codigo.ejecutar(entorno);
+                //verificacion si viene un break o continue
+                if (valor != null || valor != undefined) {
+                    if (valor.tipobyc == "continue") {
+                        continue;
+                    }
+                    else if (valor.tipobyc == "break") {
+                        break;
+                    }
+                }
                 //validacion nuevamente de la condicion sino se encicla
                 condicion = this.condicion.ejecutar(entorno);
                 if (condicion.tipo != Retorno_1.Tipo.BOOLEAN) {

@@ -15,7 +15,15 @@ export class While extends Instruccion{
         let condicion = this.condicion.ejecutar(entorno);
         if(condicion.tipo == Tipo.BOOLEAN){
             while(condicion.valor == true){
-                this.codigo.ejecutar(entorno);
+                const valor=this.codigo.ejecutar(entorno);
+                //verificacion si viene un break o continue
+                if(valor != null || valor != undefined){
+                    if(valor.tipobyc == "continue"){
+                        continue;
+                    }else if(valor.tipobyc == "break"){
+                        break;
+                    }
+                }
                 //validacion nuevamente de la condicion sino se encicla
                 condicion = this.condicion.ejecutar(entorno);
                 if(condicion.tipo != Tipo.BOOLEAN){

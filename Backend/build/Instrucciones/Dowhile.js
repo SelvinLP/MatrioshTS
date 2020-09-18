@@ -26,14 +26,25 @@ var Dowhile = /** @class */ (function (_super) {
         return _this;
     }
     Dowhile.prototype.ejecutar = function (entorno) {
-        var condicion;
+        var condicion = { valor: false, tipo: Retorno_1.Tipo.BOOLEAN };
         do {
-            this.codigo.ejecutar(entorno);
-            condicion = this.condicion.ejecutar(entorno);
-            if (condicion.tipo != Retorno_1.Tipo.BOOLEAN) {
-                throw new N_Error_1.N_Error('Semantico', 'La operacion no es booleana en el do..while', '', this.linea, this.columna);
+            var valor = this.codigo.ejecutar(entorno);
+            //verificacion si viene un break o continue
+            if (valor != null || valor != undefined) {
+                if (valor.tipobyc == "continue") {
+                    continue;
+                }
+                else if (valor.tipobyc == "break") {
+                    break;
+                }
             }
-        } while (condicion.valor == true);
+            else {
+                condicion = this.condicion.ejecutar(entorno);
+                if (condicion.tipo != Retorno_1.Tipo.BOOLEAN) {
+                    throw new N_Error_1.N_Error('Semantico', 'La operacion no es booleana en el do..while', '', this.linea, this.columna);
+                }
+            }
+        } while (condicion.valor);
     };
     Dowhile.prototype.ejecutarast = function (ast) {
         var Cadena = ast.cadena + "\n";

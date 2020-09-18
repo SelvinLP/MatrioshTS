@@ -13,14 +13,15 @@ export class Ifelse extends Instruccion{
     }
 
     public ejecutar(entorno:Entorno) {
-        const condicion = this.condicion.ejecutar(entorno);
+        let condicion = this.condicion.ejecutar(entorno);
         if(condicion.tipo == Tipo.BOOLEAN){
             if(condicion.valor == true){
                 return this.codigo.ejecutar(entorno);
             }
             else{
-                if(this.elsest != null)
-                    this.elsest.ejecutar(entorno);
+                if(this.elsest != null){
+                    return this.elsest.ejecutar(entorno);
+                } 
             }
         }else{
             throw new N_Error('Semantico','La operacion no es booleana en el If '+ condicion.valor,'', this.linea,this.columna);  

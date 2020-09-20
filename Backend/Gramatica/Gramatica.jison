@@ -7,6 +7,7 @@
     const {Aritmetica} = require('../build/Expresiones/Aritmetica');
     const {Relacional} = require('../build/Expresiones/Relacional');
     const {Logica} = require('../build/Expresiones/Logica');
+    const {Opeternario} = require('../build/Expresiones/Opeternario');
     const {Imprimir} = require('../build/Instrucciones/Imprimir');
     const {Ifelse} = require('../build/Instrucciones/Ifelse');
     const {While} = require('../build/Instrucciones/While');
@@ -98,6 +99,7 @@
 "."     return '.'
 "["     return '['
 "]"     return ']'
+"?"     return '?'
 
 
 //Expresiones Regulares
@@ -123,7 +125,7 @@
 .                               {CL_Error.L_Errores.push(new CN_Error.N_Error("Lexico",yytext,"",yylineno,yylloc.first_column));}
 
 /lex
-
+%left '?'
 %left '++' '--'
 %left '||'
 %left '&&'
@@ -133,6 +135,7 @@
 %left '*' '/'
 %left '**' '%'
 %right '!'
+
 
 
 %right UMENOS UMAS
@@ -417,11 +420,19 @@ Cuerpo:
 
 Expresion:
     '(' Expresion ')'       {$$=$2;}
+    | OpeTernario           {$$=$1;}
     | E_aritmetica          {$$=$1;}
     | E_relacional          {$$=$1;}
     | E_logica              {$$=$1;}
     | Factor                {$$=$1;}
     | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error en la expresion "+yytext,"",this._$.first_line,this._$.first_column));}
+;
+
+OpeTernario:
+    Expresion '?' Expresion ':' Expresion 
+    {
+        $$ = new Opeternario($1, $3, $5, @1.first_line,@1.first_column);
+    }
 ;
 
 E_aritmetica:

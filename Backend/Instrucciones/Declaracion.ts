@@ -5,19 +5,17 @@ import { Entorno } from "../Entorno/Entorno";
 import { N_Error } from "../Errores/N_Error";
 import { N_Ast } from "../Ast/Ast";
 import { N_Tipo } from "../Otros/N_Tipo";
-import { L_Array, C_Array } from "./Array";
-import { Literal } from "../Expresiones/Literal";
-import { Id } from "../Expresiones/Id";
+import { C_Array, L_Array } from "./Array";
 
 export class N_Declaracion{
     constructor(public value:Expresion, public array:Expresion[], public types:Array<N_Parametros>){}
 }
 export class N_Parametros{
-    constructor(public id:string, public value:Literal){}
+    constructor(public id:string, public value:Expresion){}
 }
 export class Declaracion extends Instruccion{
 
-    constructor(private letoconst:TipoDato , private id: string, private tipo:N_Tipo, private tarray:Array<L_Array>,
+    constructor(private letoconst:TipoDato , private id: string, private tipo:N_Tipo, private tarray:[],
         private value : N_Declaracion, line : number, column: number){
         super(line, column);
     }
@@ -32,6 +30,7 @@ export class Declaracion extends Instruccion{
             if(this.value!=null){//verificacion del array
                 this.insertararray(entorno);
             }
+            console.log(this.tarray);
         }else{
             //validacion si es de otro tipo de array
             let banderaarray=false;
@@ -46,7 +45,7 @@ export class Declaracion extends Instruccion{
                     }else if(this.tipo.cadTipo == "void"){
                         this.tipo.tipo=Tipo.NULL;
                     }
-                    entorno.guardararray(this.id,new C_Array(this.tipo.tipo,[]),this.linea,this.columna);
+                    entorno.guardararray(this.id,new C_Array(this.tipo.tipo,[new L_Array(null,null)]),this.linea,this.columna);
                     banderaarray=true;
 
                     if(this.value!=null){//verificacion del array
@@ -54,6 +53,7 @@ export class Declaracion extends Instruccion{
                     }
                 }
             }
+
             if (!banderaarray){
                 if(this.value == null){
                     //Validaciones de const
@@ -108,13 +108,16 @@ export class Declaracion extends Instruccion{
             result.cadena += ast.posdes+" -> "+(result.posdes)+";\n";
             result={posant:result.posdes, posdes:result.posdes+1,cadena:result.cadena};
         }
-        if(this.value!=null){
-            //=
-            result.cadena += (result.posdes)+" [label =\"=\"];\n";
-            result.cadena += ast.posdes+" -> "+(result.posdes)+";\n";
-            //Expresion
-            result=this.value.value.ejecutarast({posant:ast.posdes, posdes:result.posdes+1,cadena:result.cadena});
+        if(this.value !=null){
+            if(this.value.value!=null){
+                //=
+                result.cadena += (result.posdes)+" [label =\"=\"];\n";
+                result.cadena += ast.posdes+" -> "+(result.posdes)+";\n";
+                //Expresion
+                result=this.value.value.ejecutarast({posant:ast.posdes, posdes:result.posdes+1,cadena:result.cadena});
+            }
         }
+
         
         return result;
     }
@@ -125,22 +128,31 @@ export class Declaracion extends Instruccion{
             throw new N_Error('Semantico','El array no existe: '+this.id,'', this.linea, this.columna);
         }else{
             if(listaresult.tipo==Tipo.NULL){
-                for(const nodovalor of this.value.array){
-                    listaresult.tipo=nodovalor.ejecutar(entorno).tipo;
-                    let inicio=listaresult.listaarray[0];
-                    inicio.N_listaarray.push(nodovalor);
+                if(this.value.array==null ){
+                    //comprobacion si es [] para limpiar los array
+                }else{//sino inserta los valores del array de entrada
+                    for(const nodovalor of this.value.array){
+                        listaresult.tipo=nodovalor.ejecutar(entorno).tipo;
+                        let inicio=listaresult.listaarray;
+                        inicio.push(new L_Array({value:nodovalor.ejecutar(entorno).valor,tipo:nodovalor.ejecutar(entorno).tipo},[new L_Array(null,null)]));
+                    }
                 }
             }else{
-                for(const nodovalor of this.value.array){
-                    if(nodovalor.ejecutar(entorno).tipo==listaresult.tipo){
-                        let inicio=listaresult.listaarray[0];
-                        inicio.N_listaarray.push(nodovalor);
-                    }else{
-                        throw new N_Error('Semantico','Tipo no compatible en el array: '+this.id,'', this.linea, this.columna);
+                if(this.value.array==null ){
+                    //comprobacion si es [] para limpiar los array
+                }else{
+                    for(const nodovalor of this.value.array){
+                        if(nodovalor.ejecutar(entorno).tipo==listaresult.tipo){
+                            let inicio=listaresult.listaarray;
+                            inicio.push(new L_Array({value:nodovalor.ejecutar(entorno).valor,tipo:nodovalor.ejecutar(entorno).tipo},[new L_Array(null,null)]));
+                        }else{
+                            throw new N_Error('Semantico','Tipo no compatible en el array: '+this.id,'', this.linea, this.columna);
+                        }
+                        
                     }
-                    
                 }
             }
+
         }
     }
 }

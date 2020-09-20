@@ -31,9 +31,13 @@ var Imprimir = /** @class */ (function (_super) {
         var Cadena = ast.cadena + "\n";
         Cadena += ast.posdes + " [label =\"Console.log\"];\n";
         Cadena += ast.posant + " -> " + ast.posdes + ";\n";
-        var result;
+        var result = { posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena };
         //Expresion
-        result = this.value.ejecutarast({ posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena });
+        try {
+            result = this.value.ejecutarast({ posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena });
+        }
+        catch (error) {
+        }
         return result;
     };
     return Imprimir;

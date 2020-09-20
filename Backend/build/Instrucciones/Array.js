@@ -10,9 +10,13 @@ var C_Array = /** @class */ (function () {
 }());
 exports.C_Array = C_Array;
 var L_Array = /** @class */ (function () {
-    function L_Array(N_listaarray) {
-        this.N_listaarray = N_listaarray;
+    function L_Array(valor, lista) {
+        this.valor = valor;
+        this.lista = lista;
     }
+    L_Array.prototype.agregardimension = function (dimension) {
+        this.lista = dimension;
+    };
     return L_Array;
 }());
 exports.L_Array = L_Array;

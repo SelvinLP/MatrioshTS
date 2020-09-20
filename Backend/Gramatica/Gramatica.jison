@@ -22,7 +22,7 @@
     const {N_Type} = require('../build/Otros/L_Types');
     const {N_Tipo} = require('../build/Otros/N_Tipo');
     const {L_Array} = require('../build/Instrucciones/Array');
-    const {AsignacionArray, AsignacionArrayExp} = require('../build/Instrucciones/AsignacionArray');
+    const {AsignacionArray, AsignacionArrayExp, Obtenervalorarray, pushpopcondireccion} = require('../build/Instrucciones/AsignacionArray');
     const {SwitchCase, Case} = require('../build/Instrucciones/SwitchCase');
     const {BreakContinue} = require('../build/Instrucciones/BreakContinue');
 
@@ -196,12 +196,12 @@ Posiblearray:
 arrayllaves:
     arrayllaves '[' ']'
     {
-        $1.push(new L_Array([]));
-        $$=$1;
+        let valor=new L_Array(null,$1);
+        $$=[valor];
     }
     | '['']'
     {
-        $$=[new L_Array([])];
+        $$=[new L_Array(null,null)];
     }
 ;
 
@@ -209,6 +209,7 @@ PosibleAsignacion:
     '=' Expresion                       {$$=new N_Declaracion($2, null, null)}
     | '=' '[' Parametros ']'            {$$=new N_Declaracion(null, $3, null)}
     | '=' '{' ParametrosTypevalor '}'   {$$=new N_Declaracion(null, null, $3)}
+    | '=' '[' ']'                       {$$=new N_Declaracion(null, null, null)}
     | %empty                            {$$=null;}
 ;
 
@@ -225,12 +226,12 @@ Parametros:
 ;
 
 ParametrosTypevalor:
-    ParametrosTypevalor ',' tk_id ':' Factor
+    ParametrosTypevalor ',' tk_id ':' Expresion
     {
         $1.push(new N_Parametros($3,$5));
         $$=$1;
     }
-    | tk_id ':' Factor
+    | tk_id ':' Expresion
     {
         $$=[new N_Parametros($1,$3)];
     }
@@ -247,9 +248,24 @@ Asignacion:
     }
     | tk_id '.' tk_pop '(' ')' ';'
     {
-        $$ = new AsignacionArray($1, $3, $5, @1.first_line, @1.first_column);
+        $$ = new AsignacionArray($1, $3, null, @1.first_line, @1.first_column);
     }
-    | tk_id Direccionarray '=' '['
+    | tk_id Direccionarray '=' '[' ']' ';'
+    {
+        $$ = new AsignacionArray($1, $2, "", @1.first_line, @1.first_column);
+    }
+    | tk_id Direccionarray '=' Expresion ';'
+    {
+        $$ = new AsignacionArray($1, $2, $4, @1.first_line, @1.first_column);
+    }
+    | tk_id Direccionarray '.' tk_push '(' Expresion ')' ';'
+    {
+        $$ = new pushpopcondireccion($1, $2, $4, $6, @1.first_line, @1.first_column);
+    }
+    | tk_id Direccionarray '.' tk_pop '(' ')' ';'
+    {
+        $$ = new pushpopcondireccion($1, $2, $4, null, @1.first_line, @1.first_column);
+    }
     | Incydec ';'
     {
         $$=$1;
@@ -259,11 +275,12 @@ Asignacion:
 Direccionarray:
     Direccionarray '[' Expresion ']'
     {
-
+        $1.push($3);
+        $$=$1;
     }
     | '[' Expresion ']'
     {
-        
+        $$=[$2];
     }
 ;
 
@@ -352,14 +369,23 @@ Casos:
         $1.push(new Case($3,$5));
         $$=$1;
     }
+    | Casos tk_case  Expresion ':' 'tk_break' ';'
+    {
+        $1.push(new Case($3,new Array()));
+        $$=$1;
+    }
     | tk_case  Expresion ':' LInstrucciones 'tk_break' ';'
     {
         $$=[new Case($2,$4)];
     }
+    | tk_case  Expresion ':' 'tk_break' ';'
+    {
+        $$=[new Case($2,new Array())];
+    }
 ;
 
 Posibledefault:
-    tk_default ':' LInstrucciones 'tk_break' ';'
+    tk_default ':' LInstrucciones 
     {
         $$=$3;
     }
@@ -496,10 +522,19 @@ Factor:
     {
         $$ = new Id($1, @1.first_line, @1.first_column);
     }
-    | tk_id '.' tk_length '(' ')' 
+    | tk_id PosibleDireccionArray '.' tk_length 
     {
-        $$ = new AsignacionArrayExp($1, @1.first_line, @1.first_column);
+        $$ = new AsignacionArrayExp($1, $2, @1.first_line, @1.first_column);
     }
+    | tk_id Direccionarray 
+    {
+        $$ = new Obtenervalorarray($1, $2, @1.first_line, @1.first_column);
+    }
+;
+
+PosibleDireccionArray:
+    Direccionarray                  {$$=$1;}
+    | %empty                        {$$=null;}
 ;
 
 Incydec:

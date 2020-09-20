@@ -57,6 +57,7 @@ var Declaracion = /** @class */ (function (_super) {
             if (this.value != null) { //verificacion del array
                 this.insertararray(entorno);
             }
+            console.log(this.tarray);
         }
         else {
             //validacion si es de otro tipo de array
@@ -75,7 +76,7 @@ var Declaracion = /** @class */ (function (_super) {
                     else if (this.tipo.cadTipo == "void") {
                         this.tipo.tipo = Retorno_1.Tipo.NULL;
                     }
-                    entorno.guardararray(this.id, new Array_1.C_Array(this.tipo.tipo, []), this.linea, this.columna);
+                    entorno.guardararray(this.id, new Array_1.C_Array(this.tipo.tipo, [new Array_1.L_Array(null, null)]), this.linea, this.columna);
                     banderaarray = true;
                     if (this.value != null) { //verificacion del array
                         this.insertararray(entorno);
@@ -141,11 +142,13 @@ var Declaracion = /** @class */ (function (_super) {
             result = { posant: result.posdes, posdes: result.posdes + 1, cadena: result.cadena };
         }
         if (this.value != null) {
-            //=
-            result.cadena += (result.posdes) + " [label =\"=\"];\n";
-            result.cadena += ast.posdes + " -> " + (result.posdes) + ";\n";
-            //Expresion
-            result = this.value.value.ejecutarast({ posant: ast.posdes, posdes: result.posdes + 1, cadena: result.cadena });
+            if (this.value.value != null) {
+                //=
+                result.cadena += (result.posdes) + " [label =\"=\"];\n";
+                result.cadena += ast.posdes + " -> " + (result.posdes) + ";\n";
+                //Expresion
+                result = this.value.value.ejecutarast({ posant: ast.posdes, posdes: result.posdes + 1, cadena: result.cadena });
+            }
         }
         return result;
     };
@@ -156,22 +159,32 @@ var Declaracion = /** @class */ (function (_super) {
         }
         else {
             if (listaresult.tipo == Retorno_1.Tipo.NULL) {
-                for (var _i = 0, _a = this.value.array; _i < _a.length; _i++) {
-                    var nodovalor = _a[_i];
-                    listaresult.tipo = nodovalor.ejecutar(entorno).tipo;
-                    var inicio = listaresult.listaarray[0];
-                    inicio.N_listaarray.push(nodovalor);
+                if (this.value.array == null) {
+                    //comprobacion si es [] para limpiar los array
+                }
+                else { //sino inserta los valores del array de entrada
+                    for (var _i = 0, _a = this.value.array; _i < _a.length; _i++) {
+                        var nodovalor = _a[_i];
+                        listaresult.tipo = nodovalor.ejecutar(entorno).tipo;
+                        var inicio = listaresult.listaarray;
+                        inicio.push(new Array_1.L_Array({ value: nodovalor.ejecutar(entorno).valor, tipo: nodovalor.ejecutar(entorno).tipo }, [new Array_1.L_Array(null, null)]));
+                    }
                 }
             }
             else {
-                for (var _b = 0, _c = this.value.array; _b < _c.length; _b++) {
-                    var nodovalor = _c[_b];
-                    if (nodovalor.ejecutar(entorno).tipo == listaresult.tipo) {
-                        var inicio = listaresult.listaarray[0];
-                        inicio.N_listaarray.push(nodovalor);
-                    }
-                    else {
-                        throw new N_Error_1.N_Error('Semantico', 'Tipo no compatible en el array: ' + this.id, '', this.linea, this.columna);
+                if (this.value.array == null) {
+                    //comprobacion si es [] para limpiar los array
+                }
+                else {
+                    for (var _b = 0, _c = this.value.array; _b < _c.length; _b++) {
+                        var nodovalor = _c[_b];
+                        if (nodovalor.ejecutar(entorno).tipo == listaresult.tipo) {
+                            var inicio = listaresult.listaarray;
+                            inicio.push(new Array_1.L_Array({ value: nodovalor.ejecutar(entorno).valor, tipo: nodovalor.ejecutar(entorno).tipo }, [new Array_1.L_Array(null, null)]));
+                        }
+                        else {
+                            throw new N_Error_1.N_Error('Semantico', 'Tipo no compatible en el array: ' + this.id, '', this.linea, this.columna);
+                        }
                     }
                 }
             }

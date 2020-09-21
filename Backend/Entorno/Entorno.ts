@@ -44,6 +44,14 @@ export class Entorno{
         return null;
     } 
 
+    public eliminarvar(id:string){
+        let env : Entorno | null = this;
+        //verificacion si existe en el mismo entorno
+        if(env.variables.has(id)){
+            env.variables.delete(id);
+        }
+    }
+
     public guardarfuncion(id: string, funcion : Funcion, line : number, column: number){
         let env : Entorno | null = this;
         while(env != null){

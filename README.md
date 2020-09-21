@@ -9,6 +9,10 @@ Proyecto 1 de Organizacion de Lenguajes y Compiladores 2 2s 2020
 * If Else
 * While
 * For
+* Do while
+* Array
+* Operador ternario
+* Switch 
 
 ## Comandos 🔧
 _Levantar el frontend de angular_

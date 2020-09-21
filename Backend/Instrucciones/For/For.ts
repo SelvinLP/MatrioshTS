@@ -1,11 +1,11 @@
-import { Expresion } from "../Abstracto/Expresion";
-import { Instruccion } from "../Abstracto/Instruccion";
-import { Tipo } from "../Abstracto/Retorno";
-import { N_Error } from "../Errores/N_Error";
-import { Entorno } from "../Entorno/Entorno";
-import { Asignacion } from "./Asignacion";
-import { Declaracion } from "./Declaracion";
-import { N_Ast } from "../Ast/Ast";
+import { Expresion } from "../../Abstracto/Expresion";
+import { Instruccion } from "../../Abstracto/Instruccion";
+import { Tipo } from "../../Abstracto/Retorno";
+import { N_Error } from "../../Errores/N_Error";
+import { Entorno } from "../../Entorno/Entorno";
+import { Asignacion } from "../Asignacion";
+import { Declaracion } from "../Declaracion";
+import { N_Ast } from "../../Ast/Ast";
 
 export class For extends Instruccion{
 

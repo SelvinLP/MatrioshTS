@@ -11,7 +11,9 @@
     const {Imprimir} = require('../build/Instrucciones/Imprimir');
     const {Ifelse} = require('../build/Instrucciones/Ifelse');
     const {While} = require('../build/Instrucciones/While');
-    const {For} = require('../build/Instrucciones/For');
+    const {For} = require('../build/Instrucciones/For/For');
+    const {Forin} = require('../build/Instrucciones/For/Forin');
+    const {Forof} = require('../build/Instrucciones/For/Forof');
     const {Dowhile} = require('../build/Instrucciones/Dowhile');
     const {Declaracion, N_Declaracion, N_Parametros} = require('../build/Instrucciones/Declaracion');
     const {Asignacion} = require('../build/Instrucciones/Asignacion');
@@ -64,9 +66,11 @@
 "graficar_ts"       return 'graficar_ts'
 "type"              return 'tk_type'
 "Array"             return 'tk_array'
-"push"             return 'tk_push'
-"pop"             return 'tk_pop'
-"length"             return 'tk_length'
+"push"              return 'tk_push'
+"pop"               return 'tk_pop'
+"length"            return 'tk_length'
+"in"                return 'tk_in'
+"of"                return 'tk_of'
 
 //Relacionales
 "=="    return '=='
@@ -162,6 +166,8 @@ Instruccion:
     | Whilet                {$$=$1;}
     | Dowhilet              {$$=$1;}
     | Fort                  {$$=$1;}
+    | Forint                {$$=$1;}
+    | Foroft                {$$=$1;}
     | BreakyContinue        {$$=$1;}
     | Types                 {$$=$1;}
     | Switcht               {$$=$1;}
@@ -325,6 +331,28 @@ Fort:
     tk_for '(' Declaracion E_relacional ';' Incydec ')' Cuerpo
     {
         $$ = new For($3, $4, $6, $8, @1.first_line, @1.first_column);
+    }
+;
+
+Forint:
+    tk_for '(' tk_let tk_id tk_in tk_id ')' Cuerpo
+    {
+        $$ = new Forin(TipoDato.LET, $4, $6, $8, @1.first_line, @1.first_column);
+    }
+    | tk_for '(' tk_const tk_id tk_in tk_id ')' Cuerpo
+    {
+        $$ = new Forin(TipoDato.LET, $4, $6, $8, @1.first_line, @1.first_column);
+    }
+;
+
+Foroft:
+    tk_for '(' tk_let tk_id tk_of tk_id ')' Cuerpo
+    {
+        $$ = new Forof(TipoDato.LET, $4, $6, $8, @1.first_line, @1.first_column);
+    }
+    | tk_for '(' tk_const tk_id tk_of tk_id ')' Cuerpo
+    {
+        $$ = new Forof(TipoDato.LET, $4, $6, $8, @1.first_line, @1.first_column);
     }
 ;
 

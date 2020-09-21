@@ -33,6 +33,13 @@ var Entorno = /** @class */ (function () {
         }
         return null;
     };
+    Entorno.prototype.eliminarvar = function (id) {
+        var env = this;
+        //verificacion si existe en el mismo entorno
+        if (env.variables.has(id)) {
+            env.variables.delete(id);
+        }
+    };
     Entorno.prototype.guardarfuncion = function (id, funcion, line, column) {
         var env = this;
         while (env != null) {

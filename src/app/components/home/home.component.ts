@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 
 import { L_Errores } from "../../../../Backend/build/Errores/L_Error";
+import { L_Simbs } from "../../../../Backend/build/Otros/L_Simb";
 import { N_Error } from "../../../../Backend/build/Errores/N_Error";
 import { N_Ast } from "../../../../Backend/build/Ast/Ast";
 import { L_Print } from "../../../../Backend/build/Otros/L_Print";
@@ -43,7 +44,8 @@ export class HomeComponent implements OnInit {
     this.Consola="";
     const entorno = new Entorno(null);
     L_Errores.splice(0,L_Errores.length);
-    L_Print.splice(0,L_Print.length)
+    L_Print.splice(0,L_Print.length);
+    L_Simbs.splice(0,L_Simbs.length);
 
     this.ast=Parser.parse(this.Salida);
 
@@ -53,7 +55,8 @@ export class HomeComponent implements OnInit {
     this.Consola="";
     const entorno = new Entorno(null);
     L_Errores.splice(0,L_Errores.length);
-    L_Print.splice(0,L_Print.length)
+    L_Print.splice(0,L_Print.length);
+    L_Simbs.splice(0,L_Simbs.length);
 
     this.ast=Parser.parse(this.Salida);
     for(const Instruccion of this.ast){
@@ -99,6 +102,12 @@ export class HomeComponent implements OnInit {
     //console.log(this.CadenaGraphviz);
     wasmFolder('assets/');
     graphviz('body').renderDot(this.CadenaGraphviz);
+  }
+  
+  Ev_Simbolos(){
+    this.router.navigate(['/simb']);
+    wasmFolder('assets/');
+    graphviz('body').renderDot('digraph AST {}');
   }
   
   Ev_Errores(){

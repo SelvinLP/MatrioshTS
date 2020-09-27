@@ -10,6 +10,7 @@
     const {Opeternario} = require('../build/Expresiones/Opeternario');
     const {Llamarfuncionexp} = require('../build/Expresiones/Llamarfuncionexp');
     const {Imprimir} = require('../build/Instrucciones/Imprimir');
+    const {Graficarts} = require('../build/Instrucciones/Graficarts');
     const {Ifelse} = require('../build/Instrucciones/Ifelse');
     const {While} = require('../build/Instrucciones/While');
     const {For} = require('../build/Instrucciones/For/For');
@@ -29,6 +30,7 @@
     const {AsignacionArray, AsignacionArrayExp, Obtenervalorarray, pushpopcondireccion} = require('../build/Instrucciones/AsignacionArray');
     const {SwitchCase, Case} = require('../build/Instrucciones/SwitchCase');
     const {BreakContinue} = require('../build/Instrucciones/BreakContinue');
+    const {Returnt} = require('../build/Instrucciones/Returnt');
 
 %}
 
@@ -64,7 +66,7 @@
 "break"             return 'tk_break'
 "function"          return 'tk_function'
 "console.log"       return 'tk_console'
-"graficar_ts"       return 'graficar_ts'
+"graficar_ts"       return 'tk_graficar_ts'
 "type"              return 'tk_type'
 "Array"             return 'tk_array'
 "push"              return 'tk_push'
@@ -161,6 +163,7 @@ LInstrucciones:
 
 Instruccion:
     Declaracion             {$$=$1;}
+    | Graficartst           {$$=$1;}
     | Asignacion            {$$=$1;} 
     | Impresion             {$$=$1;}
     | Ift                   {$$=$1;}
@@ -175,6 +178,13 @@ Instruccion:
     | Funciones             {$$=$1;}
     | Returnt               {$$=$1;}
     | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error en la Instruccion "+yytext,"",this._$.first_line,this._$.first_column));}
+;
+
+Graficartst:
+    tk_graficar_ts '(' ')' ';'
+    {
+        $$=new Graficarts(@1.first_line, @1.first_column);
+    }
 ;
 
 Declaracion:
@@ -213,7 +223,7 @@ arrayllaves:
     | '['']'
     {
         $$=[new L_Array(null,null)];
-    }
+    }  
 ;
 
 PosibleAsignacion:
@@ -246,6 +256,7 @@ ParametrosTypevalor:
     {
         $$=[new N_Parametros($1,$3)];
     }
+    | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error al ingresar parametro type"+yytext,"",this._$.first_line,this._$.first_column))}
 ;
 
 Asignacion:
@@ -293,6 +304,8 @@ Direccionarray:
     {
         $$=[$2];
     }
+    | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error al definir direccion array "+yytext,"",this._$.first_line,this._$.first_column))}
+
 ;
 
 Impresion:
@@ -415,6 +428,7 @@ Casos:
     {
         $$=[new Case($2,new Array())];
     }
+    | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error al definir case "+yytext,"",this._$.first_line,this._$.first_column))}
 ;
 
 Posibledefault:
@@ -642,15 +656,16 @@ TipoDato:
     | tk_boolean                    {$$ = "boolean";}
     | tk_void                       {$$ = "void";}
     | tk_id                         {$$ = $1;}
+    | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error al definir tipo "+yytext,"",this._$.first_line,this._$.first_column))}
 ;
 
 Returnt:
     tk_return ';'
     {
-        $$=$1;
+        $$=new Returnt(null,@1.first_line, @1.first_column);
     }
     | tk_return Expresion ';'
     {
-        $$=$1;
+        $$=new Returnt($2,@1.first_line, @1.first_column);
     }
 ;

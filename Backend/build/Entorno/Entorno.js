@@ -1,9 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Entorno = void 0;
+var Retorno_1 = require("../Abstracto/Retorno");
 var Simbolo_1 = require("./Simbolo");
 var N_Error_1 = require("../Errores/N_Error");
 var L_Types_1 = require("../Otros/L_Types");
+var L_Simb_1 = require("../Otros/L_Simb");
 var Entorno = /** @class */ (function () {
     function Entorno(anterior) {
         this.anterior = anterior;
@@ -21,6 +23,34 @@ var Entorno = /** @class */ (function () {
         else {
             //sino se cumple lo guarda en el entorno actual
             this.variables.set(id, new Simbolo_1.Simbolo(letoconst, id, tipo, valor));
+            //lo insertamos en una lista para los reportes
+            var tipodevariable = "    ";
+            var tipovalor = "";
+            if (Retorno_1.TipoDato.LET == letoconst) {
+                tipodevariable = "let  ";
+            }
+            else if (Retorno_1.TipoDato.CONST == letoconst) {
+                tipodevariable = "const";
+            }
+            if (Retorno_1.Tipo.ARRAY == tipo.tipo) {
+                tipovalor = "array";
+            }
+            else if (Retorno_1.Tipo.BOOLEAN == tipo.tipo) {
+                tipovalor = "boolean";
+            }
+            else if (Retorno_1.Tipo.NULL == tipo.tipo) {
+                tipovalor = "null";
+            }
+            if (Retorno_1.Tipo.NUMBER == tipo.tipo) {
+                tipovalor = "number";
+            }
+            else if (Retorno_1.Tipo.STRING == tipo.tipo) {
+                tipovalor = "string";
+            }
+            else if (Retorno_1.Tipo.TYPE == tipo.tipo) {
+                tipovalor = "type";
+            }
+            L_Simb_1.L_Simbs.push(new L_Simb_1.N_Simbolo(tipodevariable, id, tipovalor, valor, ""));
         }
     };
     Entorno.prototype.obtenervar = function (id) {
@@ -50,6 +80,9 @@ var Entorno = /** @class */ (function () {
             env = env.anterior;
         }
         this.funciones.set(id, funcion);
+        var tipodevariable = "    ";
+        var tipovalor = "funcion";
+        L_Simb_1.L_Simbs.push(new L_Simb_1.N_Simbolo(tipodevariable, id, tipovalor, "", "global"));
     };
     Entorno.prototype.obtenerfuncion = function (id) {
         var env = this;
@@ -70,6 +103,9 @@ var Entorno = /** @class */ (function () {
         else {
             //sino se cumple lo guarda en el entorno actual
             this.array.set(id, cuerpoarray);
+            var tipodevariable = "    ";
+            var tipovalor = "array";
+            L_Simb_1.L_Simbs.push(new L_Simb_1.N_Simbolo(tipodevariable, id, tipovalor, "", ""));
         }
     };
     Entorno.prototype.obtenerarray = function (id) {

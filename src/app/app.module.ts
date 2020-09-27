@@ -8,13 +8,15 @@ import { FormsModule } from '@angular/forms';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { ErroresComponent } from './components/errores/errores.component';
 import { HomeComponent } from './components/home/home.component';
+import { TbsimbolosComponent } from './components/tbsimbolos/tbsimbolos.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ErroresComponent,
-    HomeComponent
+    HomeComponent,
+    TbsimbolosComponent
   ],
   imports: [
     BrowserModule,

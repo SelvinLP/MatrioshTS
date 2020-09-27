@@ -1,10 +1,11 @@
-import { TipoDato } from "../Abstracto/Retorno";
+import { TipoDato, Tipo } from "../Abstracto/Retorno";
 import { Simbolo } from "./Simbolo";
 import { N_Error } from "../Errores/N_Error";
 import { Funcion } from "../Instrucciones/Funcion";
 import { N_Tipo } from "../Otros/N_Tipo";
 import { L_type } from "../Otros/L_Types";
 import { C_Array } from "../Instrucciones/Array";
+import { L_Simbs,N_Simbolo } from "../Otros/L_Simb";
 
 export class Entorno{
     
@@ -26,10 +27,32 @@ export class Entorno{
         let env : Entorno | null = this;
         //verificacion si existe en el mismo entorno
         if(env.variables.has(id)){
-            throw new N_Error('Semantico','La variable ya existe: '+id,'', line, column);
+            throw new N_Error('Semantico','La variable ya existe: '+id,'', line, column);            
         }else{
             //sino se cumple lo guarda en el entorno actual
             this.variables.set(id, new Simbolo(letoconst,id, tipo, valor));
+            //lo insertamos en una lista para los reportes
+            let tipodevariable="    ";
+            let tipovalor="";
+            if(TipoDato.LET == letoconst){
+                tipodevariable="let  ";
+            }else if(TipoDato.CONST == letoconst){
+                tipodevariable="const";
+            }
+            if(Tipo.ARRAY == tipo.tipo){
+                tipovalor="array";
+            }else if(Tipo.BOOLEAN == tipo.tipo){
+                tipovalor="boolean";
+            }else if(Tipo.NULL == tipo.tipo){
+                tipovalor="null";
+            }if(Tipo.NUMBER == tipo.tipo){
+                tipovalor="number";
+            }else if(Tipo.STRING == tipo.tipo){
+                tipovalor="string";
+            }else if(Tipo.TYPE == tipo.tipo){
+                tipovalor="type";
+            }
+            L_Simbs.push(new N_Simbolo(tipodevariable,id,tipovalor,valor,""));
         }
     }
 
@@ -62,6 +85,9 @@ export class Entorno{
             env = env.anterior;
         }
         this.funciones.set(id, funcion);
+        let tipodevariable="    ";
+        let tipovalor="funcion";
+        L_Simbs.push(new N_Simbolo(tipodevariable,id,tipovalor,"","global"));
     }
 
     public obtenerfuncion(id: string): Funcion | undefined | null{
@@ -84,6 +110,9 @@ export class Entorno{
         }else{
             //sino se cumple lo guarda en el entorno actual
             this.array.set(id, cuerpoarray);
+            let tipodevariable="    ";
+            let tipovalor="array";
+            L_Simbs.push(new N_Simbolo(tipodevariable,id,tipovalor,"",""));
         }
     }
 

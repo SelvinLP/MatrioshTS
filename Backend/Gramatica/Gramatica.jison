@@ -8,6 +8,7 @@
     const {Relacional} = require('../build/Expresiones/Relacional');
     const {Logica} = require('../build/Expresiones/Logica');
     const {Opeternario} = require('../build/Expresiones/Opeternario');
+    const {Llamarfuncionexp} = require('../build/Expresiones/Llamarfuncionexp');
     const {Imprimir} = require('../build/Instrucciones/Imprimir');
     const {Ifelse} = require('../build/Instrucciones/Ifelse');
     const {While} = require('../build/Instrucciones/While');
@@ -19,7 +20,7 @@
     const {Asignacion} = require('../build/Instrucciones/Asignacion');
     const {Statement} = require('../build/Instrucciones/Statement');
     const {Id} = require('../build/Expresiones/Id');
-    const {Funcion} = require('../build/Instrucciones/Funcion');
+    const {Funcion, Parametrofunc} = require('../build/Instrucciones/Funcion');
     const {Llamarfuncion} = require('../build/Instrucciones/Llamarfuncion');
     const {Type} = require('../build/Instrucciones/Type');
     const {N_Type} = require('../build/Otros/L_Types');
@@ -172,6 +173,7 @@ Instruccion:
     | Types                 {$$=$1;}
     | Switcht               {$$=$1;}
     | Funciones             {$$=$1;}
+    | Returnt               {$$=$1;}
     | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error en la Instruccion "+yytext,"",this._$.first_line,this._$.first_column));}
 ;
 
@@ -395,21 +397,21 @@ Switcht:
 ;
 
 Casos:
-    Casos tk_case  Expresion ':' LInstrucciones 'tk_break' ';'
+    Casos tk_case  Expresion ':' LInstrucciones tk_break ';' 
     {
         $1.push(new Case($3,$5));
         $$=$1;
     }
-    | Casos tk_case  Expresion ':' 'tk_break' ';'
+    | Casos tk_case  Expresion ':' tk_break ';'
     {
         $1.push(new Case($3,new Array()));
         $$=$1;
     }
-    | tk_case  Expresion ':' LInstrucciones 'tk_break' ';'
+    | tk_case  Expresion ':' LInstrucciones tk_break ';'
     {
         $$=[new Case($2,$4)];
     }
-    | tk_case  Expresion ':' 'tk_break' ';'
+    | tk_case  Expresion ':' tk_break ';'
     {
         $$=[new Case($2,new Array())];
     }
@@ -424,14 +426,53 @@ Posibledefault:
 ;
 
 Funciones:
-    tk_function tk_id '(' ')' Cuerpo
+    tk_function tk_id '(' ParametrosFucnc ')' Posibleretorno '{' Posiblecuerpo '}'
     {
-        $$ = new Funcion($2, [], $5, @1.first_line, @1.first_column);
+        $$ = new Funcion($2, $4, $6, $8, @1.first_line, @1.first_column);
     }
-    | tk_id '(' ')' ';'
+    | tk_id '(' PosibleParametrosllamada ')' ';'
     {
-        $$ = new Llamarfuncion($1, [], @1.first_line, @1.first_column);
+        $$ = new Llamarfuncion($1, $3, @1.first_line, @1.first_column);
     }
+;
+
+PosibleParametrosllamada:
+    Parametros
+    {
+        $$=$1;
+    }
+    | %empty                                    {$$=null;}
+;
+
+Posibleretorno:
+    ':' TipoDato                                {$$=$2}  
+    | %empty                                    {$$=null;}
+;
+
+ParametrosFucnc:
+    tk_id ':' TipoDato MasParametrosFucnc           
+    {
+        $$=[new Parametrofunc($1,$3,@1.first_line, @1.first_column)];
+        $$.push($4);
+    }
+    | %empty                       {$$=null;}
+;
+
+MasParametrosFucnc:
+    ',' tk_id ':' TipoDato MasParametrosFucnc       
+    {
+        $$=[new Parametrofunc($2,$4,@1.first_line, @1.first_column)]
+        $$.push($5);
+    }
+    | %empty                       {$$=null;}
+;
+
+Posiblecuerpo:
+    LInstrucciones
+    {
+        $$=$1;
+    }
+    | %empty                       {$$=null;}
 ;
 
 Cuerpo:
@@ -453,6 +494,7 @@ Expresion:
     | E_relacional          {$$=$1;}
     | E_logica              {$$=$1;}
     | Factor                {$$=$1;}
+    | E_Funcionexp          {$$=$1;}
     | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error en la expresion "+yytext,"",this._$.first_line,this._$.first_column));}
 ;
 
@@ -495,6 +537,13 @@ E_aritmetica:
     | '+' Expresion %prec UMAS
     {
         $$ = new Aritmetica($2, null, TipoAritmetico.UMAS, @1.first_line,@1.first_column);
+    }
+;
+
+E_Funcionexp:
+    tk_id '(' PosibleParametrosllamada ')'
+    {
+        $$ = new Llamarfuncionexp($1, $3, @1.first_line, @1.first_column);
     }
 ;
 
@@ -593,4 +642,15 @@ TipoDato:
     | tk_boolean                    {$$ = "boolean";}
     | tk_void                       {$$ = "void";}
     | tk_id                         {$$ = $1;}
+;
+
+Returnt:
+    tk_return ';'
+    {
+        $$=$1;
+    }
+    | tk_return Expresion ';'
+    {
+        $$=$1;
+    }
 ;

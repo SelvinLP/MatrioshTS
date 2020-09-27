@@ -13,22 +13,22 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Llamarfuncion = void 0;
-var Instruccion_1 = require("../Abstracto/Instruccion");
+exports.Llamarfuncionexp = void 0;
+var Expresion_1 = require("../Abstracto/Expresion");
 var N_Error_1 = require("../Errores/N_Error");
 var Entorno_1 = require("../Entorno/Entorno");
 var L_Error_1 = require("../Errores/L_Error");
 var Retorno_1 = require("../Abstracto/Retorno");
 var N_Tipo_1 = require("../Otros/N_Tipo");
-var Llamarfuncion = /** @class */ (function (_super) {
-    __extends(Llamarfuncion, _super);
-    function Llamarfuncion(id, expresiones, line, column) {
+var Llamarfuncionexp = /** @class */ (function (_super) {
+    __extends(Llamarfuncionexp, _super);
+    function Llamarfuncionexp(id, expresiones, line, column) {
         var _this = _super.call(this, line, column) || this;
         _this.id = id;
         _this.expresiones = expresiones;
         return _this;
     }
-    Llamarfuncion.prototype.ejecutar = function (entorno) {
+    Llamarfuncionexp.prototype.ejecutar = function (entorno) {
         var funcion = entorno.obtenerfuncion(this.id);
         if (funcion == null) {
             throw new N_Error_1.N_Error('Semantico', 'La funcion ' + this.id + " no existe", '', this.linea, this.columna);
@@ -63,13 +63,30 @@ var Llamarfuncion = /** @class */ (function (_super) {
                 }
             }
         }
+        if (typeof funcion.tiporetorno == "string") {
+            if (funcion.tiporetorno == "number") {
+                return { valor: "resultado", tipo: Retorno_1.Tipo.NUMBER };
+            }
+            else if (funcion.tiporetorno == "string") {
+                return { valor: "resultado", tipo: Retorno_1.Tipo.STRING };
+            }
+            else if (funcion.tiporetorno == "boolean") {
+                return { valor: "resultado", tipo: Retorno_1.Tipo.BOOLEAN };
+            }
+            else {
+                return { valor: "resultado", tipo: Retorno_1.Tipo.NULL };
+            }
+        }
+        else {
+            return { valor: "resultado", tipo: funcion.tiporetorno };
+        }
     };
-    Llamarfuncion.prototype.ejecutarast = function (ast) {
+    Llamarfuncionexp.prototype.ejecutarast = function (ast) {
         var Cadena = ast.cadena + "\n";
         Cadena += ast.posdes + " [label =\"Llamar funcion\"];\n";
         Cadena += ast.posant + " -> " + ast.posdes + ";\n";
         return { posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena };
     };
-    return Llamarfuncion;
-}(Instruccion_1.Instruccion));
-exports.Llamarfuncion = Llamarfuncion;
+    return Llamarfuncionexp;
+}(Expresion_1.Expresion));
+exports.Llamarfuncionexp = Llamarfuncionexp;

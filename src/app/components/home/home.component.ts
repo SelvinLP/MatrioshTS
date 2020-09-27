@@ -23,8 +23,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  Entrada="";
-  Salida="let hola=12; \n$console.log(hola);";
+  Entrada="let hola=12; \n$console.log(hola);";
+  Salida="";
   Consola="";
   CadenaGraphviz="";
   ast;
@@ -39,7 +39,14 @@ export class HomeComponent implements OnInit {
   };
 
   Ev_Traducir(){
-    console.log("Funciona boton traducir");
+    this.Salida=this.Entrada
+    this.Consola="";
+    const entorno = new Entorno(null);
+    L_Errores.splice(0,L_Errores.length);
+    L_Print.splice(0,L_Print.length)
+
+    this.ast=Parser.parse(this.Salida);
+
   }
 
   Ev_Ejecutar(){

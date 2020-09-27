@@ -4,16 +4,16 @@ import { N_Error } from "../Errores/N_Error";
 import { Entorno } from "../Entorno/Entorno";
 import { N_Ast } from "../Ast/Ast";
 import { L_Errores } from "../Errores/L_Error";
-import { TipoDato } from "../Abstracto/Retorno";
+import { TipoDato, Retorno, Tipo } from "../Abstracto/Retorno";
 import { N_Tipo } from "../Otros/N_Tipo";
 
-export class Llamarfuncion extends Instruccion{
+export class Llamarfuncionexp extends Expresion{
 
     constructor(private id: string, private expresiones : Array<Expresion>, line : number, column : number){
         super(line, column);
     }
 
-    public ejecutar(entorno : Entorno) {
+    public ejecutar(entorno : Entorno):Retorno {
         const funcion = entorno.obtenerfuncion(this.id);
         if(funcion == null){
             throw new N_Error('Semantico','La funcion '+this.id+" no existe",'', this.linea, this.columna);
@@ -34,7 +34,6 @@ export class Llamarfuncion extends Instruccion{
             variables=variables[1];
           }
         }
-
         //recorremos todas las demas instrucciones
         if(funcion.codigo!=null || funcion.codigo != undefined){
             for(const instr of funcion.codigo){
@@ -48,7 +47,19 @@ export class Llamarfuncion extends Instruccion{
                 }
             }
         }
-
+        if(typeof funcion.tiporetorno == "string"){
+            if(funcion.tiporetorno == "number"){
+                return {valor : "resultado", tipo : Tipo.NUMBER};
+            }else if(funcion.tiporetorno == "string"){
+                return {valor : "resultado", tipo : Tipo.STRING};
+            }else if(funcion.tiporetorno == "boolean"){
+                return {valor : "resultado", tipo : Tipo.BOOLEAN};
+            }else {
+                return {valor : "resultado", tipo : Tipo.NULL};
+            }
+        }else{
+            return {valor : "resultado", tipo : funcion.tiporetorno};
+        }
 
     }
 

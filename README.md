@@ -25,3 +25,4 @@ _Agregar a package.json_
 * [Jison](https://zaa.ch/jison/)
 * [Githubpages](https://medium.com/tech-insights/how-to-deploy-angular-apps-to-github-pages-gh-pages-896c4e10f9b4)
 * [Lab](https://www.notion.so/Github-Pages-b7ee023c66654ad1961945fa0f51c4ef)
+* [Olc2](https://www.notion.so/Organizaci-n-de-Lenguajes-y-Compiladores-2-c1e5ca91ddab45019020d26d6048bbc0)

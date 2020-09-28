@@ -50,6 +50,7 @@ var For = /** @class */ (function (_super) {
                     throw new N_Error_1.N_Error('Semantico', 'La operacion no es booleana en el for', '', this.linea, this.columna);
                 }
             }
+            entorno.eliminarvar(this.declaracion.id);
         }
         else {
             throw new N_Error_1.N_Error('Semantico', 'La operacion no es booleana en el for', '', this.linea, this.columna);

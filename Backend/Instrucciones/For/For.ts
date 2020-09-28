@@ -37,6 +37,8 @@ export class For extends Instruccion{
                     throw new N_Error('Semantico','La operacion no es booleana en el for','', this.linea,this.columna);
                 }
             }
+            entorno.eliminarvar(this.declaracion.id);
+
         }else{
             throw new N_Error('Semantico','La operacion no es booleana en el for','', this.linea,this.columna);
         }

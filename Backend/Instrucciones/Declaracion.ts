@@ -15,7 +15,7 @@ export class N_Parametros{
 }
 export class Declaracion extends Instruccion{
 
-    constructor(private letoconst:TipoDato , private id: string, private tipo:N_Tipo, private tarray:[],
+    constructor(private letoconst:TipoDato , public id: string, private tipo:N_Tipo, private tarray:[],
         private value : N_Declaracion, line : number, column: number){
         super(line, column);
     }

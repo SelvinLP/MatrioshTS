@@ -113,7 +113,7 @@ export class AsignacionArray extends Instruccion{
                 }
                 
             }
-            console.log(listaresult.listaarray);
+
         }
     }
 

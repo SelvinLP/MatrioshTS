@@ -52,7 +52,17 @@ export class Entorno{
             }else if(Tipo.TYPE == tipo.tipo){
                 tipovalor="type";
             }
-            L_Simbs.push(new N_Simbolo(tipodevariable,id,tipovalor,valor,""));
+            let bandera=false;
+            for(let nodo of L_Simbs){
+                if(nodo.id==id){
+                    bandera=true;
+                    break;
+                }
+            }
+            if(!bandera){
+                L_Simbs.push(new N_Simbolo(tipodevariable,id,tipovalor,valor,""));
+            }
+           
         }
     }
 

@@ -32,6 +32,7 @@ export class Llamarfuncion extends Instruccion{
                 break;
             }
             variables=variables[1];
+            posvalorasignar++;
           }
         }
 

@@ -11,17 +11,14 @@ export class Returnt extends Instruccion{
 
     public ejecutar(entorno : Entorno) {
         let retorn= null;
-        if(this.valoraretorn!=null){
-            console.log("debe retornar expresion");
+        if(this.valoraretorn != null || this.valoraretorn != undefined){
+            //Ejecuta la expresion
+            let valors=this.valoraretorn.ejecutar(entorno);
+            retorn={tipobyc:"retornovalor", valor:valors.valor, tipo:valors.tipo,linea:this.linea, columna:this.columna};
         }else{
-            console.log("retorna un null");
-        }
-        /*
-        if(this.id=="break"){//break
-            retorn={tipobyc:"break", linea:this.linea, columna:this.columna};
-        }else{//continue
-            retorn={tipobyc:"continue", linea:this.linea, columna:this.columna};
-        }*/
+            retorn={tipobyc:"retornonulo", linea:this.linea, columna:this.columna};
+        } 
+        
         return retorn;
     }
 

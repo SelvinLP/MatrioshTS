@@ -47,6 +47,7 @@ var Llamarfuncion = /** @class */ (function (_super) {
                     break;
                 }
                 variables = variables[1];
+                posvalorasignar++;
             }
         }
         //recorremos todas las demas instrucciones

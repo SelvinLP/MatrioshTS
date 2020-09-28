@@ -50,7 +50,17 @@ var Entorno = /** @class */ (function () {
             else if (Retorno_1.Tipo.TYPE == tipo.tipo) {
                 tipovalor = "type";
             }
-            L_Simb_1.L_Simbs.push(new L_Simb_1.N_Simbolo(tipodevariable, id, tipovalor, valor, ""));
+            var bandera = false;
+            for (var _i = 0, L_Simbs_1 = L_Simb_1.L_Simbs; _i < L_Simbs_1.length; _i++) {
+                var nodo = L_Simbs_1[_i];
+                if (nodo.id == id) {
+                    bandera = true;
+                    break;
+                }
+            }
+            if (!bandera) {
+                L_Simb_1.L_Simbs.push(new L_Simb_1.N_Simbolo(tipodevariable, id, tipovalor, valor, ""));
+            }
         }
     };
     Entorno.prototype.obtenervar = function (id) {

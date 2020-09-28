@@ -30,7 +30,6 @@ export class Declaracion extends Instruccion{
             if(this.value!=null){//verificacion del array
                 this.insertararray(entorno);
             }
-            console.log(this.tarray);
         }else{ 
             //validacion si es de otro tipo de array
             let banderaarray=false;

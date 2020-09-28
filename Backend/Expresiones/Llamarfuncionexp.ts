@@ -32,6 +32,7 @@ export class Llamarfuncionexp extends Expresion{
                 break;
             }
             variables=variables[1];
+            posvalorasignar++;
           }
         }
         //recorremos todas las demas instrucciones
@@ -40,8 +41,14 @@ export class Llamarfuncionexp extends Expresion{
                 try {
     
                     const result = instr.ejecutar(nuevoentorno);
-                    if(result != undefined || result != null)
-                        return result;                
+                    if(result != undefined || result != null){
+                        if(result.tipobyc =="retornonulo"){
+                            return {valor : "", tipo : Tipo.NULL};
+                        }else if(result.tipobyc = "retornovalor"){
+                            return {valor:result.valor,tipo:result.tipo}
+                        } 
+                    }
+                                   
                 } catch (err) {
                     L_Errores.push(err);
                 }

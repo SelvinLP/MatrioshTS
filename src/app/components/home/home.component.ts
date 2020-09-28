@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  Entrada="let hola=12; \n$console.log(hola);";
+  Entrada="";
   Salida="";
   Consola="";
   CadenaGraphviz="";
@@ -64,9 +64,11 @@ export class HomeComponent implements OnInit {
           const valor=Instruccion.ejecutar(entorno);
           if(valor != null || valor != undefined){
             if(valor.tipobyc == "continue"){
-                L_Errores.push(new N_Error('Semantico','Instruccion continue fuera de un ciclo','', valor.linea,valor.columna));
+              L_Errores.push(new N_Error('Semantico','Instruccion continue fuera de un ciclo','', valor.linea,valor.columna));
             }else if(valor.tipobyc == "break"){
               L_Errores.push(new N_Error('Semantico','Instruccion break fuera de un ciclo','', valor.linea,valor.columna));
+            }else if(valor.tipobyc == "retornonulo"){
+              L_Errores.push(new N_Error('Semantico','Instruccion return fuera de una funcion','', valor.linea,valor.columna));
             }
         }
         } catch (err) {

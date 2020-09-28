@@ -40,7 +40,8 @@
 %%
 
 //Comentarios
-("//".*\r\n)|("//".*\n)|("//".*\r)  /*Comentario de una*/
+\s+											// se ignoran espacios en blanco
+"//".*										// comentario de una linea
 "/*""/"*([^*/]|[^*]"/"|"*"[^/])*"*"*"*/"  /*Comentario multilinea*/
 
 //Tipos de Datos

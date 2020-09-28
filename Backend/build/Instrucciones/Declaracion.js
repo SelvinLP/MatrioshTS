@@ -57,7 +57,6 @@ var Declaracion = /** @class */ (function (_super) {
             if (this.value != null) { //verificacion del array
                 this.insertararray(entorno);
             }
-            console.log(this.tarray);
         }
         else {
             //validacion si es de otro tipo de array

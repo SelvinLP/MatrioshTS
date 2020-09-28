@@ -47,6 +47,7 @@ var Llamarfuncionexp = /** @class */ (function (_super) {
                     break;
                 }
                 variables = variables[1];
+                posvalorasignar++;
             }
         }
         //recorremos todas las demas instrucciones
@@ -55,8 +56,14 @@ var Llamarfuncionexp = /** @class */ (function (_super) {
                 var instr = _a[_i];
                 try {
                     var result = instr.ejecutar(nuevoentorno);
-                    if (result != undefined || result != null)
-                        return result;
+                    if (result != undefined || result != null) {
+                        if (result.tipobyc == "retornonulo") {
+                            return { valor: "", tipo: Retorno_1.Tipo.NULL };
+                        }
+                        else if (result.tipobyc = "retornovalor") {
+                            return { valor: result.valor, tipo: result.tipo };
+                        }
+                    }
                 }
                 catch (err) {
                     L_Error_1.L_Errores.push(err);

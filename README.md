@@ -8,11 +8,13 @@ Proyecto 1 de Organizacion de Lenguajes y Compiladores 2 2s 2020
 * Console.log
 * If Else
 * While
-* For
+* For, For in, For of
 * Do while
 * Array
 * Operador ternario
 * Switch 
+* Funciones
+* Funciones Recursivas
 
 ## Comandos 🔧
 _Levantar el frontend de angular_

@@ -47,4 +47,5 @@ var TipoDato;
 (function (TipoDato) {
     TipoDato[TipoDato["LET"] = 0] = "LET";
     TipoDato[TipoDato["CONST"] = 1] = "CONST";
+    TipoDato[TipoDato["NADA"] = 2] = "NADA";
 })(TipoDato = exports.TipoDato || (exports.TipoDato = {}));

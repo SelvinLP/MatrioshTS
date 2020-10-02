@@ -136,7 +136,6 @@ var AsignacionArray = /** @class */ (function (_super) {
                     }
                 }
             }
-            console.log(listaresult.listaarray);
         }
     };
     AsignacionArray.prototype.ejecutarast = function (ast) {

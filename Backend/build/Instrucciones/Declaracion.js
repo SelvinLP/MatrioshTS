@@ -53,7 +53,7 @@ var Declaracion = /** @class */ (function (_super) {
             if (this.tipo == null) {
                 this.tipo = new N_Tipo_1.N_Tipo(Retorno_1.Tipo.NULL, "");
             }
-            entorno.guardararray(this.id, new Array_1.C_Array(this.tipo.tipo, this.tarray), this.linea, this.columna);
+            entorno.guardarvar(Retorno_1.TipoDato.NADA, this.id, "", new N_Tipo_1.N_Tipo(Retorno_1.Tipo.ARRAY, ""), new Array_1.C_Array(this.tipo.tipo, this.tarray), this.linea, this.columna);
             if (this.value != null) { //verificacion del array
                 this.insertararray(entorno);
             }
@@ -75,7 +75,7 @@ var Declaracion = /** @class */ (function (_super) {
                     else if (this.tipo.cadTipo == "void") {
                         this.tipo.tipo = Retorno_1.Tipo.NULL;
                     }
-                    entorno.guardararray(this.id, new Array_1.C_Array(this.tipo.tipo, [new Array_1.L_Array(null, null)]), this.linea, this.columna);
+                    entorno.guardarvar(Retorno_1.TipoDato.NADA, this.id, "", new N_Tipo_1.N_Tipo(Retorno_1.Tipo.ARRAY, ""), new Array_1.C_Array(this.tipo.tipo, [new Array_1.L_Array(null, null)]), this.linea, this.columna);
                     banderaarray = true;
                     if (this.value != null) { //verificacion del array
                         this.insertararray(entorno);
@@ -89,7 +89,7 @@ var Declaracion = /** @class */ (function (_super) {
                         throw new N_Error_1.N_Error('Semantico', 'La variable ' + this.id + " tipo const no tiene definido un valor", '', this.linea, this.columna);
                     }
                     else {
-                        entorno.guardarvar(this.letoconst, this.id, this.value, this.tipo, this.linea, this.columna);
+                        entorno.guardarvar(this.letoconst, this.id, this.value, this.tipo, null, this.linea, this.columna);
                     }
                 }
                 else {
@@ -111,7 +111,7 @@ var Declaracion = /** @class */ (function (_super) {
                     }
                     //Insertamos si cumple con las condiciones
                     if (banderainsertar == true) {
-                        entorno.guardarvar(this.letoconst, this.id, resp.valor, this.tipo, this.linea, this.columna);
+                        entorno.guardarvar(this.letoconst, this.id, resp.valor, this.tipo, null, this.linea, this.columna);
                     }
                 }
             }

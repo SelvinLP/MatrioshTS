@@ -306,7 +306,6 @@ Direccionarray:
         $$=[$2];
     }
     | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error al definir direccion array "+yytext,"",this._$.first_line,this._$.first_column))}
-
 ;
 
 Impresion:
@@ -411,21 +410,21 @@ Switcht:
 ;
 
 Casos:
-    Casos tk_case  Expresion ':' LInstrucciones tk_break ';' 
+    Casos tk_case  Expresion ':' LInstrucciones  
     {
         $1.push(new Case($3,$5));
         $$=$1;
     }
-    | Casos tk_case  Expresion ':' tk_break ';'
+    | Casos tk_case  Expresion ':'
     {
         $1.push(new Case($3,new Array()));
         $$=$1;
     }
-    | tk_case  Expresion ':' LInstrucciones tk_break ';'
+    | tk_case  Expresion ':' LInstrucciones 
     {
         $$=[new Case($2,$4)];
     }
-    | tk_case  Expresion ':' tk_break ';'
+    | tk_case  Expresion ':' 
     {
         $$=[new Case($2,new Array())];
     }

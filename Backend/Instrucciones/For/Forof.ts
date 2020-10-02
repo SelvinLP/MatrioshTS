@@ -17,7 +17,7 @@ export class Forof extends Instruccion{
         //ejecutamos el for
         if(valorarray !=null){
             if(valorarray?.listaarray != undefined){
-                entorno.guardarvar(TipoDato.LET, this.id,0, new N_Tipo(Tipo.NULL,"") ,this.linea,this.columna);
+                entorno.guardarvar(TipoDato.LET, this.id,0, new N_Tipo(Tipo.NULL,""),null ,this.linea,this.columna);
                 let variable=entorno.obtenervar(this.id);
                 for(let pos=0;pos<valorarray?.listaarray.length;pos++){
                     if(variable !=null){

@@ -17,6 +17,8 @@ Proyecto 1 de Organizacion de Lenguajes y Compiladores 2 2s 2020
 * Funciones Recursivas
 
 ## Comandos 🔧
+_Al descargar de github utilizar_
+```npm install```
 _Levantar el frontend de angular_
 ```ng server```
 _Convertir archivos ts a js automaticamente_

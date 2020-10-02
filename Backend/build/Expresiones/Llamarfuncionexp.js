@@ -42,7 +42,7 @@ var Llamarfuncionexp = /** @class */ (function (_super) {
             while (true) {
                 //valor a agregar
                 var vlar = this.expresiones[posvalorasignar].ejecutar(entorno);
-                nuevoentorno.guardarvar(Retorno_1.TipoDato.LET, variables[0].id, vlar.valor, new N_Tipo_1.N_Tipo(vlar.tipo, ""), this.linea, this.columna);
+                nuevoentorno.guardarvar(Retorno_1.TipoDato.LET, variables[0].id, vlar.valor, new N_Tipo_1.N_Tipo(vlar.tipo, ""), null, this.linea, this.columna);
                 if (variables[1] == undefined || variables[1] == null) {
                     break;
                 }

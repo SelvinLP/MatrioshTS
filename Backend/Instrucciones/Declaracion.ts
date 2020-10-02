@@ -26,7 +26,8 @@ export class Declaracion extends Instruccion{
             if(this.tipo==null){
                 this.tipo=new N_Tipo(Tipo.NULL,"");
             }
-            entorno.guardararray(this.id,new C_Array(this.tipo.tipo,this.tarray),this.linea,this.columna);
+            entorno.guardarvar(TipoDato.NADA,this.id,"",new N_Tipo(Tipo.ARRAY,""),
+                                new C_Array(this.tipo.tipo,this.tarray),this.linea,this.columna);
             if(this.value!=null){//verificacion del array
                 this.insertararray(entorno);
             }
@@ -44,7 +45,8 @@ export class Declaracion extends Instruccion{
                     }else if(this.tipo.cadTipo == "void"){
                         this.tipo.tipo=Tipo.NULL;
                     }
-                    entorno.guardararray(this.id,new C_Array(this.tipo.tipo,[new L_Array(null,null)]),this.linea,this.columna);
+                    entorno.guardarvar(TipoDato.NADA,this.id,"",new N_Tipo(Tipo.ARRAY,""),
+                                        new C_Array(this.tipo.tipo,[new L_Array(null,null)]),this.linea,this.columna);
                     banderaarray=true;
 
                     if(this.value!=null){//verificacion del array
@@ -59,7 +61,7 @@ export class Declaracion extends Instruccion{
                     if(this.letoconst == TipoDato.CONST){
                         throw new N_Error('Semantico','La variable '+this.id+" tipo const no tiene definido un valor",'', this.linea, this.columna);
                     }else{
-                        entorno.guardarvar(this.letoconst, this.id, this.value, this.tipo ,this.linea,this.columna);
+                        entorno.guardarvar(this.letoconst, this.id, this.value, this.tipo ,null,this.linea,this.columna);
                     }
                 }else{
                     let banderainsertar=false;
@@ -78,7 +80,7 @@ export class Declaracion extends Instruccion{
                     }
                     //Insertamos si cumple con las condiciones
                     if(banderainsertar == true){
-                        entorno.guardarvar(this.letoconst, this.id, resp.valor, this.tipo ,this.linea,this.columna);
+                        entorno.guardarvar(this.letoconst, this.id, resp.valor, this.tipo ,null,this.linea,this.columna);
                     }
                 }
             }

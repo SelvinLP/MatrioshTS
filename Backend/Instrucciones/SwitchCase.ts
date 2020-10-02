@@ -20,19 +20,30 @@ export class SwitchCase extends Instruccion{
         let banderadefault=false;
         for(const nodovalor of this.casos){
             let resultadoid=nodovalor.id.ejecutar(entorno);
+            let bamderabreak=false;
             if(resultadoid.valor==condicion.valor){
                 //ejecutamos instrucciones
                 const nuevoentorno = new Entorno(entorno);
                 for(const instr of nodovalor.cuerpo){
                     try {
                         const result = instr.ejecutar(nuevoentorno);
-                        if(result != undefined || result != null)
-                            return result;                
+                        //validamos break
+                        if(result != undefined || result != null){
+                            if(result.tipobyc == "break"){
+                                bamderabreak=true;
+                                break;
+                            }else{
+                                return result;
+                            }
+                        }               
                     } catch (err) {
                         L_Errores.push(err);
                     }
                 }
                 banderadefault=true;
+            }
+            if(bamderabreak){
+                break;
             }
         }
         //sino cumple 

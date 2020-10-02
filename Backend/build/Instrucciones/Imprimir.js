@@ -25,6 +25,7 @@ var Imprimir = /** @class */ (function (_super) {
     }
     Imprimir.prototype.ejecutar = function (entorno) {
         var resultado = this.value.ejecutar(entorno);
+        console.log(resultado);
         L_Print_1.L_Print.push(resultado.valor);
     };
     Imprimir.prototype.ejecutarast = function (ast) {

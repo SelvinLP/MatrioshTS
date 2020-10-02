@@ -41,6 +41,7 @@ var SwitchCase = /** @class */ (function (_super) {
         for (var _i = 0, _a = this.casos; _i < _a.length; _i++) {
             var nodovalor = _a[_i];
             var resultadoid = nodovalor.id.ejecutar(entorno);
+            var bamderabreak = false;
             if (resultadoid.valor == condicion.valor) {
                 //ejecutamos instrucciones
                 var nuevoentorno = new Entorno_1.Entorno(entorno);
@@ -48,14 +49,25 @@ var SwitchCase = /** @class */ (function (_super) {
                     var instr = _c[_b];
                     try {
                         var result = instr.ejecutar(nuevoentorno);
-                        if (result != undefined || result != null)
-                            return result;
+                        //validamos break
+                        if (result != undefined || result != null) {
+                            if (result.tipobyc == "break") {
+                                bamderabreak = true;
+                                break;
+                            }
+                            else {
+                                return result;
+                            }
+                        }
                     }
                     catch (err) {
                         L_Error_1.L_Errores.push(err);
                     }
                 }
                 banderadefault = true;
+            }
+            if (bamderabreak) {
+                break;
             }
         }
         //sino cumple 

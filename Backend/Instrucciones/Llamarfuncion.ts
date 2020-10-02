@@ -27,7 +27,7 @@ export class Llamarfuncion extends Instruccion{
           while(true){
             //valor a agregar
             let vlar=this.expresiones[posvalorasignar].ejecutar(entorno);
-            nuevoentorno.guardarvar(TipoDato.LET,variables[0].id , vlar.valor, new N_Tipo(vlar.tipo,"")  ,this.linea,this.columna);
+            nuevoentorno.guardarvar(TipoDato.LET,variables[0].id , vlar.valor, new N_Tipo(vlar.tipo,"") ,null ,this.linea,this.columna);
             if(variables[1] == undefined || variables[1]==null){
                 break;
             }

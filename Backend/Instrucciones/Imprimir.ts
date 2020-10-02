@@ -12,6 +12,7 @@ export class Imprimir extends Instruccion{
 
     public ejecutar(entorno:Entorno ) {
         const resultado = this.value.ejecutar(entorno);
+        console.log(resultado);
         L_Print.push(resultado.valor);
     }
 

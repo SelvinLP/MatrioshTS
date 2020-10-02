@@ -49,5 +49,6 @@ export enum TipoLogica{
 //Tipo de dato
 export enum TipoDato{
     LET,
-    CONST
+    CONST,
+    NADA
 }

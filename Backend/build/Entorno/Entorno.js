@@ -12,17 +12,21 @@ var Entorno = /** @class */ (function () {
         this.variables = new Map();
         this.funciones = new Map();
         this.types = new L_Types_1.L_type();
-        this.array = new Map();
     }
-    Entorno.prototype.guardarvar = function (letoconst, id, valor, tipo, line, column) {
+    Entorno.prototype.guardarvar = function (letoconst, id, valor, tipo, cuerpoarray, line, column) {
         var env = this;
         //verificacion si existe en el mismo entorno
         if (env.variables.has(id)) {
-            throw new N_Error_1.N_Error('Semantico', 'La variable ya existe: ' + id, '', line, column);
+            if (cuerpoarray != null) {
+                throw new N_Error_1.N_Error('Semantico', 'El array ya existe: ' + id, '', line, column);
+            }
+            else {
+                throw new N_Error_1.N_Error('Semantico', 'La variable ya existe: ' + id, '', line, column);
+            }
         }
         else {
             //sino se cumple lo guarda en el entorno actual
-            this.variables.set(id, new Simbolo_1.Simbolo(letoconst, id, tipo, valor));
+            this.variables.set(id, new Simbolo_1.Simbolo(letoconst, id, tipo, valor, cuerpoarray));
             //lo insertamos en una lista para los reportes
             var tipodevariable = "    ";
             var tipovalor = "";
@@ -104,25 +108,12 @@ var Entorno = /** @class */ (function () {
         }
         return null;
     };
-    Entorno.prototype.guardararray = function (id, cuerpoarray, line, column) {
-        var env = this;
-        //verificacion si existe en el mismo entorno
-        if (env.variables.has(id)) {
-            throw new N_Error_1.N_Error('Semantico', 'El array ya existe: ' + id, '', line, column);
-        }
-        else {
-            //sino se cumple lo guarda en el entorno actual
-            this.array.set(id, cuerpoarray);
-            var tipodevariable = "    ";
-            var tipovalor = "array";
-            L_Simb_1.L_Simbs.push(new L_Simb_1.N_Simbolo(tipodevariable, id, tipovalor, "", ""));
-        }
-    };
     Entorno.prototype.obtenerarray = function (id) {
+        var _a;
         var env = this;
         while (env != null) {
-            if (env.array.has(id)) {
-                return env.array.get(id);
+            if (env.variables.has(id)) {
+                return (_a = env.variables.get(id)) === null || _a === void 0 ? void 0 : _a.cuerpoarray;
             }
             env = env.anterior;
         }

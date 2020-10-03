@@ -17,9 +17,10 @@ exports.Funcion = exports.Parametrofunc = void 0;
 var Instruccion_1 = require("../Abstracto/Instruccion");
 var Retorno_1 = require("../Abstracto/Retorno");
 var Parametrofunc = /** @class */ (function () {
-    function Parametrofunc(id, tipo, line, column) {
+    function Parametrofunc(id, tipo, posibearray, line, column) {
         this.id = id;
         this.tipo = tipo;
+        this.posibearray = posibearray;
         if (this.tipo == "number") {
             this.tipo = Retorno_1.Tipo.NUMBER;
         }

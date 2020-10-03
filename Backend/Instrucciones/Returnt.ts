@@ -18,7 +18,6 @@ export class Returnt extends Instruccion{
         }else{
             retorn={tipobyc:"retornonulo", linea:this.linea, columna:this.columna};
         } 
-        
         return retorn;
     }
 

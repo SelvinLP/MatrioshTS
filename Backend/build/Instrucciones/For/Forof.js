@@ -57,6 +57,9 @@ var Forof = /** @class */ (function (_super) {
                         else if (valor.tipobyc == "break") {
                             break;
                         }
+                        else {
+                            return valor;
+                        }
                     }
                     //incremento en el for
                     if (variable != null) {

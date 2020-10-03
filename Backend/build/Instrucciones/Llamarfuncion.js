@@ -42,7 +42,12 @@ var Llamarfuncion = /** @class */ (function (_super) {
             while (true) {
                 //valor a agregar
                 var vlar = this.expresiones[posvalorasignar].ejecutar(entorno);
-                nuevoentorno.guardarvar(Retorno_1.TipoDato.LET, variables[0].id, vlar.valor, new N_Tipo_1.N_Tipo(vlar.tipo, ""), null, this.linea, this.columna);
+                if (typeof vlar.valor == "object") { //es un array entonces declaron una array
+                    entorno.guardarvar(Retorno_1.TipoDato.NADA, variables[0].id, "", new N_Tipo_1.N_Tipo(Retorno_1.Tipo.ARRAY, ""), vlar.valor, this.linea, this.columna);
+                }
+                else { //no es aray
+                    nuevoentorno.guardarvar(Retorno_1.TipoDato.LET, variables[0].id, vlar.valor, new N_Tipo_1.N_Tipo(vlar.tipo, ""), null, this.linea, this.columna);
+                }
                 if (variables[1] == undefined || variables[1] == null) {
                     break;
                 }
@@ -56,8 +61,6 @@ var Llamarfuncion = /** @class */ (function (_super) {
                 var instr = _a[_i];
                 try {
                     var result = instr.ejecutar(nuevoentorno);
-                    if (result != undefined || result != null)
-                        return result;
                 }
                 catch (err) {
                     L_Error_1.L_Errores.push(err);

@@ -15,11 +15,17 @@ export class Id extends Expresion{
         const resultado = entorno.obtenervar(this.id);
         if(resultado == null){
             throw new N_Error('Semantico','La variable no existe: '+ this.id,'', this.linea,this.columna);
-        }
-        if(resultado.valor==null){
+        }else if(resultado.valor==null){
             throw new N_Error('Semantico','La variable '+this.id+' no contiene valor ','', this.linea,this.columna);
+        }else{
+            if(resultado.cuerpoarray != null){
+                return {valor : resultado.cuerpoarray, tipo : resultado.cuerpoarray.tipo};
+            }else{
+                return {valor : resultado.valor, tipo : resultado.tipo.tipo};
+            }
         }
-        return {valor : resultado.valor, tipo : resultado.tipo.tipo};
+        
+        
     }
 
     public ejecutarast(ast:N_Ast):N_Ast{

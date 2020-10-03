@@ -36,6 +36,8 @@ export class Forof extends Instruccion{
                             continue;
                         }else if(valor.tipobyc == "break"){
                             break;
+                        }else{
+                            return valor;
                         }
                     }
                     //incremento en el for

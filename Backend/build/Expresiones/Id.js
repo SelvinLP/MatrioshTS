@@ -28,10 +28,17 @@ var Id = /** @class */ (function (_super) {
         if (resultado == null) {
             throw new N_Error_1.N_Error('Semantico', 'La variable no existe: ' + this.id, '', this.linea, this.columna);
         }
-        if (resultado.valor == null) {
+        else if (resultado.valor == null) {
             throw new N_Error_1.N_Error('Semantico', 'La variable ' + this.id + ' no contiene valor ', '', this.linea, this.columna);
         }
-        return { valor: resultado.valor, tipo: resultado.tipo.tipo };
+        else {
+            if (resultado.cuerpoarray != null) {
+                return { valor: resultado.cuerpoarray, tipo: resultado.cuerpoarray.tipo };
+            }
+            else {
+                return { valor: resultado.valor, tipo: resultado.tipo.tipo };
+            }
+        }
     };
     Id.prototype.ejecutarast = function (ast) {
         var Cadena = ast.cadena + "\n";

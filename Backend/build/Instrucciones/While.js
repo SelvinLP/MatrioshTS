@@ -38,6 +38,9 @@ var While = /** @class */ (function (_super) {
                     else if (valor.tipobyc == "break") {
                         break;
                     }
+                    else {
+                        return valor;
+                    }
                 }
                 //validacion nuevamente de la condicion sino se encicla
                 condicion = this.condicion.ejecutar(entorno);

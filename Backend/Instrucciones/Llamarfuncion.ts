@@ -4,7 +4,7 @@ import { N_Error } from "../Errores/N_Error";
 import { Entorno } from "../Entorno/Entorno";
 import { N_Ast } from "../Ast/Ast";
 import { L_Errores } from "../Errores/L_Error";
-import { TipoDato } from "../Abstracto/Retorno";
+import { TipoDato, Tipo } from "../Abstracto/Retorno";
 import { N_Tipo } from "../Otros/N_Tipo";
 
 export class Llamarfuncion extends Instruccion{
@@ -27,7 +27,11 @@ export class Llamarfuncion extends Instruccion{
           while(true){
             //valor a agregar
             let vlar=this.expresiones[posvalorasignar].ejecutar(entorno);
-            nuevoentorno.guardarvar(TipoDato.LET,variables[0].id , vlar.valor, new N_Tipo(vlar.tipo,"") ,null ,this.linea,this.columna);
+            if(typeof vlar.valor == "object"){//es un array entonces declaron una array
+                entorno.guardarvar(TipoDato.NADA,variables[0].id,"",new N_Tipo(Tipo.ARRAY,""),vlar.valor,this.linea,this.columna);
+            }else{//no es aray
+                nuevoentorno.guardarvar(TipoDato.LET,variables[0].id , vlar.valor, new N_Tipo(vlar.tipo,"") ,null ,this.linea,this.columna);
+            }
             if(variables[1] == undefined || variables[1]==null){
                 break;
             }
@@ -40,10 +44,7 @@ export class Llamarfuncion extends Instruccion{
         if(funcion.codigo!=null || funcion.codigo != undefined){
             for(const instr of funcion.codigo){
                 try {
-    
-                    const result = instr.ejecutar(nuevoentorno);
-                    if(result != undefined || result != null)
-                        return result;                
+                    const result = instr.ejecutar(nuevoentorno);             
                 } catch (err) {
                     L_Errores.push(err);
                 }

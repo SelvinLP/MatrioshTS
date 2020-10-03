@@ -41,6 +41,9 @@ var For = /** @class */ (function (_super) {
                     else if (valor.tipobyc == "break") {
                         break;
                     }
+                    else {
+                        return valor;
+                    }
                 }
                 //incremento o decremento
                 this.incydec.ejecutar(entorno);

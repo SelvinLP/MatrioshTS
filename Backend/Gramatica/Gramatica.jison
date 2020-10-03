@@ -464,21 +464,40 @@ Posibleretorno:
 ;
 
 ParametrosFucnc:
-    tk_id ':' TipoDato MasParametrosFucnc           
+    tk_id ':' TipoDato Posiblesllavesparafunc MasParametrosFucnc             
     {
-        $$=[new Parametrofunc($1,$3,@1.first_line, @1.first_column)];
-        $$.push($4);
+        $$=[new Parametrofunc($1,$3,$4,@1.first_line, @1.first_column)];
+        $$.push($5);
     }
     | %empty                       {$$=null;}
 ;
 
 MasParametrosFucnc:
-    ',' tk_id ':' TipoDato MasParametrosFucnc       
+    ',' tk_id ':' TipoDato Posiblesllavesparafunc MasParametrosFucnc        
     {
-        $$=[new Parametrofunc($2,$4,@1.first_line, @1.first_column)]
-        $$.push($5);
+        $$=[new Parametrofunc($2,$4,$5,@1.first_line, @1.first_column)]
+        $$.push($6);
     }
     | %empty                       {$$=null;}
+;
+
+Posiblesllavesparafunc:
+    Llavesparafuncion
+    {
+        $$=$1;
+    }
+    | %empty                       {$$="";}
+;
+
+Llavesparafuncion:
+    Llavesparafuncion '[' ']'
+    {
+        $$="array";
+    }
+    | '[' ']'
+    {
+        $$="array";
+    }
 ;
 
 Posiblecuerpo:

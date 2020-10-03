@@ -22,6 +22,8 @@ export class While extends Instruccion{
                         continue;
                     }else if(valor.tipobyc == "break"){
                         break;
+                    }else{
+                        return valor;
                     }
                 }
                 //validacion nuevamente de la condicion sino se encicla

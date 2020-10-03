@@ -26,6 +26,8 @@ export class For extends Instruccion{
                         continue;
                     }else if(valor.tipobyc == "break"){
                         break;
+                    }else{
+                        return valor;
                     }
                 }
                 //incremento o decremento

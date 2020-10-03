@@ -1,11 +1,10 @@
-import { Expresion } from "../Abstracto/Expresion";
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Entorno } from "../Entorno/Entorno";
 import { N_Ast } from "../Ast/Ast";
 import { Tipo } from "../Abstracto/Retorno";
-import { Type } from "./Type";
+
 export class Parametrofunc{
-    constructor(public id:string, public tipo:Tipo|string,line : number, column : number){
+    constructor(public id:string, public tipo:Tipo|string,public posibearray:string,line : number, column : number){
         if(this.tipo == "number"){
             this.tipo=Tipo.NUMBER;
         }else if(this.tipo == "string"){

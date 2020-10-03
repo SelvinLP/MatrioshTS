@@ -37,6 +37,9 @@ var Dowhile = /** @class */ (function (_super) {
                 else if (valor.tipobyc == "break") {
                     break;
                 }
+                else {
+                    return valor;
+                }
             }
             else {
                 condicion = this.condicion.ejecutar(entorno);

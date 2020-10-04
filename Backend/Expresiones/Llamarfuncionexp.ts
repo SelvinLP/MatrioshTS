@@ -27,7 +27,7 @@ export class Llamarfuncionexp extends Expresion{
             //valor a agregar
             let vlar=this.expresiones[posvalorasignar].ejecutar(entorno);
             if(typeof vlar.valor == "object"){//es un array entonces declaron una array
-                entorno.guardarvar(TipoDato.NADA,variables[0].id,"",new N_Tipo(Tipo.ARRAY,""),vlar.valor,this.linea,this.columna);
+                nuevoentorno.guardarvar(TipoDato.NADA,variables[0].id,"",new N_Tipo(Tipo.ARRAY,""),vlar.valor,this.linea,this.columna);
             }else{//no es array
                 nuevoentorno.guardarvar(TipoDato.LET,variables[0].id , vlar.valor, new N_Tipo(vlar.tipo,""), null  ,this.linea,this.columna);
             }

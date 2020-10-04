@@ -25,11 +25,11 @@ export class Llamarfuncion extends Instruccion{
         if(variables!=null || variables!=undefined){
             let posvalorasignar=0;
           while(true){
-            //valor a agregar
+            //valor a agregar 
             let vlar=this.expresiones[posvalorasignar].ejecutar(entorno);
             if(typeof vlar.valor == "object"){//es un array entonces declaron una array
-                entorno.guardarvar(TipoDato.NADA,variables[0].id,"",new N_Tipo(Tipo.ARRAY,""),vlar.valor,this.linea,this.columna);
-            }else{//no es aray
+                nuevoentorno.guardarvar(TipoDato.NADA,variables[0].id,"",new N_Tipo(Tipo.ARRAY,""),vlar.valor,this.linea,this.columna);
+            }else{//no es array
                 nuevoentorno.guardarvar(TipoDato.LET,variables[0].id , vlar.valor, new N_Tipo(vlar.tipo,"") ,null ,this.linea,this.columna);
             }
             if(variables[1] == undefined || variables[1]==null){
@@ -44,7 +44,14 @@ export class Llamarfuncion extends Instruccion{
         if(funcion.codigo!=null || funcion.codigo != undefined){
             for(const instr of funcion.codigo){
                 try {
-                    const result = instr.ejecutar(nuevoentorno);             
+                    const result = instr.ejecutar(nuevoentorno);  
+                    if(result != undefined || result != null){
+                        if(result.tipobyc =="retornonulo"){
+                            break;
+                        }else if(result.tipobyc = "retornovalor"){
+                            break;
+                        }
+                    }           
                 } catch (err) {
                     L_Errores.push(err);
                 }
@@ -58,7 +65,8 @@ export class Llamarfuncion extends Instruccion{
         let Cadena:string=ast.cadena+"\n";
         Cadena += ast.posdes+" [label =\"Llamar funcion\"];\n";
         Cadena += ast.posant+" -> "+ast.posdes+";\n";
+        let retorno={posant:ast.posdes, posdes:ast.posdes+1,cadena:Cadena};
 
-        return {posant:ast.posdes, posdes:ast.posdes+1,cadena:Cadena};
+        return retorno;
     }
 }

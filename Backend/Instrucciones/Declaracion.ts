@@ -128,9 +128,13 @@ export class Declaracion extends Instruccion{
         if(listaresult==null){
             throw new N_Error('Semantico','El array no existe: '+this.id,'', this.linea, this.columna);
         }else{
+            //limpiamos y asignamos por error en ciclo
+            listaresult.listaarray=[new L_Array(null,null)];
+
             if(listaresult.tipo==Tipo.NULL){
                 if(this.value.array==null ){
                     //comprobacion si es [] para limpiar los array
+                    
                 }else{//sino inserta los valores del array de entrada
                     for(const nodovalor of this.value.array){
                         listaresult.tipo=nodovalor.ejecutar(entorno).tipo;

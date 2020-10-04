@@ -157,6 +157,8 @@ var Declaracion = /** @class */ (function (_super) {
             throw new N_Error_1.N_Error('Semantico', 'El array no existe: ' + this.id, '', this.linea, this.columna);
         }
         else {
+            //limpiamos y asignamos por error en ciclo
+            listaresult.listaarray = [new Array_1.L_Array(null, null)];
             if (listaresult.tipo == Retorno_1.Tipo.NULL) {
                 if (this.value.array == null) {
                     //comprobacion si es [] para limpiar los array

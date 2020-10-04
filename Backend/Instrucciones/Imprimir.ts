@@ -13,7 +13,9 @@ export class Imprimir extends Instruccion{
     public ejecutar(entorno:Entorno ) {
         const resultado = this.value.ejecutar(entorno);
         console.log(resultado);
-        L_Print.push(resultado.valor);
+        let tabulacion=/\\t/gi;
+        let saltolinea=/\\n/gi;
+        L_Print.push(resultado.valor.replace(tabulacion,'\t').replace(saltolinea,'\n'));
     }
 
     public ejecutarast(ast:N_Ast):N_Ast{

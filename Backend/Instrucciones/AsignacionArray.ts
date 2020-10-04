@@ -173,22 +173,22 @@ export class AsignacionArrayExp extends Expresion{
                 }
                 //obtenemos length
                 if(inicio==null){
-                    throw new N_Error('Semantico','Dimension no definida en el aray: '+this.id,'', this.linea, this.columna);
+                    throw new N_Error('Semantico','Dimension no definida en el array: '+this.id,'', this.linea, this.columna);
                 }else{
                     let posicion=this.tipoinsert[this.tipoinsert.length-1].ejecutar(entorno).valor+1;
                     if(inicio[posicion]==null){
-                        throw new N_Error('Semantico','Dimension no definida en el aray: '+this.id,'', this.linea, this.columna);
+                        throw new N_Error('Semantico','Dimension no definida en el array: '+this.id,'', this.linea, this.columna);
                     }else{
                         if(inicio[posicion].lista!=null){
                             let valor=inicio[posicion].lista?.length
                             if(typeof valor == "number"){ 
                                 return {valor : valor-1, tipo : Tipo.NUMBER};
                             }else{
-                                throw new N_Error('Semantico','Dimension no definida en el aray: '+this.id,'', this.linea, this.columna);
+                                throw new N_Error('Semantico','Dimension no definida en el array: '+this.id,'', this.linea, this.columna);
                             }
                            
                         }else{
-                            throw new N_Error('Semantico','Dimension no definida en el aray: '+this.id,'', this.linea, this.columna);
+                            throw new N_Error('Semantico','Dimension no definida en el array: '+this.id,'', this.linea, this.columna);
                         }
                     }
                     
@@ -239,19 +239,14 @@ export class Obtenervalorarray extends Expresion{
             }
             //obtenemos length
             if(inicio==null){
-                throw new N_Error('Semantico','Dimension no definida en el aray: '+this.id,'', this.linea, this.columna);
+                throw new N_Error('Semantico','Dimension no definida en el array: '+this.id,'', this.linea, this.columna);
             }else{
                 let posicion=this.tipoinsert[this.tipoinsert.length-1].ejecutar(entorno).valor+1;
                 if(inicio[posicion]==null){
-                    throw new N_Error('Semantico','Dimension no definida en el aray: '+this.id,'', this.linea, this.columna);
+                    throw new N_Error('Semantico','Dimension no definida en el array: '+this.id,'', this.linea, this.columna);
                 }else{
-                    if(inicio[posicion].lista!=null){
-                        let valor=inicio[posicion].valor;
-                        return {valor : valor?.value, tipo : valor?.tipo};
-                       
-                    }else{
-                        throw new N_Error('Semantico','Dimension no definida en el aray: '+this.id,'', this.linea, this.columna);
-                    }
+                    let valor=inicio[posicion].valor;
+                    return {valor : valor?.value, tipo : valor?.tipo};
                 }
                 
             }
@@ -301,7 +296,7 @@ export class pushpopcondireccion extends Instruccion{
             }
             //obtenemos length
             if(inicio==null){
-                throw new N_Error('Semantico','Dimension no definida en el aray: '+this.id,'', this.linea, this.columna);
+                throw new N_Error('Semantico','Dimension no definida en el array: '+this.id,'', this.linea, this.columna);
             }else{
                 let posicion=this.tipoinsert[this.tipoinsert.length-1].ejecutar(entorno).valor+1;
                 if(inicio[posicion]==null){
@@ -327,7 +322,7 @@ export class pushpopcondireccion extends Instruccion{
                         }
                        
                     }else{
-                        throw new N_Error('Semantico','Dimension no definida en el aray: '+this.id,'', this.linea, this.columna);
+                        throw new N_Error('Semantico','Dimension no definida en el array: '+this.id,'', this.linea, this.columna);
                     }
                 }
                 

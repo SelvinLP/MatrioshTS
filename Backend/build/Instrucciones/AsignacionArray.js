@@ -199,12 +199,12 @@ var AsignacionArrayExp = /** @class */ (function (_super) {
                 }
                 //obtenemos length
                 if (inicio == null) {
-                    throw new N_Error_1.N_Error('Semantico', 'Dimension no definida en el aray: ' + this.id, '', this.linea, this.columna);
+                    throw new N_Error_1.N_Error('Semantico', 'Dimension no definida en el array: ' + this.id, '', this.linea, this.columna);
                 }
                 else {
                     var posicion = this.tipoinsert[this.tipoinsert.length - 1].ejecutar(entorno).valor + 1;
                     if (inicio[posicion] == null) {
-                        throw new N_Error_1.N_Error('Semantico', 'Dimension no definida en el aray: ' + this.id, '', this.linea, this.columna);
+                        throw new N_Error_1.N_Error('Semantico', 'Dimension no definida en el array: ' + this.id, '', this.linea, this.columna);
                     }
                     else {
                         if (inicio[posicion].lista != null) {
@@ -213,11 +213,11 @@ var AsignacionArrayExp = /** @class */ (function (_super) {
                                 return { valor: valor - 1, tipo: Retorno_1.Tipo.NUMBER };
                             }
                             else {
-                                throw new N_Error_1.N_Error('Semantico', 'Dimension no definida en el aray: ' + this.id, '', this.linea, this.columna);
+                                throw new N_Error_1.N_Error('Semantico', 'Dimension no definida en el array: ' + this.id, '', this.linea, this.columna);
                             }
                         }
                         else {
-                            throw new N_Error_1.N_Error('Semantico', 'Dimension no definida en el aray: ' + this.id, '', this.linea, this.columna);
+                            throw new N_Error_1.N_Error('Semantico', 'Dimension no definida en el array: ' + this.id, '', this.linea, this.columna);
                         }
                     }
                 }
@@ -272,21 +272,16 @@ var Obtenervalorarray = /** @class */ (function (_super) {
             }
             //obtenemos length
             if (inicio == null) {
-                throw new N_Error_1.N_Error('Semantico', 'Dimension no definida en el aray: ' + this.id, '', this.linea, this.columna);
+                throw new N_Error_1.N_Error('Semantico', 'Dimension no definida en el array: ' + this.id, '', this.linea, this.columna);
             }
             else {
                 var posicion = this.tipoinsert[this.tipoinsert.length - 1].ejecutar(entorno).valor + 1;
                 if (inicio[posicion] == null) {
-                    throw new N_Error_1.N_Error('Semantico', 'Dimension no definida en el aray: ' + this.id, '', this.linea, this.columna);
+                    throw new N_Error_1.N_Error('Semantico', 'Dimension no definida en el array: ' + this.id, '', this.linea, this.columna);
                 }
                 else {
-                    if (inicio[posicion].lista != null) {
-                        var valor = inicio[posicion].valor;
-                        return { valor: valor === null || valor === void 0 ? void 0 : valor.value, tipo: valor === null || valor === void 0 ? void 0 : valor.tipo };
-                    }
-                    else {
-                        throw new N_Error_1.N_Error('Semantico', 'Dimension no definida en el aray: ' + this.id, '', this.linea, this.columna);
-                    }
+                    var valor = inicio[posicion].valor;
+                    return { valor: valor === null || valor === void 0 ? void 0 : valor.value, tipo: valor === null || valor === void 0 ? void 0 : valor.tipo };
                 }
             }
         }
@@ -343,7 +338,7 @@ var pushpopcondireccion = /** @class */ (function (_super) {
             }
             //obtenemos length
             if (inicio == null) {
-                throw new N_Error_1.N_Error('Semantico', 'Dimension no definida en el aray: ' + this.id, '', this.linea, this.columna);
+                throw new N_Error_1.N_Error('Semantico', 'Dimension no definida en el array: ' + this.id, '', this.linea, this.columna);
             }
             else {
                 var posicion = this.tipoinsert[this.tipoinsert.length - 1].ejecutar(entorno).valor + 1;
@@ -372,7 +367,7 @@ var pushpopcondireccion = /** @class */ (function (_super) {
                         }
                     }
                     else {
-                        throw new N_Error_1.N_Error('Semantico', 'Dimension no definida en el aray: ' + this.id, '', this.linea, this.columna);
+                        throw new N_Error_1.N_Error('Semantico', 'Dimension no definida en el array: ' + this.id, '', this.linea, this.columna);
                     }
                 }
             }

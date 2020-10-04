@@ -42,9 +42,19 @@ export class Funcion extends Instruccion{
 
     public ejecutarast(ast:N_Ast):N_Ast{
         let Cadena:string=ast.cadena+"\n";
-        Cadena += ast.posdes+" [label =\"Funcion\"];\n";
+        Cadena += ast.posdes+" [label =\"Funcion: "+this.id+"\"];\n";
         Cadena += ast.posant+" -> "+ast.posdes+";\n";
-
-        return {posant:ast.posdes, posdes:ast.posdes+1,cadena:Cadena};
+        let retorno = {posant:ast.posdes, posdes:ast.posdes+1,cadena:Cadena};
+        //Instrucciones
+        retorno.cadena += retorno.posdes+" [label =\"Instrucciones\"];\n";
+        retorno.cadena += retorno.posant+" -> "+retorno.posdes+";\n";
+        //Seccion de items de array
+        retorno= {posant:retorno.posdes, posdes:retorno.posdes+1,cadena:retorno.cadena};
+        for(const instr of this.codigo){
+            let temresult = instr.ejecutarast(retorno);
+            retorno.posdes=temresult.posdes;
+            retorno.cadena=temresult.cadena;
+        }
+        return retorno;
     }
 }

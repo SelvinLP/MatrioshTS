@@ -26,7 +26,9 @@ var Imprimir = /** @class */ (function (_super) {
     Imprimir.prototype.ejecutar = function (entorno) {
         var resultado = this.value.ejecutar(entorno);
         console.log(resultado);
-        L_Print_1.L_Print.push(resultado.valor);
+        var tabulacion = /\\t/gi;
+        var saltolinea = /\\n/gi;
+        L_Print_1.L_Print.push(resultado.valor.replace(tabulacion, '\t').replace(saltolinea, '\n'));
     };
     Imprimir.prototype.ejecutarast = function (ast) {
         var Cadena = ast.cadena + "\n";

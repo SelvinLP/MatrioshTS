@@ -66,9 +66,21 @@ var Funcion = /** @class */ (function (_super) {
     };
     Funcion.prototype.ejecutarast = function (ast) {
         var Cadena = ast.cadena + "\n";
-        Cadena += ast.posdes + " [label =\"Funcion\"];\n";
+        Cadena += ast.posdes + " [label =\"Funcion: " + this.id + "\"];\n";
         Cadena += ast.posant + " -> " + ast.posdes + ";\n";
-        return { posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena };
+        var retorno = { posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena };
+        //Instrucciones
+        retorno.cadena += retorno.posdes + " [label =\"Instrucciones\"];\n";
+        retorno.cadena += retorno.posant + " -> " + retorno.posdes + ";\n";
+        //Seccion de items de array
+        retorno = { posant: retorno.posdes, posdes: retorno.posdes + 1, cadena: retorno.cadena };
+        for (var _i = 0, _a = this.codigo; _i < _a.length; _i++) {
+            var instr = _a[_i];
+            var temresult = instr.ejecutarast(retorno);
+            retorno.posdes = temresult.posdes;
+            retorno.cadena = temresult.cadena;
+        }
+        return retorno;
     };
     return Funcion;
 }(Instruccion_1.Instruccion));

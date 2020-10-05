@@ -15,7 +15,12 @@ export class Imprimir extends Instruccion{
         console.log(resultado);
         let tabulacion=/\\t/gi;
         let saltolinea=/\\n/gi;
-        L_Print.push(resultado.valor.replace(tabulacion,'\t').replace(saltolinea,'\n'));
+        try {
+            L_Print.push(resultado.valor.replace(tabulacion,'\t').replace(saltolinea,'\n'));
+        } catch (error) {
+            
+        }
+        
     }
 
     public ejecutarast(ast:N_Ast):N_Ast{

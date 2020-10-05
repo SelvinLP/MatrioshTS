@@ -20,7 +20,7 @@ export class Entorno{
         this.types=new L_type();
     }
 
-    public guardarvar(letoconst: TipoDato,id: string, valor: any, tipo: N_Tipo,cuerpoarray:C_Array|null, line : number, column: number){
+    public guardarvar(letoconst: TipoDato,id: string, valor: any, tipo: N_Tipo,cuerpoarray:C_Array|null,cuerpotype:Array<any>|null, line : number, column: number){
         let env : Entorno | null = this;
         //verificacion si existe en el mismo entorno
         if(env.variables.has(id)){
@@ -32,7 +32,7 @@ export class Entorno{
                       
         }else{
             //sino se cumple lo guarda en el entorno actual
-            this.variables.set(id, new Simbolo(letoconst,id, tipo, valor,cuerpoarray));
+            this.variables.set(id, new Simbolo(letoconst,id, tipo, valor,cuerpoarray,cuerpotype));
             //lo insertamos en una lista para los reportes
             let tipodevariable="    ";
             let tipovalor="";
@@ -52,7 +52,7 @@ export class Entorno{
             }else if(Tipo.STRING == tipo.tipo){
                 tipovalor="string";
             }else if(Tipo.TYPE == tipo.tipo){
-                tipovalor="type";
+                tipovalor="type: "+ tipo.cadTipo;
             }
             let bandera=false;
             for(let nodo of L_Simbs){
@@ -119,6 +119,17 @@ export class Entorno{
         while(env != null){
             if(env.variables.has(id)){
                 return env.variables.get(id)?.cuerpoarray;
+            }
+            env = env.anterior;
+        }
+        return null;
+    }
+
+    public obtenertype(id: string):null| undefined| Simbolo{
+        let env : Entorno | null = this;
+        while(env != null){
+            if(env.variables.has(id)){
+                return env.variables.get(id);
             }
             env = env.anterior;
         }

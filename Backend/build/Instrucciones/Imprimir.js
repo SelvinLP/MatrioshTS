@@ -28,7 +28,11 @@ var Imprimir = /** @class */ (function (_super) {
         console.log(resultado);
         var tabulacion = /\\t/gi;
         var saltolinea = /\\n/gi;
-        L_Print_1.L_Print.push(resultado.valor.replace(tabulacion, '\t').replace(saltolinea, '\n'));
+        try {
+            L_Print_1.L_Print.push(resultado.valor.replace(tabulacion, '\t').replace(saltolinea, '\n'));
+        }
+        catch (error) {
+        }
     };
     Imprimir.prototype.ejecutarast = function (ast) {
         var Cadena = ast.cadena + "\n";

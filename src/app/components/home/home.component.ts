@@ -72,7 +72,7 @@ export class HomeComponent implements OnInit {
             }
         }
         } catch (err) {
-          L_Errores.push(err);  
+          L_Errores.push(err);
         }
     }
     this.Inst_Print();

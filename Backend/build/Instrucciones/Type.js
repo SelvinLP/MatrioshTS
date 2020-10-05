@@ -13,9 +13,17 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Type = void 0;
+exports.Type = exports.Nodo_Vtype = void 0;
 var Instruccion_1 = require("../Abstracto/Instruccion");
 var N_Error_1 = require("../Errores/N_Error");
+var Nodo_Vtype = /** @class */ (function () {
+    function Nodo_Vtype(id, valor) {
+        this.id = id;
+        this.valor = valor;
+    }
+    return Nodo_Vtype;
+}());
+exports.Nodo_Vtype = Nodo_Vtype;
 var Type = /** @class */ (function (_super) {
     __extends(Type, _super);
     function Type(id, listaparametos, line, column) {

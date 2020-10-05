@@ -13,21 +13,28 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Imprimir = void 0;
+exports.Declaraciontype = void 0;
 var Instruccion_1 = require("../Abstracto/Instruccion");
-var home_component_1 = require("../../src/app/components/home/home.component");
-var Imprimir = /** @class */ (function (_super) {
-    __extends(Imprimir, _super);
-    function Imprimir(value, line, column) {
+var Declaraciontype = /** @class */ (function (_super) {
+    __extends(Declaraciontype, _super);
+    function Declaraciontype(letoconst, id, idtype, valores, line, column) {
         var _this = _super.call(this, line, column) || this;
-        _this.value = value;
+        _this.letoconst = letoconst;
+        _this.id = id;
+        _this.idtype = idtype;
+        _this.valores = valores;
         return _this;
     }
-    Imprimir.prototype.ejecutar = function (entorno) {
-        var resultado = this.value.ejecutar(entorno);
-        console.log(resultado);
-        home_component_1.HomeComponent.Consola = resultado;
+    Declaraciontype.prototype.ejecutar = function (entorno) {
     };
-    return Imprimir;
+    Declaraciontype.prototype.ejecutarast = function (ast) {
+        var Cadena = ast.cadena + "\n";
+        Cadena += ast.posdes + " [label =\"Declaracion type: " + this.id + "\"];\n";
+        Cadena += ast.posant + " -> " + ast.posdes + ";\n";
+        var result;
+        result = { posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena };
+        return result;
+    };
+    return Declaraciontype;
 }(Instruccion_1.Instruccion));
-exports.Imprimir = Imprimir;
+exports.Declaraciontype = Declaraciontype;

@@ -13,7 +13,7 @@ var Entorno = /** @class */ (function () {
         this.funciones = new Map();
         this.types = new L_Types_1.L_type();
     }
-    Entorno.prototype.guardarvar = function (letoconst, id, valor, tipo, cuerpoarray, line, column) {
+    Entorno.prototype.guardarvar = function (letoconst, id, valor, tipo, cuerpoarray, cuerpotype, line, column) {
         var env = this;
         //verificacion si existe en el mismo entorno
         if (env.variables.has(id)) {
@@ -26,7 +26,7 @@ var Entorno = /** @class */ (function () {
         }
         else {
             //sino se cumple lo guarda en el entorno actual
-            this.variables.set(id, new Simbolo_1.Simbolo(letoconst, id, tipo, valor, cuerpoarray));
+            this.variables.set(id, new Simbolo_1.Simbolo(letoconst, id, tipo, valor, cuerpoarray, cuerpotype));
             //lo insertamos en una lista para los reportes
             var tipodevariable = "    ";
             var tipovalor = "";
@@ -52,7 +52,7 @@ var Entorno = /** @class */ (function () {
                 tipovalor = "string";
             }
             else if (Retorno_1.Tipo.TYPE == tipo.tipo) {
-                tipovalor = "type";
+                tipovalor = "type: " + tipo.cadTipo;
             }
             var bandera = false;
             for (var _i = 0, L_Simbs_1 = L_Simb_1.L_Simbs; _i < L_Simbs_1.length; _i++) {
@@ -114,6 +114,16 @@ var Entorno = /** @class */ (function () {
         while (env != null) {
             if (env.variables.has(id)) {
                 return (_a = env.variables.get(id)) === null || _a === void 0 ? void 0 : _a.cuerpoarray;
+            }
+            env = env.anterior;
+        }
+        return null;
+    };
+    Entorno.prototype.obtenertype = function (id) {
+        var env = this;
+        while (env != null) {
+            if (env.variables.has(id)) {
+                return env.variables.get(id);
             }
             env = env.anterior;
         }

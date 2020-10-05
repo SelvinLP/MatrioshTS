@@ -3,8 +3,12 @@ import { Entorno } from "../Entorno/Entorno";
 import { N_Ast } from "../Ast/Ast";
 import { N_Error } from "../Errores/N_Error";
 import { N_Type } from "../Otros/L_Types";
+import { Expresion } from "../Abstracto/Expresion";
 
-
+export class Nodo_Vtype {
+    constructor(public id:string, public valor:Expresion| any){
+    }
+}
 export class Type extends Instruccion{
 
     constructor(private id:string, private listaparametos:Array<N_Type>,line : number, column : number){

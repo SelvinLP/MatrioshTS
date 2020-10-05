@@ -23,7 +23,7 @@
     const {Id} = require('../build/Expresiones/Id');
     const {Funcion, Parametrofunc} = require('../build/Instrucciones/Funcion');
     const {Llamarfuncion} = require('../build/Instrucciones/Llamarfuncion');
-    const {Type} = require('../build/Instrucciones/Type');
+    const {Type, Nodo_Vtype} = require('../build/Instrucciones/Type');
     const {N_Type} = require('../build/Otros/L_Types');
     const {N_Tipo} = require('../build/Otros/N_Tipo');
     const {L_Array} = require('../build/Instrucciones/Array');
@@ -31,6 +31,7 @@
     const {SwitchCase, Case} = require('../build/Instrucciones/SwitchCase');
     const {BreakContinue} = require('../build/Instrucciones/BreakContinue');
     const {Returnt} = require('../build/Instrucciones/Returnt');
+    const {AsigType} = require('../build/Instrucciones/AsigType');
 
 %}
 
@@ -51,6 +52,7 @@
 "number"            return 'tk_number'
 "boolean"           return 'tk_boolean'
 "void"              return 'tk_void'
+"null"              return 'tk_null'
 
 
 //Palabras Reservadas
@@ -230,8 +232,8 @@ arrayllaves:
 PosibleAsignacion:
     '=' Expresion                       {$$=new N_Declaracion($2, null, null)}
     | '=' '[' Parametros ']'            {$$=new N_Declaracion(null, $3, null)}
-    | '=' '{' ParametrosTypevalor '}'   {$$=new N_Declaracion(null, null, $3)}
-    | '=' '[' ']'                       {$$=new N_Declaracion(null, null, null)}
+    | '=' '{' ValoresTypes '}'          {$$=new N_Declaracion(null, null, $3);}
+    | '=' '[' ']'                       {$$=new N_Declaracion(null, null, null)} 
     | %empty                            {$$=null;}
 ;
 
@@ -245,19 +247,6 @@ Parametros:
     {
         $$=[$1];
     }
-;
-
-ParametrosTypevalor:
-    ParametrosTypevalor ',' tk_id ':' Expresion
-    {
-        $1.push(new N_Parametros($3,$5));
-        $$=$1;
-    }
-    | tk_id ':' Expresion
-    {
-        $$=[new N_Parametros($1,$3)];
-    }
-    | error {CL_Error.L_Errores.push(new CN_Error.N_Error("Sintactico","Error al ingresar parametro type"+yytext,"",this._$.first_line,this._$.first_column))}
 ;
 
 Asignacion:
@@ -289,9 +278,26 @@ Asignacion:
     {
         $$ = new pushpopcondireccion($1, $2, $4, null, @1.first_line, @1.first_column);
     }
+    | tk_id '=' '{' ValoresTypes '}' ';'
+    {
+        $$ = new AsigType( $1, $4 ,@1.first_line, @1.first_column);
+    }
     | Incydec ';'
     {
         $$=$1;
+    }
+;
+
+ValoresTypes:
+    ValoresTypes ',' tk_id ':' Expresion
+    {
+        $1.push(new Nodo_Vtype($3,$5)); 
+        $$ = $1;
+    }
+    | tk_id ':' Expresion
+    {
+        let nuevo=new Nodo_Vtype($1,$3);
+        $$ = [nuevo];
     }
 ;
 
@@ -469,6 +475,11 @@ ParametrosFucnc:
         $$=[new Parametrofunc($1,$3,$4,@1.first_line, @1.first_column)];
         $$.push($5);
     }
+    | tk_id ':' tk_array '<' TipoDato '>' MasParametrosFucnc             
+    {
+        $$=[new Parametrofunc($1,$5,"array",@1.first_line, @1.first_column)];
+        $$.push($5);
+    }
     | %empty                       {$$=null;}
 ;
 
@@ -638,6 +649,10 @@ Factor:
     | tk_bool
     { 
         $$ = new Literal($1, @1.first_line, @1.first_column, 2);
+    }
+    | tk_null
+    {
+        $$ = new Literal($1, @1.first_line, @1.first_column, 3);
     }
     | tk_id
     {

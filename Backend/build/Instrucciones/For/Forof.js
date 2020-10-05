@@ -34,7 +34,7 @@ var Forof = /** @class */ (function (_super) {
         //ejecutamos el for
         if (valorarray != null) {
             if ((valorarray === null || valorarray === void 0 ? void 0 : valorarray.listaarray) != undefined) {
-                entorno.guardarvar(Retorno_1.TipoDato.LET, this.id, 0, new N_Tipo_1.N_Tipo(Retorno_1.Tipo.NULL, ""), null, this.linea, this.columna);
+                entorno.guardarvar(Retorno_1.TipoDato.LET, this.id, 0, new N_Tipo_1.N_Tipo(Retorno_1.Tipo.NULL, ""), null, null, this.linea, this.columna);
                 var variable = entorno.obtenervar(this.id);
                 for (var pos = 0; pos < (valorarray === null || valorarray === void 0 ? void 0 : valorarray.listaarray.length); pos++) {
                     if (variable != null) {

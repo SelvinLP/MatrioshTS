@@ -6,12 +6,11 @@ import { N_Error } from "../Errores/N_Error";
 import { N_Ast } from "../Ast/Ast";
 import { N_Tipo } from "../Otros/N_Tipo";
 import { C_Array, L_Array } from "./Array";
+import { Nodo_Vtype } from "./Type";
+import { AsigType } from "./AsigType";
 
 export class N_Declaracion{
-    constructor(public value:Expresion, public array:Expresion[], public types:Array<N_Parametros>){}
-}
-export class N_Parametros{
-    constructor(public id:string, public value:Expresion){}
+    constructor(public value:Expresion, public array:Expresion[], public types:Array<Nodo_Vtype>){}
 }
 export class Declaracion extends Instruccion{
 
@@ -27,7 +26,7 @@ export class Declaracion extends Instruccion{
                 this.tipo=new N_Tipo(Tipo.NULL,"");
             }
             entorno.guardarvar(TipoDato.NADA,this.id,"",new N_Tipo(Tipo.ARRAY,""),
-                                new C_Array(this.tipo.tipo,this.tarray),this.linea,this.columna);
+                                new C_Array(this.tipo.tipo,this.tarray),null,this.linea,this.columna);
             if(this.value!=null){//verificacion del array
                 this.insertararray(entorno);
             }
@@ -46,12 +45,16 @@ export class Declaracion extends Instruccion{
                         this.tipo.tipo=Tipo.NULL;
                     }
                     entorno.guardarvar(TipoDato.NADA,this.id,"",new N_Tipo(Tipo.ARRAY,""),
-                                        new C_Array(this.tipo.tipo,[new L_Array(null,null)]),this.linea,this.columna);
+                                        new C_Array(this.tipo.tipo,[new L_Array(null,null)]),null,this.linea,this.columna);
                     banderaarray=true;
 
-                    if(this.value!=null){//verificacion del array
+                    if(this.value!=null){//verificacion del array para insertar
                         this.insertararray(entorno);
                     }
+                }else if(this.tipo.tipo==Tipo.TYPE){
+
+                    entorno.guardarvar(this.letoconst,this.id,"",this.tipo,null,this.value.types,this.linea,this.columna);
+
                 }
             }
 
@@ -61,7 +64,7 @@ export class Declaracion extends Instruccion{
                     if(this.letoconst == TipoDato.CONST){
                         throw new N_Error('Semantico','La variable '+this.id+" tipo const no tiene definido un valor",'', this.linea, this.columna);
                     }else{
-                        entorno.guardarvar(this.letoconst, this.id, this.value, this.tipo ,null,this.linea,this.columna);
+                        entorno.guardarvar(this.letoconst, this.id, this.value, this.tipo ,null,null,this.linea,this.columna);
                     }
                 }else{
                     let banderainsertar=false;
@@ -80,7 +83,7 @@ export class Declaracion extends Instruccion{
                     }
                     //Insertamos si cumple con las condiciones
                     if(banderainsertar == true){
-                        entorno.guardarvar(this.letoconst, this.id, resp.valor, this.tipo ,null,this.linea,this.columna);
+                        entorno.guardarvar(this.letoconst, this.id, resp.valor, this.tipo ,null,null,this.linea,this.columna);
                     }
                 }
             }

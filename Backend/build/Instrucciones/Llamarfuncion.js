@@ -78,7 +78,7 @@ var Llamarfuncion = /** @class */ (function (_super) {
     };
     Llamarfuncion.prototype.ejecutarast = function (ast) {
         var Cadena = ast.cadena + "\n";
-        Cadena += ast.posdes + " [label =\"Llamar funcion\"];\n";
+        Cadena += ast.posdes + " [label =\"Llamar funcion: " + this.id + "\"];\n";
         Cadena += ast.posant + " -> " + ast.posdes + ";\n";
         var retorno = { posant: ast.posdes, posdes: ast.posdes + 1, cadena: Cadena };
         return retorno;

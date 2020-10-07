@@ -40,7 +40,7 @@ export class AsigType extends Instruccion{
 
     public ejecutarast(ast:N_Ast):N_Ast{
         let Cadena:string=ast.cadena+"\n";
-        Cadena += ast.posdes+" [label =\"Asignacion\"];\n";
+        Cadena += ast.posdes+" [label =\"Asignacion Type"+this.id+"\"];\n";
         Cadena += ast.posant+" -> "+ast.posdes+";\n";
         let result:N_Ast={posant:ast.posdes, posdes:ast.posdes+1,cadena:Cadena};
 

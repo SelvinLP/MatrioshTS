@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.L_type = exports.N_Type = void 0;
 var N_Error_1 = require("../Errores/N_Error");
 var Retorno_1 = require("../Abstracto/Retorno");
 var N_Type = /** @class */ (function () {

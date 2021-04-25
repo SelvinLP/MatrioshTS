@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.N_Error = void 0;
 var N_Error = /** @class */ (function () {
     function N_Error(type, description, entorn, line, column) {
         this.type = type;

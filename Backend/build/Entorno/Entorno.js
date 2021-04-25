@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Entorno = void 0;
 var Retorno_1 = require("../Abstracto/Retorno");
 var Simbolo_1 = require("./Simbolo");
 var N_Error_1 = require("../Errores/N_Error");

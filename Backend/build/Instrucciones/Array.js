@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.L_Array = exports.C_Array = void 0;
 var C_Array = /** @class */ (function () {
     function C_Array(tipo, listaarray) {
         this.tipo = tipo;

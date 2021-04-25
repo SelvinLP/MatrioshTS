@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Expresion = void 0;
 var Tb_Tipos_1 = require("../Otros/Tb_Tipos");
 var Expresion = /** @class */ (function () {
     function Expresion(line, column) {

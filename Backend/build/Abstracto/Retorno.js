@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TipoDato = exports.TipoLogica = exports.TipoRelacional = exports.TipoAritmetico = exports.Tipo = void 0;
 //Tipos de variables
 var Tipo;
 (function (Tipo) {

@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -13,7 +13,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Imprimir = void 0;
 var Instruccion_1 = require("../Abstracto/Instruccion");
 var L_Print_1 = require("../Otros/L_Print");
 var Imprimir = /** @class */ (function (_super) {
@@ -28,11 +27,13 @@ var Imprimir = /** @class */ (function (_super) {
         console.log(resultado);
         var tabulacion = /\\t/gi;
         var saltolinea = /\\n/gi;
-        try {
-            L_Print_1.L_Print.push(resultado.valor.replace(tabulacion, '\t').replace(saltolinea, '\n'));
+        try{
+            let int_especial = resultado.valor.replace(tabulacion, '\t').replace(saltolinea, '\n');
+            L_Print_1.L_Print.push(int_especial);
+        }catch{
+            L_Print_1.L_Print.push(resultado.valor);
         }
-        catch (error) {
-        }
+        
     };
     Imprimir.prototype.ejecutarast = function (ast) {
         var Cadena = ast.cadena + "\n";

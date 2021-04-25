@@ -82,6 +82,7 @@ export class HomeComponent implements OnInit {
     //Intrucciones de Imprimir
     for (let ptr of L_Print) {
       try {
+        console.log(ptr);
         this.Consola += ptr +'\n';
       } catch (err) {
         L_Errores.push(err);  

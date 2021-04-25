@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.L_tipos = void 0;
 var Retorno_1 = require("../Abstracto/Retorno");
 //Tabla de tipos
 exports.L_tipos = [

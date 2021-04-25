@@ -12,14 +12,10 @@ export class Imprimir extends Instruccion{
 
     public ejecutar(entorno:Entorno ) {
         const resultado = this.value.ejecutar(entorno);
-        console.log(resultado);
+        console.log("Backend" + resultado);
         let tabulacion=/\\t/gi;
         let saltolinea=/\\n/gi;
-        try {
-            L_Print.push(resultado.valor.replace(tabulacion,'\t').replace(saltolinea,'\n'));
-        } catch (error) {
-            
-        }
+        L_Print.push(resultado.valor.replace(tabulacion,'\t').replace(saltolinea,'\n'));
         
     }
 
